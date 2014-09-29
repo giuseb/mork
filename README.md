@@ -2,7 +2,7 @@
 
 A ruby [optical mark recognition](http://en.wikipedia.org/wiki/Optical_mark_recognition) (OMR) library aimed at accomplishing two tasks in the context of paper-based, multiple-choice tests and surveys:
 
-1. generating [response sheets](/spec/samples/sheet.pdf) in PDF format
+1. generating [response sheets](/spec/samples/sheet.jpg) in PDF format
 2. capturing the responses provided on the [printed sheet](/spec/samples/sample_gray.jpg) by a human with a pen or a pencil.
 
 ## Assumptions and limitations
