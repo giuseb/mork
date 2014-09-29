@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["giuseppe.bertini@gmail.com"]
   s.homepage    = 'https://github.com/giuseb/mork'
   s.summary     = %q{Optical mark recognition of multiple-choice tests and surveys}
-  s.description = %q{Producing response sheets as PDF files and automatically scoring manually filled-out sheets}
+  s.description = %q{Optical mark recognition of multiple-choice tests and surveys}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec}/*`.split("\n")
