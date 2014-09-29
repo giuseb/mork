@@ -1,0 +1,11 @@
+*.gem
+.bundle
+Gemfile.lock
+quick.rb
+pkg/*
+tmp/*
+.rspec
+.yardoc
+.ruby-version
+.ruby-gemset
+.rspec

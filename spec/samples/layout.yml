@@ -1,0 +1,51 @@
+page_size:                # all measurements in mm
+  width:          210     # width of the paper sheet
+  height:         297     # height of the paper sheet
+reg_marks:         
+  margin:          10     # distance from each page border to registration mark center
+  radius:           2.5   # registration mark radius
+  search:          12     # initial size of the registration mark search area (*)
+  offset:           2     # distance between the search area and each page border (*)
+header:           
+  name:                   # ‘name’ is just a label; you can add arbitrary header elements
+    top:            5     # margin relative to registration frame top side
+    left:           7.5   # margin relative to registration frame left side
+    width:         170    # text will be fitted to this width
+    size:           14    # font size
+  title:
+    top:            15
+    left:           7.5
+    width:         180
+    size:           12
+  code:
+    top:             5
+    left:          165
+    width:          20
+    size:           14
+  signature:
+    top:            30
+    left:            7.5
+    width:         120
+    height:         15
+    size:            7
+    box:          true    # header element will be enclosed in a box
+items:
+  top:              55.5  # response area margin, relative to reg frame
+  left:             10.5  # response area margin, relative to reg frame
+  rows:             30    # number of items per column
+  columns:           4    # number of columns
+  column_width:     44    # 
+  x_spacing:         7    # horizontal distance between ajacent cell centers
+  y_spacing:         7    # vertical distance between ajacent cell centers
+  cell_width:        6    # width of each choice and calibration cell
+  cell_height:       5    # height of each choice and calibration cell
+  max_cells:         5    # maximum number of choices per item
+  font_size:         9    # size of both the item number and choice cell letter
+  number_width:      8    # 
+  number_margin:     2    # margin between
+barcode:
+  bits:             40    # the maximum sheet identifier is 2 to the power or bits
+  left:             15    # distance between registration frame side and the first barcode bit
+  width:             3    # width of each barcode bit
+  height:            2.5  # height of each barcode bit from the registration frame bottom side
+  spacing:           4    # horizontal distance between adjacent barcode bit centers

@@ -1,0 +1,59 @@
+registration:
+  filename: spec/samples/registration.png
+  pages:     1
+  width:  2484
+  height: 3512
+invalid_registration:
+  filename: spec/samples/invalid_registration.png
+  pages:     1
+  width:  2484
+  height: 3512
+sample01:
+  filename: spec/samples/sample01.jpg
+  pages:     1
+  width:  2334
+  height: 3291
+  
+  reg_marks: # registration marks
+    tl_x:     92
+    tl_y:     90
+    tr_x:   2245
+    tr_y:     97
+    br_x:   2230
+    br_y:   3217
+    bl_x:     78
+    bl_y:   3205
+  q_boxes:
+    q001:
+      tl_x: 175
+      tl_y: 379
+    q160:
+      tl_x: 1818
+      tl_y: 2974
+bw_faded_sample:
+  filename: spec/samples/qzc006.jpg
+  pages: 1
+  width:    1196
+  height:   1682
+  code_int: 5512
+  
+reg_mark:
+  filename: spec/samples/reg_mark.jpg
+  centroid_x: 92
+  centroid_y: 91
+
+small:
+  filename: spec/samples/small.jpg
+
+code_sample:
+  filename: spec/samples/code_sample.png
+  code_string: "0000000000000000000000000000000000000000000000000001110001010001" 
+  code_int:    7249
+
+code_zero:
+  filename: spec/samples/code_zero.png
+
+two_pages:
+  filename: spec/samples/two_pages.pdf
+  code_int: 17382938642823887837
+  
