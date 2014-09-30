@@ -23,6 +23,10 @@ Mork is a low-level library, and very much work in progress. It is not, and will
 
 ## Getting started
 
+First, make sure that ImageMagick is installed in your system. On the Mac, `brew` is the preferred package manager:
+
+    brew install imagemagick
+
 To create a small ruby project that uses Mork, `cd` into a directory of choice, then execute the following shell commands:
 
 ```
