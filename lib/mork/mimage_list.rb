@@ -1,4 +1,4 @@
-require 'RMagick'
+# require 'RMagick'
 
 module Mork
   # The class MimageList

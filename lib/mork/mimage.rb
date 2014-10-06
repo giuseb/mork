@@ -1,22 +1,35 @@
-require 'RMagick'
+require 'mini_magick'
 
 module Mork
-  # The class Mimage is a wrapper for the core image library, currently RMagick
+  # The class Mimage is a wrapper for the core image library, currently mini_magick
   class Mimage
-    def initialize(img, page=0)
-      if img.class == String
-        if File.extname(img) == '.pdf'
-          @image = Magick::Image.read(img) { self.density = 200 }[page]
-        else
-          @image = Magick::ImageList.new(img)[page]
-        end
-      elsif img.class == Magick::ImageList
-        @image = img[page]
-      elsif img.class == Magick::Image
-        @image = img
-      else
-        raise "Invalid initialization argument"
-      end
+    def initialize(path, page=0)
+      @path = path
+    end
+    
+    def path
+      @path
+    end
+    
+    def pixels
+      @pixels ||= IO.read("|convert #{@path} gray:-").unpack 'C*'
+    end
+    
+    def width
+      @width  ||= IO.read("|identify -format '%w' #{@path}").to_i
+    end
+    
+    def height
+      @height ||= IO.read("|identify -format '%h' #{@path}").to_i
+    end
+    
+    def reg_pixels(points)
+      pts = points.join ' '
+      @reg_pixels ||= IO.read("|convert #{@path} -distort Perspective '#{pts}' gray:-").unpack 'C*'
+    end
+    
+    def 
+      
     end
     
     # outline!(cells, roundedness)
@@ -120,24 +133,38 @@ module Mork
       self
     end
     
-    # returns the raw pixels from the entire image or from the area
-    # defined in opts
-    def pixels(opts = {})
-      c = {x: 0, y: 0, w: width, h: height}.merge(opts)
-      @image.export_pixels(c[:x], c[:y], c[:w], c[:h], "I")
-    end
-    
-    def width
-      @image.columns
-    end
-    
-    def height
-      @image.rows
-    end
     
     # write the underlying Magick::Image to disk
     def write(fname)
       @image.write fname
     end
+    
+    private
+    
+    def img
+      @minimage ||= MiniMagick::Image.open @path
+    end
   end
 end
+
+# if img.class == String
+#   if File.extname(img) == '.pdf'
+#     @image = MiniMagick::Image.open(img) { self.density = 200 }[page]
+#   else
+#     @image = Magick::ImageList.new(img)[page]
+#   end
+# elsif img.class == Magick::ImageList
+#   @image = img[page]
+# elsif img.class == Magick::Image
+#   @image = img
+# else
+#   raise "Invalid initialization argument"
+# end
+
+# def width
+#   @image[:width]
+# end
+#
+# def height
+#   @image[:height]
+# end

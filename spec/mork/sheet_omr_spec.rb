@@ -2,6 +2,11 @@ require 'spec_helper'
 
 module Mork
   describe SheetOMR do
+    # context 'mini', focus: true do
+    #   let(:sheet) { SheetOMR.new 'spec/samples/sample_gray.jpg', 'spec/samples/layout.yml' }
+    #
+    # end
+    
     context 'highlighting' do
       # since these specs change the @crop, they must be run in isolation
       # with the SheetOMR rebuilt each time, even though it is time consuming!
@@ -66,7 +71,7 @@ module Mork
       end
       
       describe '#marked?' do
-        it 'returns true for some darkened choices' do
+        it 'returns true for some darkened choices', focus: true do
           expect(@sheet.marked?(0,0)).to be_truthy
           expect(@sheet.marked?(1,1)).to be_truthy
           expect(@sheet.marked?(2,2)).to be_truthy

@@ -4,6 +4,37 @@ module Mork
   describe Mimage do
     let(:smp) { sample_img(:sample01) }
     let(:mim) { Mimage.new(smp.filename) }
+    let(:sg) { Mimage.new 'spec/samples/sample_gray.jpg' }
+    
+    describe 'basics', focus: true do
+      it 'returns the width' do
+        expect(sg.width).to eq 1654
+      end
+      
+      it 'returns the height' do
+        expect(sg.height).to eq 2339
+      end
+      
+      it 'returns the pixels as an array' do
+        expect(sg.pixels).to be_an Array
+      end
+      
+      it 'returns the correct number of pixels' do
+        expect(sg.pixels.length).to eq 1654*2339
+      end
+
+      it 'returns the stretched array' do
+        pts = [340, 421, 0, 0, 1640, 50, 1653, 0, 100, 2000, 0, 2339, 1100, 1940, 1653, 2338]
+        expect(sg.reg_pixels(pts).length).to eq 1654*2339
+      end
+      
+      # it 'saves the registered image' do
+      #
+      # end
+    end
+    
+    describe 'stretching' do
+    end
     
     describe ".new" do
       it "should create a Mimage from a string pointing to an existing bitmap file" do

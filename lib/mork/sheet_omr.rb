@@ -6,23 +6,21 @@ require 'mork/npatch'
 module Mork
   class SheetOMR
     def initialize(im, grom=nil)
-      @raw   = case im
-               when String
-                 Mimage.new im
-               when Mork::Mimage
-                 im
-               else
-                 raise "A new sheet requires either a Mimage or the name of the source image file, but it was a: #{im.class}"
-               end
+      @mim  = case im
+              when String
+                Mimage.new im
+              when Mork::Mimage
+                im
+              else
+                raise "A new sheet requires either a Mimage or the name of the source image file, but it was a: #{im.class}"
+              end
       @grom = case grom
-               when String, Hash, NilClass
-                 GridOMR.new @raw.width, @raw.height, grom
-               else
-                 raise 'Invalid argument in SheetOMR initialization'
-               end
-      @rm   = {}
-      @rmsa = {}
-      @ok_reg = register @raw
+              when String, Hash, NilClass
+                GridOMR.new @mim.width, @mim.height, grom
+              else
+                raise 'Invalid argument in SheetOMR initialization'
+              end
+      @ok_reg = register
     end
     
     def valid?
@@ -115,9 +113,9 @@ module Mork
     end
     
     def highlight_reg_area
-      @raw.highlight_rect! [@rmsa[:tl], @rmsa[:tr], @rmsa[:br], @rmsa[:bl]]
+      @mim.highlight_rect! [@rmsa[:tl], @rmsa[:tr], @rmsa[:br], @rmsa[:bl]]
       return if not_registered
-      @raw.join! [@rm[:tl],@rm[:tr],@rm[:br],@rm[:bl]]
+      @mim.join! [@rm[:tl],@rm[:tr],@rm[:br],@rm[:bl]]
     end
 
     def write(fname)
@@ -126,7 +124,7 @@ module Mork
     end
     
     def write_raw(fname)
-      @raw.write(fname)
+      @mim.write(fname)
     end
     
     # =================================
@@ -198,29 +196,24 @@ module Mork
     
     # this method uses a 'stretch' strategy, i.e. where the image after
     # registration has the same size in pixels as the original scanned file
-    def register(img)
+    def register
       # find the XY coordinates of the 4 registration marks
-      @rm[:tl] = reg_centroid_on(img, :tl)
-      @rm[:tr] = reg_centroid_on(img, :tr)
-      @rm[:br] = reg_centroid_on(img, :br)
-      @rm[:bl] = reg_centroid_on(img, :bl)
-      return false if @rm.any? { |k,v| v[:status] != :ok }
-      # stretch the 4 points to fit the original size and return the resulting image
-      @crop = img.stretch [
-        @rm[:tl][:x], @rm[:tl][:y],         0,          0,
-        @rm[:tr][:x], @rm[:tr][:y], img.width,          0,
-        @rm[:br][:x], @rm[:br][:y], img.width, img.height,
-        @rm[:bl][:x], @rm[:bl][:y],         0, img.height
-      ]
-      true
+      @rm   = {}
+      @rmsa = {}
+      @rm[:tl] = reg_centroid_on(:tl)
+      @rm[:tr] = reg_centroid_on(:tr)
+      @rm[:br] = reg_centroid_on(:br)
+      @rm[:bl] = reg_centroid_on(:bl)
+      # return the status
+      @rm.all? { |k,v| v[:status] == :ok }
     end
     
     # returns the centroid of the dark region within the given area
     # in the XY coordinates of the entire image
-    def reg_centroid_on(img, corner)
+    def reg_centroid_on(corner)
       1000.times do |i|
         @rmsa[corner] = @grom.rm_search_area(corner, i)
-        cx, cy = NPatch.new(img.crop(@rmsa[corner])).dark_centroid
+        cx, cy = raw_pixels.dark_centroid @rmsa[corner]
         if cx.nil?
           status = :insufficient_contrast  
         elsif (cx < @grom.rm_edgy_x) or
@@ -235,8 +228,24 @@ module Mork
       end
     end
     
+    def raw_pixels
+      @raw_pixels ||= NPatch.new @mim.pixels, @mim.width, @mim.height
+    end
+    
+    def reg_pixels
+      @reg_pixels ||= begin
+        crop = @mim.reg_pixels [
+          @rm[:tl][:x], @rm[:tl][:y],          0,          0,
+          @rm[:tr][:x], @rm[:tr][:y], @mim.width,          0,
+          @rm[:br][:x], @rm[:br][:y], @mim.width, @mim.height,
+          @rm[:bl][:x], @rm[:bl][:y],          0, @mim.height
+        ]
+        NPatch.new crop, @mim.width, @mim.height
+      end
+    end
+    
     def naverage(where)
-      NPatch.new(@crop.crop where).average
+      @reg_pixels.average where
     end
     
     def not_registered
