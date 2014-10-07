@@ -9,15 +9,31 @@ RSpec.configure do |config|
 end
 
 class SampleImager
-  attr_reader :info, :reg_marks, :q_boxes, :barcode_string, :barcode_int
+  attr_reader :info
   
   def initialize(which)
     ya = YAML.load_file("./spec/samples/info.yml")
     @info        = ya[which.to_s]
-    @reg_marks   = @info["reg_marks"]
-    @q_boxes     = @info["q_boxes"]
-    @barcode_string = @info["barcode_string"]
-    @barcode_int    = @info["barcode_int"]
+  end
+  
+  def grid_file
+    @info["grid-file"]
+  end
+  
+  def reg_marks
+    @info["reg-marks"]
+  end
+  
+  def q_boxes
+    @info["q-boxes"]
+  end
+  
+  def barcode_string
+    @info["barcode-string"]
+  end
+  
+  def barcode_int
+    @info["barcode-int"]
   end
   
   def filename

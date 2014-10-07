@@ -2,66 +2,52 @@ require 'spec_helper'
 
 module Mork
   describe SheetOMR do
-    # context 'mini', focus: true do
-    #   let(:sheet) { SheetOMR.new 'spec/samples/sample_gray.jpg', 'spec/samples/layout.yml' }
-    #
-    # end
     
     context 'highlighting' do
       # since these specs change the @crop, they must be run in isolation
       # with the SheetOMR rebuilt each time, even though it is time consuming!
-      let(:sheet) { SheetOMR.new 'spec/samples/sample_gray.jpg', 'spec/samples/layout.yml' }
+      let(:shinfo) { sample_img 'sample-gray' }
+      let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
       
       it 'highlights the registration areas and frame' do
         sheet.highlight_reg_area
         sheet.write_raw 'spec/out/reg_areas.jpg'
       end
       
-      it 'should highlight all areas' do
-        sheet.highlight_all
+      it 'highlights all choice cells' do
+        sheet.highlight_all_choices
         sheet.write 'spec/out/all_highlights.jpg'
       end
       
       it 'should highlight marked cells and outline correct responses' do
         sheet.highlight_marked
-        sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         sheet.write 'spec/out/marked_highlights.jpg'
+      end
+
+      it 'outlines some responses' do
+        sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
+        sheet.write 'spec/out/outlines.jpg'
       end
       
       it 'highlights marked cells of a problematic one' do
-        s = SheetOMR.new 'spec/samples/qzc013.jpg'
+        si = sample_img 'silvia'
+        s = SheetOMR.new si.filename, si.grid_file
         s.highlight_marked
         s.write 'spec/out/problem.jpg'
       end
       
-      it 'writes out average whiteness of choice cells' do
-        s = SheetOMR.new 'spec/samples/qzc013.jpg'
-        puts "Choice threshold: #{s.send :choice_threshold}"
-        File.open('spec/out/choices.txt', 'w') do |f|
-          120.times do |q|
-            t = (0..4).collect do |c|
-              s.send(:shade_of, q, c).round
-            end
-            f.puts "#{q+1}: #{t.join(' ')}"
-          end
-        end
-        
-        mf = File.open('spec/out/marked.txt',   'w')
-        uf = File.open('spec/out/unmarked.txt', 'w')
-        120.times do |q|
-          5.times do |c|
-            shade = s.send(:shade_of, q, c)
-            s.marked?(q,c) ? mf.puts(shade) : uf.puts(shade)
-          end
-        end
-        mf.close
-        uf.close
+      it 'highlights the barcode' do
+        si = sample_img 'sample-gray'
+        s = SheetOMR.new si.filename, si.grid_file
+        s.highlight_barcode
+        s.write 'spec/out/code_bits.jpg'
       end
     end
 
     context 'marking a nicely printed and scanned sheet' do
       before(:all) do
-        @sheet = SheetOMR.new('spec/samples/sample_gray.jpg', 'spec/samples/layout.yml')
+        @shinfo = sample_img 'sample-gray'
+        @sheet = SheetOMR.new @shinfo.filename, @shinfo.grid_file
       end
       
       describe '#valid?' do
@@ -71,7 +57,7 @@ module Mork
       end
       
       describe '#marked?' do
-        it 'returns true for some darkened choices', focus: true do
+        it 'returns true for some darkened choices' do
           expect(@sheet.marked?(0,0)).to be_truthy
           expect(@sheet.marked?(1,1)).to be_truthy
           expect(@sheet.marked?(2,2)).to be_truthy
@@ -83,27 +69,16 @@ module Mork
           expect(@sheet.marked?(2,3)).to be_falsy
         end
 
-        it 'writes out average whiteness of choice cells' do
+        it 'writes out markedness' do
           puts "Choice threshold: #{@sheet.send :choice_threshold}"
-          File.open('spec/out/choices.txt', 'w') do |f|
-            120.times do |q|
-              t = (0..4).collect do |c|
-                @sheet.send(:shade_of, q, c).round
-              end
-              f.puts "#{q+1}: #{t.join(' ')}"
-            end
-          end
-          
           mf = File.open('spec/out/marked.txt',   'w')
-          uf = File.open('spec/out/unmarked.txt', 'w')
           120.times do |q|
-            5.times do |c|
-              shade = @sheet.send(:shade_of, q, c)
-              @sheet.marked?(q,c) ? mf.puts(shade) : uf.puts(shade)
+            x = 5.times.collect do |c|
+              @sheet.marked?(q,c) ? '1' : '0'
             end
+            mf.puts x.join(' ')
           end
           mf.close
-          uf.close
         end
       end
 
@@ -144,24 +119,15 @@ module Mork
           s2 = SheetOMR.new('spec/samples/sample02.jpg')
           s2.barcode_string.should == barcode_string
           s2.barcode.should == 8608
-          s2.highlight_barcode
-          s2.write 'spec/out/code_bits.jpg'
         end
 
         it 'should read the 666 bit string' do
-          s2 = SheetOMR.new('spec/samples/sheet666.jpg')
-          s2.barcode.should == 666666666666
-          s2.highlight_barcode
-          s2.write 'spec/out/code_bits666.jpg'
+          sh = sample_img 'code666'
+          s2 = SheetOMR.new sh.filename, sh.grid_file
+          s2.barcode.should == sh.barcode_int
         end
       end
       
-    end
-    
-    context 'a faded, b&w, distorted sheet' do
-      it 'should return the correct barcode' do
-        SheetOMR.new('spec/samples/sample03.jpg').barcode.should == 8608
-      end
     end
 
     # context "multi-page pdf" do

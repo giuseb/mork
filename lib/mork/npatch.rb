@@ -22,6 +22,10 @@ module Mork
       crop(c).mean
     end
     
+    def length
+      @patch.length
+    end
+    
     def dark_centroid(c = nil)
       p = crop c
       sufficient_contrast?(p) or return
