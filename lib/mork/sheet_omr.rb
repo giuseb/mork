@@ -1,7 +1,6 @@
 require 'mork/grid_omr'
 require 'mork/mimage'
 require 'mork/mimage_list'
-# require 'mork/npatch'
 
 module Mork
   class SheetOMR
@@ -93,7 +92,7 @@ module Mork
       @mim.highlight_barcode barcode_string
     end
     
-    def highlight_reg_area
+    def highlight_registration
       @mim.highlight_reg_area
     end
 
@@ -109,7 +108,6 @@ module Mork
     # ============================================================#
     private                                                       #
     # ============================================================#
-  
 
     def question_range(r)
       if r.nil?
@@ -128,19 +126,11 @@ module Mork
     end
     
     def barcode_threshold
-      @barcode_threshold ||= (paper_white + ink_black) / 2
+      @barcode_threshold ||= (@mim.paper_white + ink_black) / 2
     end
     
     def choice_threshold
-      @choice_threshold ||= (ccmeans.mean - ink_black) * 0.9 + ink_black
-    end
-    
-    def ccmeans
-      @calcmeans ||= @mim.cal_cell_means
-    end
-    
-    def paper_white
-      @paper_white ||= @mim.paper_white
+      @choice_threshold ||= (@mim.cal_cell_mean - ink_black) * 0.9 + ink_black
     end
     
     def ink_black
@@ -155,62 +145,3 @@ module Mork
     end
   end
 end
-
-
-# # ================
-# # = Registration =
-# # ================
-#
-# # this method uses a 'stretch' strategy, i.e. where the image after
-# # registration has the same size in pixels as the original scanned file
-# def register
-#   # find the XY coordinates of the 4 registration marks
-#   @rm   = {}
-#   @rmsa = {}
-#   @rm[:tl] = reg_centroid_on(:tl)
-#   @rm[:tr] = reg_centroid_on(:tr)
-#   @rm[:br] = reg_centroid_on(:br)
-#   @rm[:bl] = reg_centroid_on(:bl)
-#   # return the status
-#   @rm.all? { |k,v| v[:status] == :ok }
-# end
-#
-# # returns the centroid of the dark region within the given area
-# # in the XY coordinates of the entire image
-# def reg_centroid_on(corner)
-#   1000.times do |i|
-#     @rmsa[corner] = @grom.rm_search_area(corner, i)
-#     cx, cy = raw_pixels.dark_centroid @rmsa[corner]
-#     if cx.nil?
-#       status = :insufficient_contrast
-#     elsif (cx < @grom.rm_edgy_x) or
-#           (cy < @grom.rm_edgy_y) or
-#           (cy > @rmsa[corner][:h] - @grom.rm_edgy_y) or
-#           (cx > @rmsa[corner][:w] - @grom.rm_edgy_x)
-#       status = :edgy
-#     else
-#       return {status: :ok, x: cx + @rmsa[corner][:x], y: cy + @rmsa[corner][:y]}
-#     end
-#     return {status: status, x: nil, y: nil} if @rmsa[corner][:w] > @grom.rm_max_search_area_side
-#   end
-# end
-# def raw_pixels
-#   @raw_pixels ||= NPatch.new @mim.pixels, @mim.width, @mim.height
-# end
-#
-# def reg_pixels
-#   @reg_pixels ||= begin
-#     crop = @mim.reg_pixels [
-#       @rm[:tl][:x], @rm[:tl][:y],          0,          0,
-#       @rm[:tr][:x], @rm[:tr][:y], @mim.width,          0,
-#       @rm[:br][:x], @rm[:br][:y], @mim.width, @mim.height,
-#       @rm[:bl][:x], @rm[:bl][:y],          0, @mim.height
-#     ]
-#     NPatch.new crop, @mim.width, @mim.height
-#   end
-# end
-#
-#
-# def naverage(where)
-#   @reg_pixels.average where
-# end

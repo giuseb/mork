@@ -25,8 +25,8 @@ module Mork
       reg_pixels.average @grom.paper_white_area
     end
     
-    def cal_cell_means
-      @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }
+    def cal_cell_mean
+      @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }.mean
     end
     
     def shade_of_barcode_bit(i)
@@ -37,33 +37,14 @@ module Mork
       reg_pixels.average @grom.choice_cell_area(q, c)
     end
     
-    def path
-      @path
-    end
-    
     def width
-      @width  ||= IO.read("|identify -format '%w' #{@path}").to_i
+      img_size[0].to_i
     end
     
     def height
-      @height ||= IO.read("|identify -format '%h' #{@path}").to_i
+      img_size[1].to_i
     end
-    
-    def raw_pixels
-      @raw_pixels ||= begin
-        bytes = IO.read("|convert #{@path} gray:-").unpack 'C*'
-        NPatch.new bytes, width, height
-      end
-    end
-    
-    def reg_pixels
-      @reg_pixels ||= begin
-        bytes = IO.read("|convert #{@path} -distort Perspective '#{perspective_points}' gray:-").unpack 'C*'
-        NPatch.new bytes, width, height
-      end
-    end
-    
-    
+        
     # outline(cells, roundedness)
     # 
     # draws on the Mimage a set of cell outlines
@@ -83,10 +64,6 @@ module Mork
     def highlight_all_choices
       cells = (0...@grom.max_questions).collect { |i| (0...@grom.max_choices_per_question).to_a }
       highlight_cells cells
-      # @crop.highlight_cells! array_of cells
-      # @crop.highlight_cells! @grom.calibration_cell_areas
-      # @crop.highlight_rect! [@grom.ink_black_area, @grom.paper_white_area]
-      # @crop.highlight_rect! @grom.barcode_bit_areas
     end
     
     # highlight_cells(cells, roundedness)
@@ -133,53 +110,8 @@ module Mork
       end
     end
     
-    def join(p)
-      @cmd << [:fill, 'none']
-      @cmd << [:stroke, 'green']
-      @cmd << [:strokewidth, 3]
-      pts = [p[0][:x], p[0][:y], p[1][:x], p[1][:y], p[2][:x], p[2][:y], p[3][:x], p[3][:y]].join ' '
-      @cmd << [:draw, "polygon #{pts}"]
-    end
-    
-    # ============
-    # = Cropping =
-    # ============
-    def crop(c)
-      Mimage.new @image.crop(c[:x], c[:y], c[:w], c[:h])
-    end
-    
-    def crop!(c)
-      @image.crop!(c[:x], c[:y], c[:w], c[:h])
-      self
-    end
-    
-    # ============
-    # = Blurring =
-    # ============
-    def blur(a, b)
-      Mimage.new @image.blur_image(a, b)
-    end
-
-    def blur!(a, b)
-      @image = @image.blur_image(a, b)
-      self
-    end
-    
-    # ==============
-    # = Stretching =
-    # ==============
-    def stretch(points)
-      Mimage.new @image.distort(Magick::PerspectiveDistortion, points)
-    end
-    
-    def stretch!(points)
-      @image = @image.distort(Magick::PerspectiveDistortion, points)
-      self
-    end
-    
-    
     # write the underlying MiniMagick::Image to disk;
-    # if the 2nd arg is false, then then stretching is not applied
+    # if the 2nd arg is false, then stretching is not applied
     def write(fname, reg=true)
       img = MiniMagick::Image.open @path
       img.combine_options do |c|
@@ -191,13 +123,27 @@ module Mork
       img.write fname
     end
     
-    def write_raw(fname)
-      
+    # ============================================================#
+    private                                                       #
+    # ============================================================#
+    
+    def img_size
+      @img_size ||= IO.read("|identify -format '%w,%h' #{@path}").split ','
     end
     
-    # =======#
-    private  #
-    # =======#
+    def raw_pixels
+      @raw_pixels ||= begin
+        bytes = IO.read("|convert #{@path} gray:-").unpack 'C*'
+        NPatch.new bytes, width, height
+      end
+    end
+    
+    def reg_pixels
+      @reg_pixels ||= begin
+        bytes = IO.read("|convert #{@path} -distort Perspective '#{perspective_points}' gray:-").unpack 'C*'
+        NPatch.new bytes, width, height
+      end
+    end
     
     def perspective_points
       [
@@ -208,6 +154,14 @@ module Mork
       ].join ' '
     end
 
+    def join(p)
+      @cmd << [:fill, 'none']
+      @cmd << [:stroke, 'green']
+      @cmd << [:strokewidth, 3]
+      pts = [p[0][:x], p[0][:y], p[1][:x], p[1][:y], p[2][:x], p[2][:y], p[3][:x], p[3][:y]].join ' '
+      @cmd << [:draw, "polygon #{pts}"]
+    end
+        
     def array_of(cells)
       out = []
       cells.each_with_index do |q, i|
@@ -218,7 +172,6 @@ module Mork
       out
     end
 
-    
     def register
       # find the XY coordinates of the 4 registration marks
       @rm   = {} # registration mark centers
@@ -250,31 +203,5 @@ module Mork
         return {status: status, x: nil, y: nil} if @rmsa[corner][:w] > @grom.rm_max_search_area_side
       end
     end
-    
-    def img
-      @minimage ||= MiniMagick::Image.open @path
-    end
   end
 end
-
-# if img.class == String
-#   if File.extname(img) == '.pdf'
-#     @image = MiniMagick::Image.open(img) { self.density = 200 }[page]
-#   else
-#     @image = Magick::ImageList.new(img)[page]
-#   end
-# elsif img.class == Magick::ImageList
-#   @image = img[page]
-# elsif img.class == Magick::Image
-#   @image = img
-# else
-#   raise "Invalid initialization argument"
-# end
-
-# def width
-#   @image[:width]
-# end
-#
-# def height
-#   @image[:height]
-# end

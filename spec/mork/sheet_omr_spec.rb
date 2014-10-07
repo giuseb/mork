@@ -10,7 +10,7 @@ module Mork
       let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
       
       it 'highlights the registration areas and frame' do
-        sheet.highlight_reg_area
+        sheet.highlight_registration
         sheet.write_raw 'spec/out/reg_areas.jpg'
       end
       

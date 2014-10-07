@@ -13,7 +13,7 @@ class SampleImager
   
   def initialize(which)
     ya = YAML.load_file("./spec/samples/info.yml")
-    @info        = ya[which.to_s]
+    @info = ya[which.to_s]
   end
   
   def grid_file

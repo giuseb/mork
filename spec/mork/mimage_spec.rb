@@ -15,15 +15,15 @@ module Mork
       end
       
       it 'returns the pixels as an array' do
-        expect(sg.raw_pixels).to be_a NPatch
+        expect(sg.send :raw_pixels).to be_a NPatch
       end
       
       it 'returns the correct number of pixels' do
-        expect(sg.raw_pixels.length).to eq sgi.width * sgi.height
+        expect(sg.send(:raw_pixels).length).to eq sgi.width * sgi.height
       end
 
       it 'returns the stretched array' do
-        expect(sg.reg_pixels.length).to eq sgi.width * sgi.height
+        expect(sg.send(:reg_pixels).length).to eq sgi.width * sgi.height
       end
       
       it 'raises an error if the file is not found' do
