@@ -18,9 +18,9 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # dependencies:
-  s.add_dependency 'narray',    '~> 0.6'
-  s.add_dependency 'rmagick',   '~> 2.13'
-  s.add_dependency 'prawn', '1.0.0.rc2'
+  s.add_dependency 'narray',      '~> 0.6'
+  s.add_dependency 'mini_magick', '~> 3.8'
+  s.add_dependency 'prawn',       '1.0.0.rc2'
   s.add_development_dependency 'rake',          '~> 10.3'
   s.add_development_dependency 'rspec',         '~>  3.1'
   s.add_development_dependency 'guard',         '~>  2.6'

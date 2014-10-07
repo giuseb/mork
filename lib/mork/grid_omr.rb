@@ -2,14 +2,21 @@ require 'mork/grid'
 
 module Mork
   class GridOMR < Grid
-    def initialize(page_width, page_height, options=nil)
+    def initialize(options=nil)
       super options
-      @px = page_width.to_f
-      @py = page_height.to_f
     end
     
-    def barcode_bit_areas(code = 2**barcode_bits-1)
-      barcode_bits.times.collect { |b| barcode_bit_area b }
+    def set_page_size(width, height)
+      @px = width.to_f
+      @py = height.to_f
+    end
+    
+    def barcode_bit_areas(bitstring = '1' * barcode_bits)
+      areas = []
+      bitstring.reverse.each_char.with_index do |c, i|
+        areas << barcode_bit_area(i+1) if c=='1'
+      end
+      areas
     end
     
     # ====================================================
