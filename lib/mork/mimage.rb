@@ -71,6 +71,7 @@ module Mork
     # partially transparent yellow on top of choice cells
     def highlight_cells(cells, roundedness=nil)
       return if cells.empty?
+      @cmd << [:stroke, 'none']
       @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
       array_of(cells).each do |c|
         roundedness ||= [c[:h], c[:w]].min / 2

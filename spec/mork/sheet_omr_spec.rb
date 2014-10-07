@@ -19,7 +19,7 @@ module Mork
         sheet.write 'spec/out/all_highlights.jpg'
       end
       
-      it 'should highlight marked cells and outline correct responses' do
+      it 'highlights marked cells' do
         sheet.highlight_marked
         sheet.write 'spec/out/marked_highlights.jpg'
       end
@@ -27,6 +27,12 @@ module Mork
       it 'outlines some responses' do
         sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         sheet.write 'spec/out/outlines.jpg'
+      end
+
+      it 'highlights marked cells and outline correct responses', focus: true do
+        sheet.highlight_marked
+        sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
+        sheet.write 'spec/out/marks_and_outs.jpg'
       end
       
       it 'highlights marked cells of a problematic one' do
