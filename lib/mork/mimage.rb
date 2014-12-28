@@ -108,7 +108,6 @@ module Mork
       cells = [cells] if cells.is_a? Hash
       @cmd << [:stroke, 'red']
       @cmd << [:strokewidth, '3']
-      # @cmd << [:fill, 'none']
       coordinates_of(cells).each do |c|
         pts = [
           c[:x]+corner,
