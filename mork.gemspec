@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   # dependencies:
   s.add_dependency 'narray',      '~> 0.6'
-  s.add_dependency 'mini_magick', '~> 3.8'
+  s.add_dependency 'mini_magick', '~> 4.0'
   s.add_dependency 'prawn',       '~> 1.3'
   s.add_development_dependency 'rake',          '~> 10.3'
   s.add_development_dependency 'rspec',         '~>  3.1'

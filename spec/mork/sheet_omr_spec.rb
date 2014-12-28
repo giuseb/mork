@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fileutils'
 
 module Mork
   describe SheetOMR do
@@ -24,12 +25,29 @@ module Mork
         sheet.write 'spec/out/marked_highlights.jpg'
       end
 
+      it 'crossed marked cells' do
+        sheet.cross_marked
+        sheet.write 'spec/out/marked_crosses.jpg'
+      end
+
       it 'outlines some responses' do
         sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         sheet.write 'spec/out/outlines.jpg'
       end
 
-      it 'highlights marked cells and outline correct responses', focus: true do
+      it 'cross some responses' do
+        sheet.cross [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
+        sheet.write 'spec/out/crosses.jpg'
+      end
+
+      it 'outlines some responses in-place (rewriting the source image)' do
+        FileUtils.cp shinfo.filename, 'spec/out/inplace.jpg'
+        tsheet = SheetOMR.new 'spec/out/inplace.jpg', shinfo.grid_file
+        tsheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
+        tsheet.write
+      end
+
+      it 'highlights marked cells and outline correct responses' do
         sheet.highlight_marked
         sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         sheet.write 'spec/out/marks_and_outs.jpg'
