@@ -77,6 +77,17 @@ module Mork
       @mim.outline cells
     end
     
+    def cross(cells)
+      return if not_registered
+      raise "Invalid ‘cells’ argument" unless cells.kind_of? Array
+      @mim.cross cells
+    end
+    
+    def cross_marked
+      return if not_registered
+      @mim.cross mark_array
+    end
+    
     def highlight_marked
       return if not_registered
       @mim.highlight_cells mark_array
@@ -96,12 +107,24 @@ module Mork
       @mim.highlight_reg_area
     end
 
-    def write(fname)
+    # write(output_path_file_name)
+    #
+    # writes out a copy of the source image after registration;
+    # the output image will also contain any previously applied overlays;
+    # if the argument is omitted, the image is created in-place,
+    # i.e. the original source image is overwritten.
+    def write(fname=nil)
       return if not_registered
       @mim.write(fname)
     end
     
-    def write_raw(fname)
+    # write_raw(output_path_file_name)
+    #
+    # writes out a copy of the source image before registration;
+    # the output image will also contain any previously applied overlays
+    # if the argument is omitted, the image is created in-place,
+    # i.e. the original source image is overwritten.
+    def write_raw(fname=nil)
       @mim.write(fname, false)
     end
     

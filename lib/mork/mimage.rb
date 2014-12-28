@@ -9,6 +9,8 @@ module Mork
       @path = path
       @grom = grom
       @grom.set_page_size width, height
+      @rm   = {} # registration mark centers
+      @rmsa = {} # registration mark search area
       @status = register
       @cmd = []
     end
@@ -54,7 +56,7 @@ module Mork
       @cmd << [:stroke, 'green']
       @cmd << [:strokewidth, '4']
       @cmd << [:fill, 'none']
-      array_of(cells).each do |c|
+      coordinates_of(cells).each do |c|
         roundedness ||= [c[:h], c[:w]].min / 2
         pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h], roundedness, roundedness].join ' '
         @cmd << [:draw, "roundrectangle #{pts}"]
@@ -73,7 +75,7 @@ module Mork
       return if cells.empty?
       @cmd << [:stroke, 'none']
       @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
-      array_of(cells).each do |c|
+      coordinates_of(cells).each do |c|
         roundedness ||= [c[:h], c[:w]].min / 2
         pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h], roundedness, roundedness].join ' '
         @cmd << [:draw, "roundrectangle #{pts}"]
@@ -101,32 +103,51 @@ module Mork
       end
     end
     
-    def cross_cells!(cells)
+    def cross(cells)
+      return if cells.empty?
       cells = [cells] if cells.is_a? Hash
-      cells.each do |c|
-        out = Magick::Draw.new
-        out.stroke 'yellow'
-        out.stroke_width 3
-        out.line
+      @cmd << [:stroke, 'red']
+      @cmd << [:strokewidth, '3']
+      coordinates_of(cells).each do |c|
+        pts = [
+          c[:x]+corner,
+          c[:y]+corner,
+          c[:x]+c[:w]-corner,
+          c[:y]+c[:h]-corner
+        ].join ' '
+        @cmd << [:draw, "line #{pts}"]
+        pts = [
+          c[:x]+corner,
+          c[:y]+c[:h]-corner,
+          c[:x]+c[:w]-corner,
+          c[:y]+corner
+        ].join ' '
+        @cmd << [:draw, "line #{pts}"]
       end
     end
     
     # write the underlying MiniMagick::Image to disk;
+    # if no file name is given, image is processed in-place;
     # if the 2nd arg is false, then stretching is not applied
-    def write(fname, reg=true)
-      img = MiniMagick::Image.open @path
-      img.combine_options do |c|
-        c.distort(:perspective, perspective_points) if reg
-        @cmd.each do |cmd|
-          c.send *cmd
-        end
+    def write(fname=nil, reg=true)
+      if fname
+        img = MiniMagick::Image.open @path
+        img.combine_options {|c| exec_mm_cmd c, reg }
+        img.write fname
+      else
+        MiniMagick::Image.new(@path) { |c| exec_mm_cmd c, reg }
       end
-      img.write fname
     end
     
     # ============================================================#
     private                                                       #
     # ============================================================#
+    def exec_mm_cmd(c, reg)
+      c.distort(:perspective, perspective_points) if reg
+      @cmd.each do |cmd|
+        c.send *cmd
+      end
+    end
     
     def img_size
       @img_size ||= IO.read("|identify -format '%w,%h' #{@path}").split ','
@@ -163,20 +184,18 @@ module Mork
       @cmd << [:draw, "polygon #{pts}"]
     end
         
-    def array_of(cells)
-      out = []
-      cells.each_with_index do |q, i|
-        q.each do |c|
-          out << @grom.choice_cell_area(i, c)
-        end
-      end
-      out
+    def coordinates_of(cells)
+      cells.collect.each_with_index do |q, i|
+        q.collect { |c| @grom.choice_cell_area(i, c) }
+      end.flatten
+    end
+    
+    def corner
+      @corner_size ||= @grom.cell_corner_size
     end
 
     def register
       # find the XY coordinates of the 4 registration marks
-      @rm   = {} # registration mark centers
-      @rmsa = {} # registration mark search area
       @rm[:tl] = reg_centroid_on(:tl)
       @rm[:tr] = reg_centroid_on(:tr)
       @rm[:br] = reg_centroid_on(:br)
@@ -192,7 +211,7 @@ module Mork
         @rmsa[corner] = @grom.rm_search_area(corner, i)
         cx, cy = raw_pixels.dark_centroid @rmsa[corner]
         if cx.nil?
-          status = :insufficient_contrast  
+          status = :no_contrast  
         elsif (cx < @grom.rm_edgy_x) or
               (cy < @grom.rm_edgy_y) or
               (cy > @rmsa[corner][:h] - @grom.rm_edgy_y) or

@@ -42,6 +42,11 @@ module Mork
       end
     end
     
+    def cell_corner_size
+      d = choice_cell_area(0,0)
+      (d[:w]-d[:h]).abs
+    end
+    
     def barcode_bit_area(bit)
       {
         x: (cx * barcode_bit_x(bit)).round,
