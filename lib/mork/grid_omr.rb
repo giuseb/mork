@@ -83,7 +83,7 @@ module Mork
     def ppu_x() @px / page_width       end
     def ppu_y() @py / page_height      end
       
-    # finding the width of the registration area based on iteration
+    # finding the x position of the registration area based on iteration
     def rmx(corner, i)
       case corner
       when :tl; reg_off
@@ -93,7 +93,7 @@ module Mork
       end
     end
   
-    # finding the height of the registration area based on iteration
+    # finding the y position of the registration area based on iteration
     def rmy(corner, i)
       case corner
       when :tl; reg_off

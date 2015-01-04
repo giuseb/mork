@@ -11,12 +11,23 @@ module Mork
       @grom.set_page_size width, height
       @rm   = {} # registration mark centers
       @rmsa = {} # registration mark search area
-      @status = register
+      @valid = register
+      @writing = nil
       @cmd = []
     end
     
+    def valid?
+      @valid
+    end
+    
     def status
-      @status
+      {
+        tl: @rm[:tl][:status],
+        tr: @rm[:tr][:status],
+        br: @rm[:br][:status],
+        bl: @rm[:bl][:status],
+        write: @writing
+      }
     end
     
     def ink_black
@@ -84,7 +95,7 @@ module Mork
     
     def highlight_reg_area
       highlight_rect [@rmsa[:tl], @rmsa[:tr], @rmsa[:br], @rmsa[:bl]]
-      return unless @status
+      return unless valid?
       join [@rm[:tl], @rm[:tr], @rm[:br], @rm[:bl]]
     end
     
@@ -131,9 +142,20 @@ module Mork
     # if the 2nd arg is false, then stretching is not applied
     def write(fname=nil, reg=true)
       if fname
-        img = MiniMagick::Image.open @path
-        img.combine_options {|c| exec_mm_cmd c, reg }
-        img.write fname
+        # img = MiniMagick::Image.open @path
+        # img.combine_options {|c| exec_mm_cmd c, reg }
+        # begin
+        #   img.write fname
+        #   @write = :ok
+        # rescue Exception
+        #   @write = :fail
+        # end
+        MiniMagick::Tool::Convert.new(false) do |img|
+          img << @path
+          img.distort(:perspective, perspective_points) if reg
+          @cmd.each { |cmd| img.send *cmd }
+          img << fname
+        end
       else
         MiniMagick::Image.new(@path) { |c| exec_mm_cmd c, reg }
       end
@@ -144,6 +166,7 @@ module Mork
     # ============================================================#
     def exec_mm_cmd(c, reg)
       c.distort(:perspective, perspective_points) if reg
+      
       @cmd.each do |cmd|
         c.send *cmd
       end
@@ -200,8 +223,7 @@ module Mork
       @rm[:tr] = reg_centroid_on(:tr)
       @rm[:br] = reg_centroid_on(:br)
       @rm[:bl] = reg_centroid_on(:bl)
-      # return the status
-      @rm.all? { |k,v| v[:status] == :ok }
+      @rm.all? { |k,v| v[:status] == :ok }      
     end
     
     # returns the centroid of the dark region within the given area

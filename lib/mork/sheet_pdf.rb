@@ -120,26 +120,3 @@ module Mork
     end
   end
 end
-
-# def control(content)
-#   font_size @grip.control_size do
-#     text_box content[:string], at: @grip.control_xy,
-#                             width: @grip.control_width,
-#                             align: :right
-#     stroke do
-#       stroke_color "ff0000"
-#       # dark
-#       a = @grip.ctrl_area_dark
-#       rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-#       fill_color "ff0000"
-#       draw_text content[:labels][0], at: @grip.dark_control_letter_xy
-#       # light
-#       a = @grip.ctrl_area_light
-#       rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-#       fill_color "ff0000"
-#       draw_text content[:labels][1], at: @grip.light_control_letter_xy
-#
-#     end
-#   end
-# end
-#

@@ -7,11 +7,14 @@ module Mork
     def initialize(path, grom=nil)
       @grom = GridOMR.new grom
       @mim = Mimage.new path, @grom
-      @ok_reg = @mim.status
     end
     
     def valid?
-      @ok_reg
+      @mim.valid?
+    end
+    
+    def status
+      @mim.status
     end
     
     # barcode
@@ -161,8 +164,8 @@ module Mork
     end
     
     def not_registered
-      unless @ok_reg
-        puts "---=={ Unregistered image. Reason: '#{@rm.inspect}' }==---"
+      unless valid?
+        puts "---=={ Unregistered image. Reason: '#{@mim.status.inspect}' }==---"
         true
       end
     end
