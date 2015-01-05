@@ -34,6 +34,7 @@ module Mork
       # find the intensity trough
       ctr_x = xp.find_index(xp.min)
       ctr_y = yp.find_index(yp.min)
+      # puts "Centroid: #{ctr_x}, #{ctr_y} - MinX #{xp.min/xp.length}, MaxX #{xp.max/xp.length}, MinY #{yp.min/yp.length}, MaxY #{yp.max/yp.length}"
       return ctr_x, ctr_y
     end
     
@@ -49,6 +50,7 @@ module Mork
     end
     
     def sufficient_contrast?(p)
+      # puts "Contrast: #{p.stddev}"
       # tested with the few examples: spec/samples/rm0x.jpeg
       p.stddev > 20
     end

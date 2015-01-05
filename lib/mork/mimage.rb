@@ -220,9 +220,13 @@ module Mork
     def register
       # find the XY coordinates of the 4 registration marks
       @rm[:tl] = reg_centroid_on(:tl)
+      # puts "TL: #{@rm[:tl][:status].inspect}"
       @rm[:tr] = reg_centroid_on(:tr)
+      # puts "TR: #{@rm[:tr][:status].inspect}"
       @rm[:br] = reg_centroid_on(:br)
+      # puts "BR: #{@rm[:br][:status].inspect}"
       @rm[:bl] = reg_centroid_on(:bl)
+      # puts "BL: #{@rm[:bl][:status].inspect}"
       @rm.all? { |k,v| v[:status] == :ok }      
     end
     
@@ -231,6 +235,8 @@ module Mork
     def reg_centroid_on(corner)
       1000.times do |i|
         @rmsa[corner] = @grom.rm_search_area(corner, i)
+        # puts "================================================================"
+        # puts "Corner #{corner} - Iteration #{i} - Coo #{@rmsa[corner].inspect}"
         cx, cy = raw_pixels.dark_centroid @rmsa[corner]
         if cx.nil?
           status = :no_contrast  

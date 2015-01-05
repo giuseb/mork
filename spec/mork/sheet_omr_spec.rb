@@ -3,6 +3,30 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
+    # context 'problematic' do
+    #   let(:shinfo) { sample_img 'bianchi' }
+    #   let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
+    #
+    #   it 'has a status' do
+    #     sheet.status.should == {:tl=>:ok, :tr=>:ok, :br=>:ok, :bl=>:ok, :write=>nil}
+    #   end
+    #
+    #   it 'has a barcode' do
+    #     sheet.barcode.should == shinfo.barcode_int
+    #   end
+    #
+    #   it 'writes the registered and marked image' do
+    #     sheet.cross_marked
+    #     sheet.write 'spec/out/bianchi.jpg'
+    #     sheet.status[:write].should == :fail
+    #   end
+    #
+    #   it 'writes the registration areas' do
+    #     sheet.highlight_registration
+    #     sheet.write_raw 'spec/out/reg_bianchi.jpg'
+    #   end
+    #
+    # end
     
     context 'highlighting' do
       # since these specs change the @crop, they must be run in isolation

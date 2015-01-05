@@ -12,30 +12,15 @@ sample-gray:
   grid-file: spec/samples/layout.yml
   width: 1654
   height: 2339
-  
 
-sample01:
-  filename: spec/samples/sample01.jpg
-  pages:     1
-  width:  2334
-  height: 3291
-  
-  reg-marks: # registration marks
-    tl-x:     92
-    tl-y:     90
-    tr-x:   2245
-    tr-y:     97
-    br-x:   2230
-    br-y:   3217
-    bl-x:     78
-    bl-y:   3205
-  q-boxes:
-    q001:
-      tl-x: 175
-      tl-y: 379
-    q160:
-      tl-x: 1818
-      tl-y: 2974
+bianchi:
+  # filename: spec/samples/IMG_20150104_0005.jpg
+  # filename: spec/samples/out0000.jpg
+  # filename: spec/samples/SCN_0001.jpg
+  # filename: spec/samples/IMG_20150104_0011.jpg
+  # filename: spec/samples/IMG_20150104_0009.jpg
+  grid-file: spec/samples/bianchi.yml
+  barcode-int: 9350
   
 reg-mark:
   filename: spec/samples/reg_mark.jpg
