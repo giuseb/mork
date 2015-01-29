@@ -39,6 +39,10 @@ module Mork
       columns * rows
     end
     
+    def max_choices_per_question
+      @params[:items][:max_cells].to_i
+    end
+    
     def barcode_bits
       @params[:barcode][:bits].to_i
     end

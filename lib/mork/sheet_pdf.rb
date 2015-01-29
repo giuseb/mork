@@ -2,6 +2,9 @@ require 'mork/grid_pdf'
 require 'prawn'
 
 module Mork
+  
+  #TODO: read the prawn manual, we should probably use views
+  
   class SheetPDF < Prawn::Document
     def initialize(content, grip=GridPDF.new)
       @grip = case grip
@@ -100,23 +103,52 @@ module Mork
     end
 
     def questions_and_choices(content)
+      make_stamps
       stroke do
+        a = @grip.choice_cell_area 0, 0
+        rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
+        
         content.length.times do |q|
           fill_color "000000"
           text_box "#{q+1}", at: @grip.qnum_xy(q),
                              width: @grip.qnum_width,
                              align: :right,
                              size: @grip.item_font_size
-          stroke_color "ff0000"
-          font_size @grip.item_font_size
           content[q].times do |c|
-            a = @grip.choice_cell_area q, c
-            rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-            fill_color "ff0000"
-            text_box (65+c).chr, at: @grip.choice_letter_xy(q, c)
+            stamp_cell q, c
+            # a = @grip.choice_cell_area q, c
+            # rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
+            # le = "st-#{(65+c).chr}"
+            # stamp_at le, a[:p]
+            # fill_color "ff0000"
+            # text_box (65+c).chr, at: @grip.choice_letter_xy(q, c)
           end
         end
       end
+    end
+    
+    def stamp_cell(q, c)
+      stamp_at stamp_for(c), @grip.choice_cell_pos(q, c)
+    end
+    
+    def make_stamps
+      @grip.max_choices_per_question.times { |i| lettered_stamps i }
+    end
+    
+    def lettered_stamps(i)
+      create_stamp(stamp_for i) do
+        font_size @grip.item_font_size
+        stroke_rounded_rectangle [0,0], @grip.cell_width, @grip.cell_height, [@grip.cell_width, @grip.cell_height].min / 2
+        draw_text letter_for(i), at: [7,-5]
+      end
+    end
+    
+    def stamp_for(c)
+      "st-#{letter_for c}"
+    end
+    
+    def letter_for(c)
+      (65+c).chr
     end
   end
 end

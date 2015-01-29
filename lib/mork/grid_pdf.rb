@@ -27,8 +27,8 @@ module Mork
       rows.times.collect do |q|
         {
           p: [(reg_frame_width-cell_spacing).mm, (reg_frame_height - cell_y(q)).mm],
-          w: cell_width.mm,
-          h: cell_height.mm
+          w: cell_width,
+          h: cell_height
         }
       end
     end
@@ -57,12 +57,24 @@ module Mork
       ]
     end
     
+    def choice_cell_pos(q, c)
+      [ cell_x(q, c).mm, (reg_frame_height - cell_y(q)).mm ]
+    end
+    
     def choice_cell_area(q, c)
       {
         p: [cell_x(q, c).mm, (reg_frame_height - cell_y(q)).mm],
-        w: cell_width.mm,
-        h: cell_height.mm
+        w: cell_width,
+        h: cell_height
       }
+    end
+    
+    def cell_width
+      super.mm
+    end
+    
+    def cell_height
+      super.mm
     end
 
     def page_size()      [page_width.mm, page_height.mm]        end
