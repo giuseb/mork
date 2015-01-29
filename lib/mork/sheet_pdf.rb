@@ -100,6 +100,7 @@ module Mork
     end
 
     def questions_and_choices(content)
+      puts @grip.choice_cell_area(0,0).inspect
       stroke do
         content.length.times do |q|
           fill_color "000000"
