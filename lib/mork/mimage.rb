@@ -142,22 +142,16 @@ module Mork
     # if the 2nd arg is false, then stretching is not applied
     def write(fname=nil, reg=true)
       if fname
-        # img = MiniMagick::Image.open @path
-        # img.combine_options {|c| exec_mm_cmd c, reg }
-        # begin
-        #   img.write fname
-        #   @write = :ok
-        # rescue Exception
-        #   @write = :fail
-        # end
         MiniMagick::Tool::Convert.new(false) do |img|
           img << @path
-          img.distort(:perspective, perspective_points) if reg
-          @cmd.each { |cmd| img.send *cmd }
+          exec_mm_cmd img, reg
           img << fname
         end
       else
-        MiniMagick::Image.new(@path) { |c| exec_mm_cmd c, reg }
+        MiniMagick::Tool::Mogrify.new(false) do |img|
+          img << @path
+          exec_mm_cmd img, reg
+        end
       end
     end
     
@@ -166,10 +160,7 @@ module Mork
     # ============================================================#
     def exec_mm_cmd(c, reg)
       c.distort(:perspective, perspective_points) if reg
-      
-      @cmd.each do |cmd|
-        c.send *cmd
-      end
+      @cmd.each { |cmd| c.send *cmd }
     end
     
     def img_size

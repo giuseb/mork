@@ -73,7 +73,6 @@ module Mork
     # areas on the sheet that are certainly white/black
     def paper_white_area()         barcode_bit_area -1               end
     def ink_black_area()           barcode_bit_area  0               end
-    def max_choices_per_question() @params[:items][:max_cells].to_i  end
     def rm_max_search_area_side()  (ppu_x * page_width / 4).round    end
     
     private
