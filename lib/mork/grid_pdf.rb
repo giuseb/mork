@@ -18,74 +18,66 @@ module Mork
       ]
     end
     
-    def barcode_bit_areas_for(code)
+    def barcode_width
+      super.mm
+    end
+    
+    def barcode_height
+      super.mm
+    end
+    
+    def barcode_xy_for(code)
       black = barcode_bits.times.reject { |x| (code>>x)[0]==0 }
-      black.collect { |x| barcode_area x+1 }
+      black.collect { |x| barcode_xy x+1 }
     end
     
-    def calibration_cell_areas
+    def ink_black_xy
+      barcode_xy 0
+    end
+    
+    def calibration_cells_xy
       rows.times.collect do |q|
-        {
-          p: [(reg_frame_width-cell_spacing).mm, (reg_frame_height - cell_y(q)).mm],
-          w: cell_width,
-          h: cell_height
-        }
+        [(reg_frame_width-cell_spacing).mm, item_y(q).mm]
       end
-    end
-    
-    # Coordinates at which to place calibration cell labels (usually an ‘X’)
-    def calibration_letter_xy(q)
-      [
-        (reg_frame_width-cell_spacing).mm + 2.mm,
-        item_text_y(q)
-      ]
     end
     
     # Coordinates at which to place item numbers
     def qnum_xy(q)
       [
-        cell_x(q, 0).mm - qnum_width - @params[:items][:number_margin].to_f.mm,
-        item_text_y(q)
+        item_x(q).mm - qnum_width - qnum_margin,
+        item_y(q).mm
       ]
     end
     
-    # Coordinates at which to place choice labels
-    def choice_letter_xy(q, c)
-      [
-        cell_x(q, c).mm + 2.mm,
-        item_text_y(q)
-      ]
+    def width_of_cell
+      cell_width.mm
     end
     
-    def choice_cell_pos(q, c)
-      [ cell_x(q, c).mm, (reg_frame_height - cell_y(q)).mm ]
+    def height_of_cell
+      cell_height.mm
     end
     
-    def choice_cell_area(q, c)
-      {
-        p: [cell_x(q, c).mm, (reg_frame_height - cell_y(q)).mm],
-        w: cell_width,
-        h: cell_height
-      }
+    def choice_spacing
+      cell_spacing.mm
     end
     
-    def cell_width
-      super.mm
+    def item_xy(q)
+      [item_x(q).mm, item_y(q).mm]
     end
     
-    def cell_height
-      super.mm
+    def cround
+      @cround ||= [width_of_cell, height_of_cell].min / 2
     end
 
-    def page_size()      [page_width.mm, page_height.mm]        end
-    def margins()        reg_margin.mm                          end
-    def ink_black_area() barcode_area(0)                        end
-    def qnum_width()     @params[:items][:number_width].to_f.mm end
-    def item_font_size() @params[:items][:font_size].to_f       end
-    def header_width(k)  @params[:header][k][:width].to_f.mm    end
-    def header_height(k) @params[:header][k][:height].to_f.mm   end
-    def header_size(k)   @params[:header][k][:size].to_f        end
-    def header_boxed?(k) @params[:header][k][:box] == true      end
+    def page_size()      [page_width.mm, page_height.mm]         end
+    def margins()        reg_margin.mm                           end
+    def qnum_margin()    @params[:items][:number_margin].to_f.mm end
+    def qnum_width()     @params[:items][:number_width].to_f.mm  end
+    def item_font_size() @params[:items][:font_size].to_f        end
+    def header_width(k)  @params[:header][k][:width].to_f.mm     end
+    def header_height(k) @params[:header][k][:height].to_f.mm    end
+    def header_size(k)   @params[:header][k][:size].to_f         end
+    def header_boxed?(k) @params[:header][k][:box] == true       end
 
     def header_xy(k)
       [
@@ -100,12 +92,18 @@ module Mork
         header_height(k) - 1.mm
       ]
     end
-  
 
     private
-    
-    def item_text_y(q)
-      (reg_frame_height - cell_y(q) - cell_height/4).mm
+
+    def item_y(q)
+      reg_frame_height - cell_y(q)
+    end
+
+    def barcode_xy(i)
+      [
+        barcode_bit_x(i).mm,
+        barcode_height
+      ]
     end
     
     def barcode_area(i)

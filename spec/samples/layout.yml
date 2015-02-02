@@ -6,6 +6,7 @@ reg_marks:
   radius:           2.5   # registration mark radius
   search:          12     # initial size of the registration mark search area (*)
   offset:           2     # distance between the search area and each page border (*)
+
 header:           
   name:                   # ‘name’ is just a label; you can add arbitrary header elements
     top:            5     # margin relative to registration frame top side

@@ -72,7 +72,11 @@ module Mork
     # the distance from the registration frame to the left edge
     # of the c-th choice cell of the q-th question
     def cell_x(q,c)
-      first_x + column_width * (q / rows) + cell_spacing * c - cell_width / 2
+      item_x(q) + cell_spacing * c
+    end
+    
+    def item_x(q)
+      first_x + column_width * (q / rows) - cell_width / 2
     end
     
     def cal_cell_x

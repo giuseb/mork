@@ -29,21 +29,6 @@ module Mork
 
     private
 
-    def process
-      # for each response sheet
-      @content.each_with_index do |content, i|
-        start_new_page if i>0
-        fill_color "000000"
-        stroke_color "000000"
-        line_width 0.3
-        registration_marks
-        barcode content[:barcode]
-        header content[:header]
-        questions_and_choices content[:choices]
-        calibration_cells
-      end
-    end
-    
     def my_page_params
       {
         page_size: @grip.page_size,
@@ -51,38 +36,50 @@ module Mork
       }
     end
     
-    def registration_marks
-      fill do
-        @grip.reg_marks.each do |r|
-          circle r[:p], r[:r]
+    def process
+      # for all sheets
+      line_width 0.3
+      font_size @grip.item_font_size
+      create_stamps
+      make_repeaters
+      # for each response sheet
+      @content.each_with_index do |content, i|
+        start_new_page if i>0
+        barcode content[:barcode]
+        header content[:header]
+        unless equal_choice_number?
+          questions_and_choices ch_len[i]
         end
       end
     end
     
-    def calibration_cells
-      font_size @grip.item_font_size do
-        stroke do
-          stroke_color "ff0000"
-          @grip.calibration_cell_areas.each_with_index do |a, i|
-            rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-            fill_color "ff0000"
-            text_box 'X', at: @grip.calibration_letter_xy(i)
+    def make_repeaters
+      if equal_choice_number?
+        repeat(:all) do
+          questions_and_choices ch_len.first
+        end
+      end
+      
+      repeat(:all) do
+        calibration_cells
+        fill do
+          @grip.reg_marks.each do |r|
+            circle r[:p], r[:r]
           end
         end
       end
     end
     
+    def calibration_cells
+      @grip.calibration_cells_xy.each { |c| stamp_at 'X', c }
+    end
+    
     def barcode(code)
-      fill do
-        # draw the dark calibration bar
-        c = @grip.ink_black_area
-        rectangle c[:p], c[:w], c[:h]
-        # draw the bars corresponding to the code
-        # least to most significant bit, left to right
-        @grip.barcode_bit_areas_for(code).each do |c|
-          rectangle c[:p], c[:w], c[:h]
-        end
-      end
+      # draw the dark calibration bar
+      stamp_at 'barcode', @grip.ink_black_xy
+      # draw the bars corresponding to the code
+      # least to most significant bit, left to right
+      @grip.barcode_xy_for(code).each { |c| stamp_at 'barcode', c }
     end
     
     def header(content)
@@ -102,51 +99,66 @@ module Mork
       end
     end
 
-    def questions_and_choices(content)
-      make_stamps
-      stroke do
-        a = @grip.choice_cell_area 0, 0
-        rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-        
-        content.length.times do |q|
-          fill_color "000000"
-          text_box "#{q+1}", at: @grip.qnum_xy(q),
-                             width: @grip.qnum_width,
-                             align: :right,
-                             size: @grip.item_font_size
-          content[q].times do |c|
-            stamp_cell q, c
-            # a = @grip.choice_cell_area q, c
-            # rounded_rectangle a[:p], a[:w], a[:h], [a[:h], a[:w]].min / 2
-            # le = "st-#{(65+c).chr}"
-            # stamp_at le, a[:p]
-            # fill_color "ff0000"
-            # text_box (65+c).chr, at: @grip.choice_letter_xy(q, c)
-          end
+    def questions_and_choices(n_ch)
+      n_ch.each_with_index do |n, i|
+        text_box "#{i+1}",
+                 at: @grip.qnum_xy(i),
+                 width: @grip.qnum_width,
+                 height: @grip.height_of_cell,
+                 align: :right,
+                 valign: :center
+        stamp_at "s#{n}", @grip.item_xy(i)
+      end
+    end
+    
+    def create_stamps
+      create_choice_stamps
+      create_stamp('X') do
+        cell_stamp_content 'X', 0
+      end
+      create_stamp('barcode') do
+        fill do
+          rectangle [0,0], @grip.barcode_width, @grip.barcode_height
         end
       end
     end
     
-    def stamp_cell(q, c)
-      stamp_at stamp_for(c), @grip.choice_cell_pos(q, c)
-    end
-    
-    def make_stamps
-      @grip.max_choices_per_question.times { |i| lettered_stamps i }
-    end
-    
-    def lettered_stamps(i)
-      create_stamp(stamp_for i) do
-        font_size @grip.item_font_size
-        stroke_rounded_rectangle [0,0], @grip.cell_width, @grip.cell_height, [@grip.cell_width, @grip.cell_height].min / 2
-        draw_text letter_for(i), at: [7,-5]
+    def create_choice_stamps
+      ch_len.flatten.uniq.each do |t|
+        create_stamp("s#{t}") do
+          t.times do |i|
+            cell_stamp_content letter_for(i), @grip.choice_spacing*i
+          end
+        end
       end
     end
-    
-    def stamp_for(c)
-      "st-#{letter_for c}"
+
+    def cell_stamp_content(l, x)
+      stroke_rounded_rectangle [x,0],
+                               @grip.width_of_cell,
+                               @grip.height_of_cell,
+                               @grip.cround
+      text_box l,
+               at:     [x,0],
+               width:  @grip.width_of_cell,
+               height: @grip.height_of_cell,
+               align:  :center,
+               valign: :center
     end
     
+    def equal_choice_number?
+      return false unless ch_len.all? { |c| c.length == ch_len[0].length }
+      ch_len[0].each_with_index do |c, i|
+        return false unless ch_len.all? { |x| c == x[i] }
+      end
+      true
+    end
+    
+    def ch_len
+      @all_choice_lengths ||= @content.collect { |c| c[:choices] }
+    end
+    
+    # Choices are labeled 'A', 'B', ...
     def letter_for(c)
       (65+c).chr
     end
