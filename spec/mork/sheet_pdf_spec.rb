@@ -64,9 +64,15 @@ module Mork
       s.save('spec/out/i160.pdf')
     end
 
-    it 'creates a multipage pdf' do
-      s = SheetPDF.new([content, content, content])
-      s.save('spec/out/p2.pdf')
+    it 'creates a PDF sheet with unequal choices per item' do
+      s = SheetPDF.new(content.merge({choices: [5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1]}), 'spec/samples/layout.yml')
+      s.save('spec/out/uneq.pdf')
+    end
+
+    it 'creates 20 PDF sheets' do
+      c = content
+      s = SheetPDF.new([c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c])
+      s.save('spec/out/p20.pdf')
     end
   end
 end

@@ -69,7 +69,7 @@ module Mork
       bits:         40,
       left:         15,
       width:         3,
-      height:        2.5,
+      height:        3,
       spacing:       4
     }, # barcode end
     control: {
