@@ -59,7 +59,7 @@ module Mork
       s.save('spec/out/maxcode.pdf')
     end
 
-    it 'creates a PDF sheet with 160 items', focus: true do
+    it 'creates a PDF sheet with 160 items' do
       s = SheetPDF.new(content.merge({choices: [5] * 160}), 'spec/samples/grid160.yml')
       s.save('spec/out/i160.pdf')
       system 'open spec/out/i160.pdf'
