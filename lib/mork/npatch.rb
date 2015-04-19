@@ -22,6 +22,10 @@ module Mork
       crop(c).mean
     end
     
+    def stddev(c=nil)
+      crop(c).stddev
+    end
+    
     def length
       @patch.length
     end

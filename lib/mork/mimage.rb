@@ -2,12 +2,14 @@ require 'mini_magick'
 require 'mork/npatch'
 
 module Mork
-  # The class Mimage is a wrapper for the core image library, currently mini_magick
+  # The class Mimage manages the image. It is also a wrapper for the core image library
+  # currently mini_magick. TODO: consider moving out the interaction with mini_magick.
+  # Note that Mimage is NOT intended as public API, it should only be called by SheetOMR
   class Mimage
-    def initialize(path, grom, page=0)
-      raise "File '#{path}' not found" unless File.exists? path
-      @path = path
-      @grom = grom
+    def initialize(path, nitems, grom)
+      @path   = path
+      @grom   = grom
+      @nitems = nitems
       @grom.set_page_size width, height
       @rm   = {} # registration mark centers
       @rmsa = {} # registration mark search area
@@ -30,24 +32,12 @@ module Mork
       }
     end
     
-    def ink_black
-      reg_pixels.average @grom.ink_black_area
+    def marked?(q,c)
+      shade_of(q,c) < choice_threshold
     end
     
-    def paper_white
-      reg_pixels.average @grom.paper_white_area
-    end
-    
-    def cal_cell_mean
-      @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }.mean
-    end
-    
-    def shade_of_barcode_bit(i)
-      reg_pixels.average @grom.barcode_bit_area i+1
-    end
-    
-    def shade_of(q,c)
-      reg_pixels.average @grom.choice_cell_area(q, c)
+    def barcode_bit?(i)
+      reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
     end
     
     def width
@@ -65,7 +55,7 @@ module Mork
     def outline(cells, roundedness=nil)
       return if cells.empty?
       @cmd << [:stroke, 'green']
-      @cmd << [:strokewidth, '4']
+      @cmd << [:strokewidth, '2']
       @cmd << [:fill, 'none']
       coordinates_of(cells).each do |c|
         roundedness ||= [c[:h], c[:w]].min / 2
@@ -161,6 +151,44 @@ module Mork
     def exec_mm_cmd(c, reg)
       c.distort(:perspective, perspective_points) if reg
       @cmd.each { |cmd| c.send *cmd }
+    end
+    
+    def shade_of(q,c)
+      choice_cell_averages[q][c]
+    end
+    
+    def choice_cell_averages
+      @choice_cell_averages ||= begin
+        @nitems.each_with_index.collect do |cho, q|
+          cho.times.collect do |c|
+            reg_pixels.average @grom.choice_cell_area(q, c)
+          end
+        end
+      end
+    end
+    
+    def choice_threshold
+      @choice_threshold ||= (cal_cell_mean - darkest_cell_mean) * 0.75 + darkest_cell_mean
+    end
+    
+    def barcode_threshold
+      @barcode_threshold ||= (paper_white + ink_black) / 2
+    end    
+
+    def cal_cell_mean
+      @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }.mean
+    end
+
+    def darkest_cell_mean
+      @choice_cell_averages.flatten.min
+    end
+
+    def ink_black
+      reg_pixels.average @grom.ink_black_area
+    end
+    
+    def paper_white
+      reg_pixels.average @grom.paper_white_area
     end
     
     def img_size

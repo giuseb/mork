@@ -152,18 +152,19 @@ If the `layout` argument is omitted, Mork will search for a file named `layout.y
 
 ## Scoring response sheets with `SheetOMR`
 
-Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Again, two pieces of information must be provided to the class constructor:
+Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Three pieces of information must be provided to the class constructor:
 
 - **image**: the path/filename of the bitmap image (currently accepts JPG, JPEG, PNG, PDF extensions; a resolution of 150-200 dpi is usually more than sufficient to obtain accurate readings)
-- **layout**: same as for the SheetPDF class
+- **choices**: equivalent to the `choices` array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above)
+- **layout**: same as for the `SheetPDF` class
 
 The following code shows how to create and analyze a SheetOMR based on a bitmap file named `image.jpg`:
 
 ```ruby
 # instantiating the object
-s = SheetOMR.new 'image.jpg', 'layout.yml'
+s = SheetOMR.new 'image.jpg', [5]*100, 'layout.yml'
 # detecting darkened choice cells for the 100 items
-chosen = s.mark_array 100
+chosen = s.mark_array
 ```
 
 If all goes well, the `chosen` array will contain 100 sub-arrays, each containing the list of darkened choices for that item, where the first cell is indicated by a 0, the second by a 1, etc. It is also possible to show the scoring graphically:
