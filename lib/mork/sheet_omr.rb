@@ -4,9 +4,19 @@ require 'mork/mimage_list'
 
 module Mork
   class SheetOMR
-    def initialize(path, grom=nil)
-      @grom = GridOMR.new grom
-      @mim = Mimage.new path, @grom
+    
+    def initialize(path, nitems=nil, grom=nil)
+      raise "File '#{path}' not found" unless File.exists? path
+      @grom   = GridOMR.new grom
+      @nitems = case nitems
+                when nil
+                  [@grom.max_choices_per_question] * @grom.max_questions
+                when Fixnum
+                  [@grom.max_choices_per_question] * nitems 
+                when Array
+                  nitems
+                end
+      @mim    = Mimage.new path, @nitems, @grom
     end
     
     def valid?
@@ -31,7 +41,7 @@ module Mork
     # bits long, with most significant bits to the left
     def barcode_string
       return if not_registered
-      cs = @grom.barcode_bits.times.inject("") { |c, v| c << barcode_bit_value(v) }
+      cs = @grom.barcode_bits.times.inject("") { |c, v| c << barcode_bit_string(v) }
       cs.reverse
     end
     
@@ -41,23 +51,42 @@ module Mork
     # false otherwise
     def marked?(q, c)
       return if not_registered
-      @mim.shade_of(q, c) < choice_threshold
+      @mim.marked? q, c
     end
     
     # TODO: define method ‘mark’ to retrieve the choice array for a single item
+    
     
     # mark_array(range)
     # 
     # returns an array of arrays of marked choices.
     # takes either a range of questions, an array of questions, or a fixnum,
     # in which case the choices for the first n questions will be returned.
-    # if called without arguments, all available choices will be evaluated
+    # if called without arguments, all available choices will be evaluated.
     def mark_array(r = nil)
       return if not_registered
       question_range(r).collect do |q|
         cho = []
         (0...@grom.max_choices_per_question).each do |c|
           cho << c if marked?(q, c)
+        end
+        cho
+      end
+    end
+    
+    # mark_char_array(range)
+    # 
+    # returns an array of arrays of the characters corresponding to marked choices.
+    # WARNING: at this time, only the latin sequence 'A, B, C...' is supported.
+    # takes either a range of questions, an array of questions, or a fixnum,
+    # in which case the choices for the first n questions will be returned.
+    # if called without arguments, all available choices will be evaluated.
+    def mark_char_array(r = nil)
+      return if not_registered
+      question_range(r).collect do |q|
+        cho = []
+        (0...@grom.max_choices_per_question).each do |c|
+          cho << (65+c).chr if marked?(q, c)
         end
         cho
       end
@@ -134,10 +163,15 @@ module Mork
     # ============================================================#
     private                                                       #
     # ============================================================#
-
+    
+    def barcode_bit_string(i)
+      @mim.barcode_bit?(i) ? "1" : "0"
+    end
+    
     def question_range(r)
+      # TODO: help text: although not API, people need to know this! 
       if r.nil?
-        (0...@grom.max_questions)
+        (0...@nitems.length)
       elsif r.is_a? Fixnum
         (0...r)
       elsif r.is_a? Array
@@ -146,23 +180,7 @@ module Mork
         raise "Invalid argument"
       end
     end
-    
-    def barcode_bit_value(i)
-      @mim.shade_of_barcode_bit(i) < barcode_threshold ? "1" : "0"
-    end
-    
-    def barcode_threshold
-      @barcode_threshold ||= (@mim.paper_white + ink_black) / 2
-    end
-    
-    def choice_threshold
-      @choice_threshold ||= (@mim.cal_cell_mean - ink_black) * 0.9 + ink_black
-    end
-    
-    def ink_black
-      @ink_black ||= @mim.ink_black
-    end
-    
+        
     def not_registered
       unless valid?
         puts "---=={ Unregistered image. Reason: '#{@mim.status.inspect}' }==---"

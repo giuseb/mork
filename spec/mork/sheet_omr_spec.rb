@@ -32,7 +32,7 @@ module Mork
       # since these specs change the @crop, they must be run in isolation
       # with the SheetOMR rebuilt each time, even though it is time consuming!
       let(:shinfo) { sample_img 'sample-gray' }
-      let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
+      let(:sheet)  { SheetOMR.new shinfo.filename, [5]*100, shinfo.grid_file }
       
       it 'highlights the registration areas and frame' do
         sheet.highlight_registration
@@ -66,7 +66,7 @@ module Mork
 
       it 'outlines some responses in-place (rewriting the source image)' do
         FileUtils.cp shinfo.filename, 'spec/out/inplace.jpg'
-        tsheet = SheetOMR.new 'spec/out/inplace.jpg', shinfo.grid_file
+        tsheet = SheetOMR.new 'spec/out/inplace.jpg', [5]*100, shinfo.grid_file
         tsheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         tsheet.write
       end
@@ -76,26 +76,26 @@ module Mork
         sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         sheet.write 'spec/out/marks_and_outs.jpg'
       end
-      
+
       it 'highlights marked cells of a problematic one' do
         si = sample_img 'silvia'
-        s = SheetOMR.new si.filename, si.grid_file
+        s = SheetOMR.new si.filename, [5]*100, si.grid_file
         s.highlight_marked
         s.write 'spec/out/problem.jpg'
       end
       
       it 'highlights the barcode' do
         si = sample_img 'sample-gray'
-        s = SheetOMR.new si.filename, si.grid_file
+        s = SheetOMR.new si.filename, [5]*100, si.grid_file
         s.highlight_barcode
         s.write 'spec/out/code_bits.jpg'
       end
     end
-
+    
     context 'marking a nicely printed and scanned sheet' do
       before(:all) do
         @shinfo = sample_img 'sample-gray'
-        @sheet = SheetOMR.new @shinfo.filename, @shinfo.grid_file
+        @sheet = SheetOMR.new @shinfo.filename, [5]*120, @shinfo.grid_file
       end
       
       describe '#valid?' do
@@ -118,8 +118,7 @@ module Mork
         end
 
         it 'writes out markedness' do
-          puts "Choice threshold: #{@sheet.send :choice_threshold}"
-          mf = File.open('spec/out/marked.txt',   'w')
+          mf = File.open('spec/out/marked.txt', 'w')
           120.times do |q|
             x = 5.times.collect do |c|
               @sheet.marked?(q,c) ? '1' : '0'
@@ -164,18 +163,89 @@ module Mork
         
         it 'should read another bit string' do
           barcode_string = '0000000000000000000000000010000110100000'
-          s2 = SheetOMR.new('spec/samples/sample02.jpg')
+          s2 = SheetOMR.new('spec/samples/sample02.jpg', [5]*100)
           s2.barcode_string.should == barcode_string
           s2.barcode.should == 8608
         end
 
         it 'should read the 666 bit string' do
           sh = sample_img 'code666'
-          s2 = SheetOMR.new sh.filename, sh.grid_file
+          s2 = SheetOMR.new sh.filename, [5]*100, sh.grid_file
           s2.barcode.should == sh.barcode_int
         end
       end
       
+    end
+    
+    context 'marking a problematic sheet' do
+      let(:sheet) { SheetOMR.new 'spec/samples/out-1.jpg', [5]*100, 'spec/samples/grid.yml' }
+      
+      it 'highlights marked cells and outline correct responses' do
+        sheet.cross_marked
+        sheet.outline [[0,1,2,3,4]] * 100
+        sheet.write 'spec/out/marks_and_outs.jpg'
+      end
+      
+      it 'highlights the barcode' do
+        sheet.highlight_barcode
+        sheet.write 'spec/out/barcode.jpg'
+      end
+    end
+
+    context 'systematic tests' do
+      let(:bila)  { 'CCEBEBCEEACCDCABDBEBCADEADDCCCACCACDBBDAECDDABDEEBCEEDCBAAADEEEEDCADEABCBDECCCCDDDCABBECAADADBBEEABA'.split '' }
+      let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bila2) { SheetOMR.new 'spec/samples/syst/bila2.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bila3) { SheetOMR.new 'spec/samples/syst/bila3.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:dald)  { 'DDDBECAAADBAEEEAEEEBAACAEDBDECDBDCDCDDEDCCDCDBDCADEEDBCCBEBBAADDCDBBECBBBDEABADABADADBABAEABACBDADDA'.split '' }
+      let(:dald0) { SheetOMR.new 'spec/samples/syst/dald0.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:dald1) { SheetOMR.new 'spec/samples/syst/dald1.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:dald2) { SheetOMR.new 'spec/samples/syst/dald2.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:dald3) { SheetOMR.new 'spec/samples/syst/dald3.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:cost)  { 'ABBDDBAEAEBAADEAAECBCDBBDABABADEECCACBCAEDDAEBEABBCDABECAACEEEBADECBBEAADBBBEABDAEBDEEABBABEBEDDAEEC'.split '' }
+      let(:cost0) { SheetOMR.new 'spec/samples/syst/cost0.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:cost1) { SheetOMR.new 'spec/samples/syst/cost1.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:cost2) { SheetOMR.new 'spec/samples/syst/cost2.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:cost3) { SheetOMR.new 'spec/samples/syst/cost3.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bone)  { 'CECBBABAECADEDCACBBDEECBADBECDCEDECABCAADCBDEDACAEEDCCADBEDCEBCCBBDCCACDEDDAAECEBDBADCBAAEBAEDABCBDC'.split '' }
+      let(:bone0) { SheetOMR.new 'spec/samples/syst/bone0.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bone1) { SheetOMR.new 'spec/samples/syst/bone1.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:barr)  { 'ACECAAADDBCECCCDBEBECDEDAECEDDEEDCDEADDCCBCCCBBEACBCAEDEEDDDABBBBABEBDCEADEEDEBCBADBCEDCDBACEBCBDCDA'.split '' }
+      let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', [5]*100,  'spec/samples/grid.yml'}
+            
+      it 'checks bila' do
+        expect(bila0.mark_char_array.flatten).to eq(bila)
+        expect(bila1.mark_char_array.flatten).to eq(bila)
+        expect(bila2.mark_char_array.flatten).to eq(bila)
+        expect(bila3.mark_char_array.flatten).to eq(bila)
+      end
+
+      it 'checks dald' do
+        expect(dald0.mark_char_array.flatten).to eq(dald)
+        expect(dald1.mark_char_array.flatten).to eq(dald)
+        expect(dald2.mark_char_array.flatten).to eq(dald)
+        expect(dald3.mark_char_array.flatten).to eq(dald)
+      end
+
+      it 'checks cost' do
+        expect(cost0.mark_char_array.flatten).to eq(cost)
+        expect(cost1.mark_char_array.flatten).to eq(cost)
+        expect(cost2.mark_char_array.flatten).to eq(cost)
+        expect(cost3.mark_char_array.flatten).to eq(cost)
+      end
+
+      it 'checks bone' do
+        expect(bone0.mark_char_array.flatten).to eq(bone)
+        expect(bone1.mark_char_array.flatten).to eq(bone)
+      end
+
+      it 'checks barr' do
+        expect(barr0.mark_char_array.flatten).to eq(barr)
+        expect(barr1.mark_char_array.flatten).to eq(barr)
+      end
+
     end
 
     # context "multi-page pdf" do
