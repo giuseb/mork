@@ -1,13 +1,13 @@
 page_size:                # all measurements in mm
   width:          210     # width of the paper sheet
   height:         297     # height of the paper sheet
-reg_marks:         
+reg_marks:
   margin:          10     # distance from each page border to registration mark center
   radius:           2.5   # registration mark radius
   search:          12     # initial size of the registration mark search area (*)
   offset:           2     # distance between the search area and each page border (*)
 
-header:           
+header:
   name:                   # ‘name’ is just a label; you can add arbitrary header elements
     top:            5     # margin relative to registration frame top side
     left:           7.5   # margin relative to registration frame left side
@@ -35,14 +35,14 @@ items:
   left:             10.5  # response area margin, relative to reg frame
   rows:             30    # number of items per column
   columns:           4    # number of columns
-  column_width:     44    # 
+  column_width:     44    #
   x_spacing:         7    # horizontal distance between ajacent cell centers
   y_spacing:         7    # vertical distance between ajacent cell centers
   cell_width:        6    # width of each choice and calibration cell
   cell_height:       5    # height of each choice and calibration cell
   max_cells:         5    # maximum number of choices per item
   font_size:         9    # size of both the item number and choice cell letter
-  number_width:      8    # 
+  number_width:      8    #
   number_margin:     2    # margin between
 barcode:
   bits:             40    # the maximum sheet identifier is 2 to the power or bits

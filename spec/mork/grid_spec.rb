@@ -12,13 +12,13 @@ module Mork
       before(:all) do
         @grid = Grid.new 'spec/samples/layout.yml'
       end
-      
+
       describe '#max_questions' do
         it 'returns the maximum number of questions in a sheet' do
           @grid.max_questions.should == 120
         end
       end
-      
+
       describe '#barcode_bits' do
         it 'returns the number of bits used to define the form barcode' do
           @grid.send(:barcode_bits).should == 40
@@ -26,7 +26,7 @@ module Mork
       end
     end
 
-    
+
     # describe "#cell_x" do
     #   context "for 1st-column questions" do
     #     it "returns the distance from the registration frame of the left edge of the 1st choice" do
@@ -68,7 +68,7 @@ end
 #   it "returns a hash" do
 #     grid.question_area(1).should be_an_instance_of(Hash)
 #   end
-#   
+#
 #   it "returns the location in pixels of the first question patch" do
 #     c = grid.question_area(1)
 #     c[:x].should be_within(4).of(90)
@@ -79,13 +79,13 @@ end
 #     c[:x].should be_within(4).of(90)
 #     c[:y].should be_within(4).of(3120)
 #   end
-# 
+#
 #   it "returns the location in pixels of the 121th question patch" do
 #     c = grid.question_area(121)
 #     c[:x].should be_within(4).of(1887)
 #     c[:y].should be_within(4).of(388)
 #   end
-# 
+#
 #   it "returns the location in pixels of the last question patch" do
 #     c = grid.question_area(160)
 #     c[:x].should be_within(4).of(1887)

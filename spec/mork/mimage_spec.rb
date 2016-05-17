@@ -34,14 +34,6 @@ module Mork
       let(:sg)  { Mimage.new sgi.filename, qna, GridOMR.new(sgi.grid_file) }
 
       describe 'basics' do
-        it 'returns the width' do
-          expect(sg.width).to eq sgi.width
-        end
-
-        it 'returns the height' do
-          expect(sg.height).to eq sgi.height
-        end
-
         it 'returns the pixels as an array' do
           expect(sg.send :raw_pixels).to be_a NPatch
         end

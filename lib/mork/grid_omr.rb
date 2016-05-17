@@ -9,6 +9,7 @@ module Mork
     def set_page_size(width, height)
       @px = width.to_f
       @py = height.to_f
+      self
     end
 
     def barcode_bit_areas(bitstring = '1' * barcode_bits)

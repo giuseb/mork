@@ -1,3 +1,8 @@
+slanted:
+  filename: spec/samples/slanted.jpg
+  width:  1241
+  height: 1754
+
 code666:
   filename: spec/samples/sheet666.jpg
   grid-file: spec/samples/layout.yml
@@ -21,7 +26,7 @@ bianchi:
   # filename: spec/samples/IMG_20150104_0009.jpg
   grid-file: spec/samples/bianchi.yml
   barcode-int: 9350
-  
+
 reg-mark:
   filename: spec/samples/reg_mark.jpg
   centroid-x: 92
@@ -32,7 +37,7 @@ small:
 
 code-sample:
   filename: spec/samples/code_sample.png
-  code-string: "0000000000000000000000000000000000000000000000000001110001010001" 
+  code-string: "0000000000000000000000000000000000000000000000000001110001010001"
   code-int:    7249
 
 code-zero:
@@ -41,4 +46,4 @@ code-zero:
 two-pages:
   filename: spec/samples/two_pages.pdf
   code-int: 17382938642823887837
-  
+

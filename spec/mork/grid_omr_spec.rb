@@ -6,17 +6,17 @@ module Mork
       @grom = GridOMR.new 'spec/samples/layout.yml'
       @grom.set_page_size 1601, 2281
     end
-      
+
     describe '#choice_cell_area' do
       it 'returns the coordinates of the first choice cell' do
         @grom.choice_cell_area(0,0).should == {x: 63, y: 436, w: 51, h: 41}
       end
-      
+
       it 'returns the coordinates of the last choice cell' do
         @grom.choice_cell_area(119,4).should == {x: 1411, y: 2108, w: 51, h: 41}
       end
     end
-    
+
     describe '#barcode_bit_area' do
       # it 'returns the coordinates of the first barcode bit area' do
       #   @grom.barcode_bit_area(0).should == {x: 160, y: 2260, w: 25, h: 21}
@@ -76,7 +76,7 @@ module Mork
         end
       end
     end
-    
+
     describe '#rm_edgy_x' do
       it 'returns the minimum acceptable number of pixels from the regmark center to the edge of the rm_search_area' do
         @grom.rm_edgy_x.should == 24
@@ -94,7 +94,7 @@ module Mork
         @grom.rm_edgy_y.should be_a Fixnum
       end
     end
-    
+
     describe '#rm_max_search_area_side' do
       it 'returns the maximum extent of the regmark search area, 1/4 of the raw image horizontal pixels' do
         @grom.rm_max_search_area_side.should == 400
@@ -109,13 +109,13 @@ module Mork
         @grom.max_choices_per_question.should == 5
       end
     end
-    
+
     describe '#paper_white_area' do
       it 'returns the coordinates of the white area used for barcode calibration' do
         @grom.paper_white_area.should == {x: 93, y: 2260, w: 25, h: 21}
       end
     end
-    
+
     describe '#ink_black_area' do
       it 'returns the coordinates of the barcode calibration bar' do
         @grom.ink_black_area.should == {x: 126, y: 2260, w: 25, h: 21}
