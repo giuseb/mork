@@ -180,7 +180,7 @@ module Mork
     end
 
     def darkest_cell_mean
-      @choice_cell_averages.flatten.min
+      choice_cell_averages.flatten.min
     end
 
     def ink_black

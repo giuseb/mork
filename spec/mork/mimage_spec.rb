@@ -6,8 +6,8 @@ module Mork
     context 'problematic sheets' do
       let(:mim)  { Mimage.new 'spec/samples/out-1.jpg', qna, GridOMR.new('spec/samples/grid.yml')  }
       let(:bila) { Mimage.new 'spec/samples/syst/bila0.jpg', qna, GridOMR.new('spec/samples/grid.yml') }
-      
-      xit 'writes all cell values to a text file' do
+
+      it 'writes all cell values to a text file', exclude: true do
         d=Dir['spec/samples/syst/*.jpg']
         d.each do |f|
           fn = File.basename f, '.jpg'
@@ -28,24 +28,24 @@ module Mork
         end
       end
     end
-    
+
     context 'Old specs' do
       let(:sgi) { sample_img 'sample-gray' }
       let(:sg)  { Mimage.new sgi.filename, qna, GridOMR.new(sgi.grid_file) }
-    
+
       describe 'basics' do
         it 'returns the width' do
           expect(sg.width).to eq sgi.width
         end
-      
+
         it 'returns the height' do
           expect(sg.height).to eq sgi.height
         end
-      
+
         it 'returns the pixels as an array' do
           expect(sg.send :raw_pixels).to be_a NPatch
         end
-      
+
         it 'returns the correct number of pixels' do
           expect(sg.send(:raw_pixels).length).to eq sgi.width * sgi.height
         end
@@ -53,7 +53,7 @@ module Mork
         it 'returns the stretched array' do
           expect(sg.send(:reg_pixels).length).to eq sgi.width * sgi.height
         end
-      
+
         it 'raises an error if the file is not found' do
           expect { Mimage.new 'non_existing_file' }.to raise_error
         end
