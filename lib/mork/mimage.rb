@@ -1,9 +1,5 @@
-require 'mini_magick'
-require 'mork/npatch'
-
 module Mork
-  # The class Mimage manages the image. It is also a wrapper for the core image library
-  # currently mini_magick. TODO: consider moving out the interaction with mini_magick.
+  # The class Mimage processes the image.
   # Note that Mimage is NOT intended as public API, it should only be called by SheetOMR
   class Mimage
     def initialize(path, nitems, grom)
@@ -14,7 +10,6 @@ module Mork
       @rmsa = {} # registration mark search area
       @valid = register
       @writing = nil
-      @cmd = []
     end
 
     def valid?
@@ -39,23 +34,9 @@ module Mork
       reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
     end
 
-    # #!!! get rid of
-    # def width
-    #   @mack.width
-    # end
-
-    # #!!! get rid of
-    # def height
-    #   @mack.height
-    # end
-
-    # outline(cells, roundedness)
-    #
-    # draws on the Mimage a set of cell outlines
-    # typically used to highlight the expected responses
     def outline(cells, roundedness=nil)
       return if cells.empty?
-      @mack.outline coordinates_of cells, roundedness
+      @mack.outline coordinates_of(cells), roundedness
     end
 
     # highlight_cells(cells, roundedness)
@@ -84,7 +65,7 @@ module Mork
     def cross(cells)
       return if cells.empty?
       cells = [cells] if cells.is_a? Hash
-      @mack.cross coordinates_of cells, corner
+      @mack.cross coordinates_of(cells), corner
     end
 
     # write the underlying MiniMagick::Image to disk;

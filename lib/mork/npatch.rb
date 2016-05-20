@@ -1,28 +1,23 @@
 require 'narray'
 
 module Mork
-  # NPatch handles low-level computations on pixels
-  # it is basically a wrapper around NArray
+  # NPatch handles low-level computations on pixels by leveraging NArray
   class NPatch
+    # NPatch.new(source, width, height) constructs an NPatch object
+    # from the `source` linear array of bytes, to be reshaped as a
+    # `width` by `height` matrix
     def initialize(source, width, height)
       @patch = NArray.byte(width, height)
-      @patch[true] = case source
-                     when Array
-                       source
-                     when String
-                       IO.read("|convert #{source} gray:-").unpack 'C*'
-                     else
-                       raise 'Invalid NPatch init param'
-                     end
+      @patch[true] = source
       @width  = width
       @height = height
     end
 
-    def average(c=nil)
+    def average(c = nil)
       crop(c).mean
     end
 
-    def stddev(c=nil)
+    def stddev(c = nil)
       crop(c).stddev
     end
 
@@ -62,21 +57,3 @@ module Mork
   end
 end
 
-
-# def edgy?(x, y)
-#   tol = 5
-#   (x < tol) or (y < tol) or (y > @height - tol) or (x > @width - tol)
-# end
-#
-# def patch
-#   @the_npatch ||= blurry_narr.reshape!(@width, @height)
-# end
-#
-# def narr
-#   NArray[@mim.pixels]
-# end
-#
-# def blurry_narr
-#   @blurry_narr ||= NArray[@mim.blur!(10,5).pixels]
-# end
-#

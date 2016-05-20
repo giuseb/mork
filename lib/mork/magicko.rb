@@ -1,3 +1,6 @@
+require 'mini_magick'
+require 'mork/npatch'
+
 module Mork
   # Magicko: image management, done in two ways: 1) direct system calls to
   # imagemagick tools; 2) via the MiniMagick gem
@@ -44,7 +47,7 @@ module Mork
       @cmd << [:stroke, 'green']
       @cmd << [:strokewidth, '2']
       @cmd << [:fill, 'none']
-      cerllcoord.each do |c|
+      cellcoord.each do |c|
         roundedness ||= [c[:h], c[:w]].min / 2
         pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h], roundedness, roundedness].join ' '
         @cmd << [:draw, "roundrectangle #{pts}"]
@@ -87,7 +90,12 @@ module Mork
       @cmd << [:fill, 'none']
       @cmd << [:stroke, 'green']
       @cmd << [:strokewidth, 3]
-      pts = [p[0][:x], p[0][:y], p[1][:x], p[1][:y], p[2][:x], p[2][:y], p[3][:x], p[3][:y]].join ' '
+      pts = [
+        p[0][:x], p[0][:y],
+        p[1][:x], p[1][:y],
+        p[2][:x], p[2][:y],
+        p[3][:x], p[3][:y]
+      ].join ' '
       @cmd << [:draw, "polygon #{pts}"]
     end
 
@@ -110,7 +118,7 @@ module Mork
 
     def exec_mm_cmd(c, pp)
       c.distort(:perspective, pp) if pp
-      @cmd.each { |cmd| c.send * cmd }
+      @cmd.each { |cmd| c.send(*cmd) }
     end
 
     def patch(str = nil)
