@@ -28,7 +28,12 @@ module Mork
     # the centers of the four registration marks)
     # pp: a hash in the form of pp[:tl][:x], pp[:tl][:y], etc.
     def reg_patch(pp)
-      @reg_pixels ||= patch "-distort Perspective '#{pps pp}'"
+      @reg_pixels ||= patch(shape: "-distort Perspective '#{pps pp}'")
+    end
+
+    def rm_patch(corner, side)
+      sh = "-gravity #{gravity corner} -crop #{side}x#{side}+0+0"
+      patch shape: sh, wid: side, hei: side
     end
 
     # MiniMagick stuff
@@ -121,10 +126,10 @@ module Mork
       @cmd.each { |cmd| c.send(*cmd) }
     end
 
-    def patch(str = nil)
-      s = "|convert #{@path} #{str} gray:-"
+    def patch(shape: nil, wid: width, hei: height)
+      s = "|convert #{@path} #{shape} gray:-"
       bytes = IO.read(s).unpack 'C*'
-      NPatch.new bytes, width, height
+      NPatch.new bytes, wid, hei
     end
 
     # perspective points: brings the found registration area centers to the
@@ -143,6 +148,19 @@ module Mork
       @img_size ||= begin
         s = "|identify -format '%w,%h' #{@path}"
         IO.read(s).split(',').map(&:to_i)
+      end
+    end
+
+    def gravity(corner)
+      case corner
+      when :tl
+        :NorthWest
+      when :tr
+        :NorthEast
+      when :br
+        :SouthEast
+      when :bl
+        :SouthWest
       end
     end
   end

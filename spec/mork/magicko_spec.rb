@@ -41,5 +41,11 @@ module Mork
         expect(ma.reg_patch(pp).length).to eq sh.height*sh.width
       end
     end
+
+    describe '#rm_patch' do
+      it 'exists' do
+        expect(ma.rm_patch :tl, 100).to be_an NPatch
+      end
+    end
   end
 end

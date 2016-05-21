@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'fileutils'
 
 module Mork
-  describe SheetOMR, focus: true do
+  describe SheetOMR do
     # context 'problematic' do
     #   let(:shinfo) { sample_img 'bianchi' }
     #   let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
