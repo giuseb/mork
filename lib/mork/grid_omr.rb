@@ -1,4 +1,5 @@
 require 'mork/grid'
+require 'mork/coord'
 
 module Mork
   class GridOMR < Grid
@@ -31,11 +32,6 @@ module Mork
       rows.times.collect do |q|
         coord cal_cell_x, cell_y(q), cell_width, cell_height
       end
-    end
-
-    def cell_corner_size
-      d = choice_cell_area(0,0)
-      (d[:w]-d[:h]).abs
     end
 
     def barcode_bit_area(bit)
@@ -115,3 +111,9 @@ end
 # def rm_edgy_x()                (ppu_x * reg_radius).round + 5    end
 # def rm_edgy_y()                (ppu_y * reg_radius).round + 5    end
 # def rm_max_search_area_side()  (ppu_x * page_width / 4).round    end
+
+# def cell_corner_size
+#   d = choice_cell_area(0,0)
+#   (d[:w]-d[:h]).abs
+# end
+

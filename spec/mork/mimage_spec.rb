@@ -68,7 +68,7 @@ module Mork
           expect(sg.send(:reg_pixels).length).to eq sgi.width * sgi.height
         end
 
-        it 'raises an error if the file is not found' do
+        xit 'raises an error if the file is not found' do
           expect { Mimage.new 'non_existing_file' }.to raise_error
         end
       end

@@ -1,4 +1,5 @@
 require 'mork/npatch'
+require 'mork/magicko'
 
 module Mork
   # The class Mimage processes the image.
