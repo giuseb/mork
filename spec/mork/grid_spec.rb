@@ -4,7 +4,7 @@ module Mork
   describe Grid do
     context 'init params' do
       it 'does not work with an integer' do
-        expect {Grid.new 1}.to raise_error
+        expect {Grid.new 1}.to raise_error RuntimeError
       end
     end
 

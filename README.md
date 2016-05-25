@@ -91,8 +91,10 @@ page_size:                # all measurements in mm
 reg_marks:         
   margin:          10     # distance from each page border to registration mark center
   radius:           2.5   # registration mark radius
-  search:          12     # initial size of the registration mark search area (*)
+  crop:            12     # size of the registration mark search area (*)
   offset:           2     # distance between the search area and each page border (*)
+  blur:             2     # size of a gaussian blur filter to smooth overly pixelated registration marks (0 to skip)
+  dilate:           5     # size of a “dilate” filter to get rid of stray noise (0 to skip)
 header:           
   name:                   # ‘name’ is just a label; you can add arbitrary header elements
     top:            5     # margin relative to registration frame top side
@@ -152,7 +154,7 @@ If the `layout` argument is omitted, Mork will search for a file named `layout.y
 
 ## Scoring response sheets with `SheetOMR`
 
-Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Three pieces of information must be provided to the class constructor:
+Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that the sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Three pieces of information must be provided to the object constructor:
 
 - **image**: the path/filename of the bitmap image (currently accepts JPG, JPEG, PNG, PDF extensions; a resolution of 150-200 dpi is usually more than sufficient to obtain accurate readings)
 - **choices**: equivalent to the `choices` array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above)

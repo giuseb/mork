@@ -3,12 +3,12 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
-    context 'basic object generation', focus: true do
+    context 'basic object generation' do
       let(:img) { sample_img 'slanted' }
       let(:omr) { SheetOMR.new img.filename, [5] * 120, img.grid_file }
       describe '#new' do
         it 'raises an error if the provided path is invalid' do
-          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error
+          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
         end
 
         it 'creates a SheetOMR object' do

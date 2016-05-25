@@ -6,7 +6,7 @@ module Mork
   class SheetOMR
 
     def initialize(path, nitems=nil, grom=nil)
-      raise "File '#{path}' not found" unless File.exists? path
+      raise IOError, "File '#{path}' not found" unless File.exists? path
       @grom   = GridOMR.new grom
       @nitems = case nitems
                 when nil

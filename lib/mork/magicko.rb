@@ -101,13 +101,13 @@ module Mork
 
     def write(fname, reg)
       if fname
-        MiniMagick::Tool::Convert.new(false) do |img|
+        MiniMagick::Tool::Convert.new(whiny: false) do |img|
           img << @path
           exec_mm_cmd img, reg
           img << fname
         end
       else
-        MiniMagick::Tool::Mogrify.new(false) do |img|
+        MiniMagick::Tool::Mogrify.new(whiny: false) do |img|
           img << @path
           exec_mm_cmd img, reg
         end

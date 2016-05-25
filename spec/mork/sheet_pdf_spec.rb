@@ -26,7 +26,7 @@ module Mork
     end
 
     it 'raises an error with an invalid init parameter' do
-      lambda { SheetPDF.new(content, 2) }.should raise_error 'Invalid initialization parameter'
+      lambda { SheetPDF.new(content, 2) }.should raise_error ArgumentError
     end
 
     it 'assigns an array to @content' do

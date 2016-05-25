@@ -67,10 +67,6 @@ module Mork
         it 'returns the stretched array' do
           expect(sg.send(:reg_pixels).length).to eq sgi.width * sgi.height
         end
-
-        xit 'raises an error if the file is not found' do
-          expect { Mimage.new 'non_existing_file' }.to raise_error
-        end
       end
 
       describe 'inspecting' do
