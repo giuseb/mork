@@ -1,18 +1,23 @@
 module Mork
   # this is the default grid!
+  # default units are millimiters
   DGRID = {
-    # default units are millimiters
+    # size of the paper sheet
     page_size: {
       # this is A4
       width:      210,
       height:     297
-    }, # page end
+    },
+    # size, location, search parameters of registration marks
     reg_marks: {
       margin:      10,
       radius:       2.5,
-      search:      10,
-      offset:       2
-    }, # reg_marks end
+      search:      10, # remove this?
+      offset:       2,
+      crop:        20, # size of square where the regmark should be located
+      dilate:       0, # set to >0 to apply a dilate IM operation
+      blur:         0  # set to >0 to apply a blur IM operation
+    },
     header: {
       name: {
         top:        5,
@@ -42,7 +47,7 @@ module Mork
       }
     }, # header end
     items: {
-      columns:       4, 
+      columns:       4,
       column_width: 44,
       rows:         30,
       # from the top-left registration mark

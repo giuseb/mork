@@ -4,8 +4,13 @@ page_size:                # all measurements in mm
 reg_marks:
   margin:          10     # distance from each page border to registration mark center
   radius:           2.5   # registration mark radius
-  search:          12     # initial size of the registration mark search area (*)
+  # search:          12     # initial size of the registration mark search area (*)
   offset:           2     # distance between the search area and each page border (*)
+  crop:    12
+  offset:   2
+  blur:     2
+  dilate:   5
+
 
 header:
   name:                   # ‘name’ is just a label; you can add arbitrary header elements

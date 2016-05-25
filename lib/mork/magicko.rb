@@ -1,5 +1,4 @@
 require 'mini_magick'
-require 'mork/npatch'
 
 module Mork
   # Magicko: image management, done in two ways: 1) direct system calls to
@@ -18,66 +17,63 @@ module Mork
       img_size[1]
     end
 
-    # raw_patch returns an NPatch containing the pixels of the original image
-    def raw_patch
-      @raw_pixels ||= patch
-    end
-
-    # reg_patch returns an NPatch of the same size as the original image, but
-    # with pixels stretched out based on the passed perspective points (i.e.
-    # the centers of the four registration marks)
+    # registered_bytes returns an array of the same size as the original image,
+    # but with pixels stretched out based on the passed perspective points
+    # (i.e. the centers of the four registration marks)
     # pp: a hash in the form of pp[:tl][:x], pp[:tl][:y], etc.
-    def reg_patch(pp)
-      @reg_pixels ||= patch(shape: "-distort Perspective '#{pps pp}'")
+    def registered_bytes(pp)
+      read_bytes "-distort Perspective '#{pps pp}'"
     end
 
-    def rm_patch(corner, side)
-      sh = "-gravity #{gravity corner} -crop #{side}x#{side}+0+0"
-      patch shape: sh, wid: side, hei: side
+    # def rm_patch(coord, blur_factor, dilate_factor)
+    def rm_patch(c, blr=0, dlt=0)
+      b = blr==0 ? '' : " -blur #{blr*3}x#{blr}"
+      d = dlt==0 ? '' : " -morphology Dilate Octagon:#{dlt}"
+      read_bytes "-crop #{c.cropper}#{b}#{d}"
     end
 
     # MiniMagick stuff
 
-    def highlight_cells(cellcoord, roundedness)
+    def highlight_cells(coords)
       @cmd << [:stroke, 'none']
       @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
-      cellcoord.each do |c|
-        roundedness ||= [c[:h], c[:w]].min / 2
-        pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h], roundedness, roundedness].join ' '
-        @cmd << [:draw, "roundrectangle #{pts}"]
+      coords.each do |c|
+        @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
       end
     end
 
-    def outline(cellcoord, roundedness)
+    def outline(coords)
       @cmd << [:stroke, 'green']
       @cmd << [:strokewidth, '2']
       @cmd << [:fill, 'none']
-      cellcoord.each do |c|
-        roundedness ||= [c[:h], c[:w]].min / 2
-        pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h], roundedness, roundedness].join ' '
-        @cmd << [:draw, "roundrectangle #{pts}"]
+      coords.each do |c|
+        @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
       end
     end
 
-    def cross(cellcoord, corner)
+    def cross(coords)
       @cmd << [:stroke, 'red']
       @cmd << [:strokewidth, '3']
-      cellcoord.each do |c|
-        pts = [
-          c[:x]+corner,
-          c[:y]+corner,
-          c[:x]+c[:w]-corner,
-          c[:y]+c[:h]-corner
-        ].join ' '
-        @cmd << [:draw, "line #{pts}"]
-        pts = [
-          c[:x]+corner,
-          c[:y]+c[:h]-corner,
-          c[:x]+c[:w]-corner,
-          c[:y]+corner
-        ].join ' '
-        @cmd << [:draw, "line #{pts}"]
+      coords.each do |c|
+        @cmd << [:draw, "line #{c.cross1}"]
+        @cmd << [:draw, "line #{c.cross2}"]
       end
+    end
+
+    def plus(x, y, l)
+      @cmd << [:stroke, 'red']
+      @cmd << [:strokewidth, 1]
+      pts = [ x-l, y, x+l, y ].join ' '
+      @cmd << [:draw, "line #{pts}"]
+      pts = [ x, y-l, x, y+l ].join ' '
+      @cmd << [:draw, "line #{pts}"]
+    end
+
+    def highlight_area(c)
+      @cmd << [:fill, 'none']
+      @cmd << [:stroke, 'yellow']
+      @cmd << [:strokewidth, 3]
+      @cmd << [:draw, "rectangle #{c.rect_points}"]
     end
 
     def highlight_rect(areas)
@@ -86,8 +82,7 @@ module Mork
       @cmd << [:stroke, 'yellow']
       @cmd << [:strokewidth, 3]
       areas.each do |c|
-        pts = [c[:x], c[:y], c[:x]+c[:w], c[:y]+c[:h]].join ' '
-        @cmd << [:draw, "rectangle #{pts}"]
+        @cmd << [:draw, "rectangle #{c.rect_points}"]
       end
     end
 
@@ -121,16 +116,18 @@ module Mork
 
     private
 
+    # calling imagemagick and capturing the converted image
+    # into an array of bytes
+    def read_bytes(params=nil)
+      s = "|convert #{@path} #{params} gray:-"
+      IO.read(s).unpack 'C*'
+    end
+
     def exec_mm_cmd(c, pp)
-      c.distort(:perspective, pp) if pp
+      c.distort(:perspective, pps(pp)) if pp
       @cmd.each { |cmd| c.send(*cmd) }
     end
 
-    def patch(shape: nil, wid: width, hei: height)
-      s = "|convert #{@path} #{shape} gray:-"
-      bytes = IO.read(s).unpack 'C*'
-      NPatch.new bytes, wid, hei
-    end
 
     # perspective points: brings the found registration area centers to the
     # original image boundaries; the result is that the registered image is
@@ -150,18 +147,16 @@ module Mork
         IO.read(s).split(',').map(&:to_i)
       end
     end
-
-    def gravity(corner)
-      case corner
-      when :tl
-        :NorthWest
-      when :tr
-        :NorthEast
-      when :br
-        :SouthEast
-      when :bl
-        :SouthWest
-      end
-    end
   end
 end
+
+# def patch(shape: nil, wid: width, hei: height)
+#   s = "|convert #{@path} #{shape} gray:-"
+#   bytes = IO.read(s).unpack 'C*'
+#   NPatch.new bytes, wid, hei
+# end
+
+# # raw_patch returns an array containing the pixels of the original image
+# def raw_patch
+#   @raw_pixels ||= patch
+# end

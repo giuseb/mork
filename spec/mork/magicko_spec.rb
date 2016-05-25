@@ -4,6 +4,7 @@ module Mork
   describe Magicko do
     let(:sh) { sample_img :slanted }
     let(:ma) { Magicko.new sh.filename }
+    let(:co) { Coord.new 50}
     let(:pp) { { tl: {x: 10, y: 10}, tr: {x: 1000, y: 10}, bl: {x: 10, y: 1700}, br: {x: 1000, y: 1700}} }
 
     it 'exists' do
@@ -22,29 +23,23 @@ module Mork
       end
     end
 
-    describe '#raw_patch' do
-      it 'returns an NPatch for the entire raw image' do
-        expect(ma.raw_patch).to be_an NPatch
-      end
-
-      it 'returns an NPatch of appropriate size' do
-        expect(ma.raw_patch.length).to eq sh.height*sh.width
-      end
-    end
-
-    describe '#reg_patch' do
-      it 'returns an NPatch for the registered image' do
-        expect(ma.reg_patch pp).to be_an NPatch
-      end
-
-      it 'returns an NPatch of the same size as the origina image' do
-        expect(ma.reg_patch(pp).length).to eq sh.height*sh.width
-      end
-    end
-
     describe '#rm_patch' do
-      it 'exists' do
-        expect(ma.rm_patch :tl, 100).to be_an NPatch
+      it 'returns an array of bytes for the registration mark area' do
+        expect(ma.rm_patch co).to be_an Array
+      end
+
+      it 'returns an Array of appropriate size' do
+        expect(ma.rm_patch(co).length).to eq 2500
+      end
+    end
+
+    describe '#registered_bytes' do
+      it 'returns an array of bytes for the registered image' do
+        expect(ma.registered_bytes pp).to be_an Array
+      end
+
+      it 'returns an array of bytes of the same size as the original image' do
+        expect(ma.registered_bytes(pp).length).to eq sh.height*sh.width
       end
     end
   end

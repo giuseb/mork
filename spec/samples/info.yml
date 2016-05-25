@@ -1,7 +1,12 @@
 slanted:
   filename: spec/samples/slanted.jpg
+  grid-file: spec/samples/slanted.yml
   width:  1241
   height: 1754
+  tl: [63, 67]
+  tr: [1172, 68]
+  br: [1169, 1704]
+  bl: [55, 1702]
 
 code666:
   filename: spec/samples/sheet666.jpg
@@ -17,15 +22,6 @@ sample-gray:
   grid-file: spec/samples/layout.yml
   width: 1654
   height: 2339
-
-bianchi:
-  # filename: spec/samples/IMG_20150104_0005.jpg
-  # filename: spec/samples/out0000.jpg
-  # filename: spec/samples/SCN_0001.jpg
-  # filename: spec/samples/IMG_20150104_0011.jpg
-  # filename: spec/samples/IMG_20150104_0009.jpg
-  grid-file: spec/samples/bianchi.yml
-  barcode-int: 9350
 
 reg-mark:
   filename: spec/samples/reg_mark.jpg

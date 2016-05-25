@@ -3,6 +3,28 @@ require 'spec_helper'
 module Mork
   describe Mimage do
     let(:qna) { [5] * 100 }
+
+    context 'new age on slanted' do
+      let(:img) { sample_img 'slanted' }
+      let(:mim) { Mimage.new img.filename, qna, GridOMR.new(img.grid_file)  }
+      describe 'basics' do
+        it 'should be valid' do
+          mim.highlight_rm_centers
+          mim.highlight_rm_areas
+          mim.write 'spec/out/slanted.jpg', false
+          expect(mim.valid?).to be_truthy
+        end
+
+        it 'should return the correct regmark coordinates' do
+          [:tl, :tr, :br, :bl].each do |corner|
+            crn = mim.rm[corner]
+            expect(crn[:x]).to be_within(2).of(img.info[corner.to_s][0])
+
+          end
+        end
+      end
+    end
+
     context 'problematic sheets' do
       let(:mim)  { Mimage.new 'spec/samples/out-1.jpg', qna, GridOMR.new('spec/samples/grid.yml')  }
       let(:bila) { Mimage.new 'spec/samples/syst/bila0.jpg', qna, GridOMR.new('spec/samples/grid.yml') }
@@ -35,11 +57,11 @@ module Mork
 
       describe 'basics' do
         it 'returns the pixels as an array' do
-          expect(sg.send :raw_pixels).to be_a NPatch
+          expect(sg.send :reg_pixels).to be_a NPatch
         end
 
         it 'returns the correct number of pixels' do
-          expect(sg.send(:raw_pixels).length).to eq sgi.width * sgi.height
+          expect(sg.send(:reg_pixels).length).to eq sgi.width * sgi.height
         end
 
         it 'returns the stretched array' do

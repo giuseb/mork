@@ -9,6 +9,12 @@ RSpec.configure do |config|
   end
 end
 
+RSpec::Matchers.define :have_coords do |x, y, w, h|
+  match do |coord|
+    coord.x == x and coord.y == y and coord.w == w and coord.h == h
+  end
+end
+
 class SampleImager
   attr_reader :info
 
@@ -52,6 +58,7 @@ class SampleImager
   def pages
     @info["pages"]
   end
+
 end
 
 def sample_img(which)

@@ -1,0 +1,53 @@
+page_size:
+  width:  210
+  height: 297
+reg_marks:
+  margin:  10
+  radius:   2.5
+  offset:   2
+  crop:     12
+  blur:     2
+  dilate:   5
+header:
+  name:
+    top:    5
+    left:   7.5
+    width: 170
+    size: 14
+  title:
+    top: 15
+    left: 7.5
+    width: 180
+    size: 12
+  code:
+    top: 5
+    left: 165
+    width: 20
+    size: 14
+  signature:
+    top: 30
+    left: 7.5
+    width: 120
+    height: 15
+    size: 7
+    box: true
+items:
+  top: 55.5
+  left: 10.5
+  columns: 4
+  column_width: 44
+  rows: 30
+  x_spacing: 7
+  y_spacing: 7
+  cell_width: 6
+  cell_height: 5
+  max_cells: 5
+  font_size: 9
+  number_width: 8
+  number_margin: 2
+barcode:
+  bits: 40
+  left: 15
+  width: 3
+  height: 2.5
+  spacing: 4

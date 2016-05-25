@@ -2,37 +2,37 @@ require 'spec_helper'
 
 module Mork
   describe NPatch do
-    let(:impath)  { 'spec/samples/rm01.jpeg' }
-    let(:imbytes) { IO.read("|convert #{impath} gray:-").unpack 'C*' }
-    let(:rm)      { NPatch.new imbytes, 134, 104 }
-
-    describe ".new" do
-      it "should create an NPatch" do
-        expect(rm).to be_an NPatch
-      end
-    end
-
-    describe '#dark_centroid' do
-      it 'computes centers for rm01' do
+    describe '#centroid' do
+      it 'computes centers for rm0X' do
         np = make 'spec/samples/rm01.jpeg', 134, 104
-        expect(np.dark_centroid).to eq [50, 60]
+        expect(np.centroid[0]).to eq 50
+        expect(np.centroid[1]).to eq 60
         np = make 'spec/samples/rm02.jpeg', 114, 117
-        expect(np.dark_centroid).to eq [69, 71]
+        expect(np.centroid[0]).to eq 69
+        expect(np.centroid[1]).to eq 71
         np = make 'spec/samples/rm03.jpeg', 124, 105
-        expect(np.dark_centroid).to eq [71, 61]
+        expect(np.centroid[0]).to eq 71
+        expect(np.centroid[1]).to eq 61
         np = make 'spec/samples/rm04.jpeg', 144, 117
-        expect(np.dark_centroid).to eq [84, 52]
+        expect(np.centroid[0]).to eq 84
+        expect(np.centroid[1]).to eq 52
         np = make 'spec/samples/rm05.jpeg', 144, 117
-        expect(np.dark_centroid).to eq [84, 52]
+        expect(np.centroid[0]).to eq 84
+        expect(np.centroid[1]).to eq 52
       end
     end
 
     describe '#average' do
       it 'works' do
-        c = {x: 30, y: 35, w: 46, h: 46}
-        puts rm.average c
-        c = {x: 85, y: 10, w: 46, h: 46}
-        puts rm.average c
+        np = make 'spec/samples/rm00.jpeg', 100, 100
+        expect(np.average Coord.new(100)).to be_within(1).of(234)
+      end
+    end
+
+    describe '#stddev' do
+      it 'works' do
+        np = make 'spec/samples/rm00.jpeg', 100, 100
+        expect(np.stddev Coord.new(100)).to be_within(1).of(53)
       end
     end
 
@@ -69,3 +69,14 @@ end
 #     y.should be_within(2).of(smp.reg_marks["bl_y"])
 #   end
 # end
+
+# let(:impath)  { 'spec/samples/rm01.jpeg' }
+# let(:imbytes) { IO.read("|convert #{impath} gray:-").unpack 'C*' }
+# let(:rm)      { NPatch.new imbytes, 134, 104 }
+
+# describe ".new" do
+#   it "should create an NPatch" do
+#     expect(rm).to be_an NPatch
+#   end
+# end
+

@@ -30,11 +30,10 @@ module Mork
     #
     context 'slanted' do
       let(:sh) { sample_img 'slanted' }
-      let(:sheet) { SheetOMR.new sh.filename }
+      let(:sheet) { SheetOMR.new sh.filename, [5]*120, sh.grid_file }
 
       it 'gets in trouble' do
-        sheet.highlight_registration
-        sheet.write_raw 'spec/out/laurout.jpg'
+        sheet.write_registration 'spec/out/laurout.jpg'
       end
 
       it 'gets more in trouble' do
@@ -51,11 +50,10 @@ module Mork
       # since these specs change the @crop, they must be run in isolation
       # with the SheetOMR rebuilt each time, even though it is time consuming!
       let(:shinfo) { sample_img 'sample-gray' }
-      let(:sheet)  { SheetOMR.new shinfo.filename, [5]*100, shinfo.grid_file }
+      let(:sheet)  { SheetOMR.new shinfo.filename, [5]*120, shinfo.grid_file }
 
-      it 'highlights the registration areas and frame' do
-        sheet.highlight_registration
-        sheet.write_raw 'spec/out/reg_areas.jpg'
+      it 'writes the sheet with registrations highlighted' do
+        sheet.write_registration 'spec/out/sample_gray_registered.jpg'
       end
 
       it 'highlights all choice cells' do
@@ -199,10 +197,8 @@ module Mork
     context 'marking a problematic sheet' do
       let(:sheet) { SheetOMR.new 'spec/samples/out-1.jpg', [5]*100, 'spec/samples/grid.yml' }
 
-      it 'highlights marked cells and outline correct responses' do
-        sheet.cross_marked
-        sheet.outline [[0,1,2,3,4]] * 100
-        sheet.write 'spec/out/marks_and_outs.jpg'
+      it 'highlights the registration' do
+        sheet.write_registration 'spec/out/problematic.jpg'
       end
 
       it 'highlights the barcode' do
@@ -213,31 +209,31 @@ module Mork
 
     context 'systematic tests' do
       let(:bila)  { 'CCEBEBCEEACCDCABDBEBCADEADDCCCACCACDBBDAECDDABDEEBCEEDCBAAADEEEEDCADEABCBDECCCCDDDCABBECAADADBBEEABA'.split '' }
-      let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bila2) { SheetOMR.new 'spec/samples/syst/bila2.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bila3) { SheetOMR.new 'spec/samples/syst/bila3.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bila4) { SheetOMR.new 'spec/samples/syst/bila4.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bila2) { SheetOMR.new 'spec/samples/syst/bila2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bila3) { SheetOMR.new 'spec/samples/syst/bila3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bila4) { SheetOMR.new 'spec/samples/syst/bila4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
       let(:dald)  { 'DDDBECAAADBAEEEAEEEBAACAEDBDECDBDCDCDDEDCCDCDBDCADEEDBCCBEBBAADDCDBBECBBBDEABADABADADBABAEABACBDADDA'.split '' }
-      let(:dald0) { SheetOMR.new 'spec/samples/syst/dald0.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:dald1) { SheetOMR.new 'spec/samples/syst/dald1.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:dald2) { SheetOMR.new 'spec/samples/syst/dald2.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:dald3) { SheetOMR.new 'spec/samples/syst/dald3.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:dald4) { SheetOMR.new 'spec/samples/syst/dald4.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:dald0) { SheetOMR.new 'spec/samples/syst/dald0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:dald1) { SheetOMR.new 'spec/samples/syst/dald1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:dald2) { SheetOMR.new 'spec/samples/syst/dald2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:dald3) { SheetOMR.new 'spec/samples/syst/dald3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:dald4) { SheetOMR.new 'spec/samples/syst/dald4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
       let(:cost)  { 'ABBDDBAEAEBAADEAAECBCDBBDABABADEECCACBCAEDDAEBEABBCDABECAACEEEBADECBBEAADBBBEABDAEBDEEABBABEBEDDAEEC'.split '' }
-      let(:cost0) { SheetOMR.new 'spec/samples/syst/cost0.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:cost1) { SheetOMR.new 'spec/samples/syst/cost1.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:cost2) { SheetOMR.new 'spec/samples/syst/cost2.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:cost3) { SheetOMR.new 'spec/samples/syst/cost3.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:cost4) { SheetOMR.new 'spec/samples/syst/cost4.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:cost0) { SheetOMR.new 'spec/samples/syst/cost0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:cost1) { SheetOMR.new 'spec/samples/syst/cost1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:cost2) { SheetOMR.new 'spec/samples/syst/cost2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:cost3) { SheetOMR.new 'spec/samples/syst/cost3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:cost4) { SheetOMR.new 'spec/samples/syst/cost4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
       let(:bone)  { 'CECBBABAECADEDCACBBDEECBADBECDCEDECABCAADCBDEDACAEEDCCADBEDCEBCCBBDCCACDEDDAAECEBDBADCBAAEBAEDABCBDC'.split '' }
-      let(:bone0) { SheetOMR.new 'spec/samples/syst/bone0.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bone1) { SheetOMR.new 'spec/samples/syst/bone1.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:bone2) { SheetOMR.new 'spec/samples/syst/bone2.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:bone0) { SheetOMR.new 'spec/samples/syst/bone0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bone1) { SheetOMR.new 'spec/samples/syst/bone1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bone2) { SheetOMR.new 'spec/samples/syst/bone2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
       let(:barr)  { 'ACECAAADDBCECCCDBEBECDEDAECEDDEEDCDEADDCCBCCCBBEACBCAEDEEDDDABBBBABEBDCEADEEDEBCBADBCEDCDBACEBCBDCDA'.split '' }
-      let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', [5]*100,  'spec/samples/grid.yml'}
-      let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', [5]*100,  'spec/samples/grid.yml'}
+      let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
 
       it 'checks bila' do
         expect(bila0.mark_char_array.flatten).to eq(bila)
