@@ -85,15 +85,19 @@ module Mork
     def header(content)
       content.each do |k,v|
         font_size @grip.header_size(k) do
+          align = @grip.header_align(k).nil?? :left : @grip.header_align(k).to_sym
           if @grip.header_boxed?(k)
             bounding_box @grip.header_xy(k), width: @grip.header_width(k), height: @grip.header_height(k) do
               stroke_bounds
-              bounding_box @grip.header_padding(k), width: @grip.header_width(k) do
-                text v
-              end
+              text_box v, at:    @grip.header_padding(k),
+                          width: @grip.header_width(k)-@grip.header_padding(k)[0]*2,
+                          align: align
             end
           else
-            text_box v, at: @grip.header_xy(k), width: @grip.header_width(k)
+            text_box v, at:     @grip.header_xy(k),
+                        width:  @grip.header_width(k),
+                        height: @grip.header_height(k),
+                        align: align
           end
         end
       end

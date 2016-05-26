@@ -1,35 +1,41 @@
-page_size:                # all measurements in mm
-  width:        210     # width of the paper sheet
-  height:       297     # height of the paper sheet
+page_size:             # all measurements in mm
+  width:        210    # width of the paper sheet
+  height:       297    # height of the paper sheet
 reg_marks:
-  margin:        10     # distance from each page border to registration mark center
-  radius:         2.5   # registration mark radius
-  offset:         2     # distance between the search area and each page border (*)
+  margin:        10    # distance from each page border to registration mark center
+  radius:         3    # registration mark radius
+  offset:         2    # distance between the search area and each page border (*)
   crop:          20
   offset:         2
   blur:           2
   dilate:         5
 
-
 header:
-  name:                   # ‘name’ is just a label; you can add arbitrary header elements
+  name:                # ‘name’ is just a label; you can add arbitrary header elements
     top:          5    # margin relative to registration frame top side
     left:        15    # margin relative to registration frame left side
-    width:      170    # text will be fitted to this width
+    width:      160    # text will be fitted to this width
+    height:       7    # text will be fitted to this height
     size:        14    # font size
+    box:       true
   title:
     top:         15
     left:        15
-    width:      180
+    width:      160
+    height:      12
     size:        12
+    box:       true
   code:
-    top:          5
-    left:       165
-    width:       20
+    top:         30
+    left:       155
+    width:       35
+    height:      10
     size:        14
+    box:       true
+    align:    right
   signature:
     top:         30
-    left:         7.5
+    left:        15
     width:      120
     height:      15
     size:         7

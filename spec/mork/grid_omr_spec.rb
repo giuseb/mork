@@ -30,22 +30,22 @@ module Mork
     describe '#rm_crop_area' do
       it 'returns a Coord object for the :tl reg_mark corner' do
         c = @grom.rm_crop_area :tl
-        expect(c). to have_coords(15, 15, 91, 92)
+        expect(c). to have_coords(15, 15, 152, 154)
       end
 
       it 'returns a Coord object for the :tr reg_mark corner' do
         c = @grom.rm_crop_area :tr
-        expect(c).to have_coords(1494, 15, 91, 92)
+        expect(c).to have_coords(1433, 15, 152, 154)
       end
 
       it 'returns a Coord object for the :br reg_mark corner' do
         c = @grom.rm_crop_area :br
-        expect(c).to have_coords(1494, 2173, 91, 92)
+        expect(c).to have_coords(1433, 2112, 152, 154)
       end
 
       it 'returns a Coord object for the :bl reg_mark corner' do
         c = @grom.rm_crop_area :bl
-        expect(c).to have_coords(15, 2173, 91, 92)
+        expect(c).to have_coords(15, 2112, 152, 154)
       end
     end
 

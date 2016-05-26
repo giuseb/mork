@@ -40,8 +40,19 @@ module Mork
     end
 
     it 'creates a basic PDF sheet' do
-      s = SheetPDF.new(content)
+      s = SheetPDF.new(content, 'spec/samples/layout.yml')
       s.save('spec/out/sheet.pdf')
+    end
+
+    it 'creates a boxed PDF sheet' do
+      h = {
+        name: lorem,
+        title: lorem,
+        code: '1000.10.100',
+        signature: 'Signature'
+      }
+      s = SheetPDF.new(content.merge({header: h}), 'spec/samples/boxy.yml')
+      s.save('spec/out/boxy.pdf')
     end
 
     it 'creates a basic PDF sheet with a code of 15' do

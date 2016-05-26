@@ -18,6 +18,10 @@ module Mork
         it 'registers correctly' do
           expect(omr.valid?).to be_truthy
         end
+
+        it 'writes out the registration' do
+          omr.write_registration 'spec/out/slanted2.jpg'
+        end
       end
     end
     # context 'problematic' do
