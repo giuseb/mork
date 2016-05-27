@@ -6,10 +6,8 @@ reg_marks:
   radius:         3    # registration mark radius
   offset:         2    # distance between the search area and each page border (*)
   crop:          20
-  offset:         2
   blur:           2
   dilate:         5
-
 header:
   name:                # ‘name’ is just a label; you can add arbitrary header elements
     top:          5    # margin relative to registration frame top side
@@ -17,7 +15,7 @@ header:
     width:      160    # text will be fitted to this width
     height:       7    # text will be fitted to this height
     size:        14    # font size
-    box:       true
+    # box:       true
   title:
     top:         15
     left:        15

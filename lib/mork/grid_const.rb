@@ -11,8 +11,7 @@ module Mork
     # size, location, search parameters of registration marks
     reg_marks: {
       margin:      10,
-      radius:       2.5,
-      search:      10, # remove this?
+      radius:       3,
       offset:       2,
       crop:        20, # size of square where the regmark should be located
       dilate:       0, # set to >0 to apply a dilate IM operation
@@ -21,29 +20,33 @@ module Mork
     header: {
       name: {
         top:        5,
-        left:       7.5,
-        width:    170,
-        size:      14,
+        left:      15,
+        width:    160,
+        height:     7,
+        size:      14
       },
       title: {
         top:       15,
-        left:       7.5,
-        width:    180,
+        left:      15,
+        width:    160,
+        height:    12,
         size:      12
       },
       code: {
-        top:         5,
-        left:      165,
-        width:      20,
-        size:       14
+        top:        30,
+        left:      155,
+        width:      35,
+        height:     10,
+        size:       14,
+        align:   right
       },
       signature: {
         top:        30,
-        left:        7.5,
+        left:       15,
         width:     120,
         height:     15,
         size:        7,
-        box:      true,
+        box:      true
       }
     }, # header end
     items: {
@@ -52,8 +55,8 @@ module Mork
       rows:         30,
       # from the top-left registration mark
       # to the center of the first choice cell
-      left:      10.5,
-      top:      55.5,
+      left:         10.5,
+      top:          55.5,
       # between choices
       x_spacing:     7,
       # between rows

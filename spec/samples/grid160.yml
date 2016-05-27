@@ -11,16 +11,19 @@ header:
     top:    5
     left:   7.5
     width: 170
+    height: 7
     size: 14
   title:
     top: 12
     left: 7.5
     width: 85
+    height: 12
     size: 12
   code:
     top: 5
     left: 165
     width: 20
+    height: 10
     size: 14
   signature:
     top: 12
