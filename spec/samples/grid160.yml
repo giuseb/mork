@@ -52,9 +52,3 @@ barcode:
   width: 3.0
   height: 3
   spacing: 4
-control:
-  top: 40
-  left: 123
-  width: 50
-  size: 9
-  margin: 2.5

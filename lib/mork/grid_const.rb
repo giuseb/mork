@@ -38,7 +38,7 @@ module Mork
         width:      35,
         height:     10,
         size:       14,
-        align:   right
+        align:   :right
       },
       signature: {
         top:        30,
@@ -79,13 +79,6 @@ module Mork
       width:         3,
       height:        3,
       spacing:       4
-    }, # barcode end
-    control: {
-      top:          40,
-      left:        123,
-      width:        50,
-      size:          9,
-      margin:        2.5
-    } # control end
+    } # barcode end
   }
 end

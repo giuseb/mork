@@ -25,7 +25,7 @@ module Mork
 
     # Puts out the Grid parameters in YAML format; the entire hash is displayed
     # if no arguments are given; you can specify what to show by passing one of:
-    # :page_size, :reg_marks, :header, :items, :barcode, :control
+    # :page_size, :reg_marks, :header, :items, :barcode
     def show(subset=nil)
       out = subset ? @params[subset] : @params
       puts out.to_yaml
