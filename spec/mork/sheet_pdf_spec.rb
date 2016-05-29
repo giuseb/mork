@@ -40,7 +40,7 @@ module Mork
     end
 
     it 'creates a basic PDF sheet' do
-      s = SheetPDF.new(content, 'spec/samples/layout.yml')
+      s = SheetPDF.new(content)
       s.save('spec/out/sheet.pdf')
     end
 

@@ -66,11 +66,11 @@ module Mork
     def mark_array(r = nil)
       return if not_registered
       question_range(r).collect do |q|
-        cho = []
-        (0...@grom.max_choices_per_question).each do |c|
-          cho << c if marked?(q, c)
+        [].tap do |cho|
+          (0...@grom.max_choices_per_question).each do |c|
+            cho << c if marked?(q, c)
+          end
         end
-        cho
       end
     end
 
@@ -84,11 +84,11 @@ module Mork
     def mark_char_array(r = nil)
       return if not_registered
       question_range(r).collect do |q|
-        cho = []
-        (0...@grom.max_choices_per_question).each do |c|
-          cho << (65+c).chr if marked?(q, c)
+        [].tap do |cho|
+          (0...@grom.max_choices_per_question).each do |c|
+            cho << (65+c).chr if marked?(q, c)
+          end
         end
-        cho
       end
     end
 

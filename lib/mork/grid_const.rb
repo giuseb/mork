@@ -14,8 +14,8 @@ module Mork
       radius:       3,
       offset:       2,
       crop:        20, # size of square where the regmark should be located
-      dilate:       0, # set to >0 to apply a dilate IM operation
-      blur:         0  # set to >0 to apply a blur IM operation
+      dilate:       2, # set to >0 to apply a dilate IM operation
+      blur:         5  # set to >0 to apply a blur IM operation
     },
     header: {
       name: {
@@ -33,9 +33,9 @@ module Mork
         size:      12
       },
       code: {
-        top:        30,
-        left:      155,
-        width:      35,
+        top:        35,
+        left:      130,
+        width:      57,
         height:     10,
         size:       14,
         align:   :right
@@ -55,8 +55,8 @@ module Mork
       rows:         30,
       # from the top-left registration mark
       # to the center of the first choice cell
-      left:         10.5,
-      top:          55.5,
+      left:         11,
+      top:          55,
       # between choices
       x_spacing:     7,
       # between rows
