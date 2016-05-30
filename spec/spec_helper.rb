@@ -23,42 +23,41 @@ class SampleImager
     @info = ya[which.to_s]
   end
 
-  def grid_file
-    @info["grid-file"]
+  def method_missing(name)
+    @info[name.to_s] || raise("non existing sample key: #{name}")
   end
+end
 
-  def reg_marks
-    @info["reg-marks"]
+###################
+# UTILITY FUNCTIONS
+###################
+
+# this is how I manually score a sample sheet, usually;
+# see images in /spec/samples/jdoe
+def standard_mark_array(n)
+  standard_array n, [[0],[1],[2],[3],[4]]
+end
+
+def standard_mark_logical_array(n)
+  standard_array n, [
+        [true, false, false, false, false],
+        [false, true, false, false, false],
+        [false, false, true, false, false],
+        [false, false, false, true, false],
+        [false, false, false, false, true],
+      ]
+end
+
+def standard_mark_char_array(n)
+  standard_array n, [['A'],['B'],['C'],['D'],['E']]
+end
+
+def standard_array(n, what)
+  [].tap do |a|
+    n.times do
+      a.concat what
+    end
   end
-
-  def q_boxes
-    @info["q-boxes"]
-  end
-
-  def barcode_string
-    @info["barcode-string"]
-  end
-
-  def barcode_int
-    @info["barcode-int"]
-  end
-
-  def filename
-    @info["filename"]
-  end
-
-  def width
-    @info["width"]
-  end
-
-  def height
-    @info["height"]
-  end
-
-  def pages
-    @info["pages"]
-  end
-
 end
 
 def sample_img(which)
