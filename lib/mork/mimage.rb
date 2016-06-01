@@ -25,8 +25,7 @@ module Mork
         tl: @rm[:tl][:status],
         tr: @rm[:tr][:status],
         br: @rm[:br][:status],
-        bl: @rm[:bl][:status],
-        write: @writing
+        bl: @rm[:bl][:status]
       }
     end
 
@@ -79,6 +78,7 @@ module Mork
     # if the 2nd arg is false, then stretching is not applied
     def write(fname=nil, reg=true)
       pp = reg ? @rm : nil
+      puts pp.inspect
       @mack.write fname, pp
     end
 

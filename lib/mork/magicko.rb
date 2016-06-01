@@ -100,16 +100,17 @@ module Mork
     end
 
     def write(fname, reg)
-      if fname
+      if fname.nil?
+        puts "MACKO HERE #{@path.inspect} name #{fname.inspect}"
+        MiniMagick::Tool::Mogrify.new(whiny: false) do |img|
+          img << @path
+          exec_mm_cmd img, reg
+        end
+      else
         MiniMagick::Tool::Convert.new(whiny: false) do |img|
           img << @path
           exec_mm_cmd img, reg
           img << fname
-        end
-      else
-        MiniMagick::Tool::Mogrify.new(whiny: false) do |img|
-          img << @path
-          exec_mm_cmd img, reg
         end
       end
     end
@@ -124,6 +125,7 @@ module Mork
     end
 
     def exec_mm_cmd(c, pp)
+      puts "THE PP #{pp}"
       c.distort(:perspective, pps(pp)) if pp
       @cmd.each { |cmd| c.send(*cmd) }
     end

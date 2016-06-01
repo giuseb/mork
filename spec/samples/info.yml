@@ -1,45 +1,59 @@
+jdoe1:
+  image_path:  spec/samples/jdoe/JohnDoe1.jpeg
+  grid_path:   spec/samples/jdoe/layout.yml
+  nchoices:    5
+  nitems:      120
+  barcode_int: 1234566
+  barcode_str: '0000000000000000000100101101011010000110'
+  width:       1240
+  height:      1754
+  mark_array:  [[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4],[0],[1],[2],[3],[4]]
+
+
 slanted:
-  filename: spec/samples/slanted.jpg
-  grid-file: spec/samples/slanted.yml
+  image_path: spec/samples/slanted.jpg
+  grid_path: spec/samples/slanted.yml
+  barcode_int: 16471
   width:  1241
   height: 1754
   tl: [63, 67]
   tr: [1172, 68]
   br: [1169, 1704]
   bl: [55, 1702]
+  mark_array: [[4],[4],[0],[1],[2]]
 
 code666:
-  filename: spec/samples/sheet666.jpg
-  grid-file: spec/samples/layout.yml
-  barcode-int: 666666666666
+  image_path: spec/samples/sheet666.jpg
+  grid_path: spec/samples/layout.yml
+  barcode_int: 666666666666
 
 silvia:
-  filename: spec/samples/qzc013.jpg
-  grid-file: spec/samples/layout.yml
+  image_path: spec/samples/qzc013.jpg
+  grid_path: spec/samples/layout.yml
 
 sample-gray:
-  filename:  spec/samples/sample_gray.jpg
-  grid-file: spec/samples/layout.yml
+  image_path:  spec/samples/sample_gray.jpg
+  grid_path: spec/samples/layout.yml
   width: 1654
   height: 2339
 
 reg-mark:
-  filename: spec/samples/reg_mark.jpg
+  image_path: spec/samples/reg_mark.jpg
   centroid-x: 92
   centroid-y: 91
 
 small:
-  filename: spec/samples/small.jpg
+  image_path: spec/samples/small.jpg
 
 code-sample:
-  filename: spec/samples/code_sample.png
+  image_path: spec/samples/code_sample.png
   code-string: "0000000000000000000000000000000000000000000000000001110001010001"
   code-int:    7249
 
 code-zero:
-  filename: spec/samples/code_zero.png
+  image_path: spec/samples/code_zero.png
 
 two-pages:
-  filename: spec/samples/two_pages.pdf
+  image_path: spec/samples/two_pages.pdf
   code-int: 17382938642823887837
 

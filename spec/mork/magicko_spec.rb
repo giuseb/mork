@@ -3,7 +3,7 @@ require 'spec_helper'
 module Mork
   describe Magicko do
     let(:sh) { sample_img :slanted }
-    let(:ma) { Magicko.new sh.filename }
+    let(:ma) { Magicko.new sh.image_path }
     let(:co) { Coord.new 50}
     let(:pp) { { tl: {x: 10, y: 10}, tr: {x: 1000, y: 10}, bl: {x: 10, y: 1700}, br: {x: 1000, y: 1700}} }
 

@@ -3,67 +3,110 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
-    context 'basic object generation' do
-      let(:img) { sample_img 'slanted' }
-      let(:omr) { SheetOMR.new img.filename, [5] * 120, img.grid_file }
+    context 'with a valid response sheet' do
+      let(:img) { sample_img 'jdoe1' }
+      let(:fn)  { File.basename(img.image_path) }
+      let(:omr) { SheetOMR.new img.image_path, nitems: [img.nchoices]*img.nitems, layout_file: img.grid_path }
       describe '#new' do
-        it 'raises an error if the provided path is invalid' do
-          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
-        end
-
         it 'creates a SheetOMR object' do
           expect(omr).to be_a SheetOMR
         end
 
-        it 'registers correctly' do
-          expect(omr.valid?).to be_truthy
+        it 'raises an error if the provided path is invalid' do
+          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
         end
 
         it 'writes out the registration' do
           omr.write_registration 'spec/out/slanted2.jpg'
         end
       end
-    end
-    # context 'problematic' do
-    #   let(:shinfo) { sample_img 'bianchi' }
-    #   let(:sheet)  { SheetOMR.new shinfo.filename, shinfo.grid_file }
-    #
-    #   it 'has a status' do
-    #     sheet.status.should == {:tl=>:ok, :tr=>:ok, :br=>:ok, :bl=>:ok, :write=>nil}
-    #   end
-    #
-    #   it 'has a barcode' do
-    #     sheet.barcode.should == shinfo.barcode_int
-    #   end
-    #
-    #   it 'writes the registered and marked image' do
-    #     sheet.cross_marked
-    #     sheet.write 'spec/out/bianchi.jpg'
-    #     sheet.status[:write].should == :fail
-    #   end
-    #
-    #   it 'writes the registration areas' do
-    #     sheet.highlight_registration
-    #     sheet.write_raw 'spec/out/reg_bianchi.jpg'
-    #   end
-    #
-    # end
-    #
-    context 'slanted' do
-      let(:sh) { sample_img 'slanted' }
-      let(:sheet) { SheetOMR.new sh.filename, [5]*120, sh.grid_file }
 
-      it 'gets in trouble' do
-        sheet.write_registration 'spec/out/laurout.jpg'
+      describe '#valid?' do
+        it 'registers correctly' do
+          expect(omr.valid?).to be_truthy
+        end
       end
 
-      it 'gets more in trouble' do
-        sheet.highlight_marked
-        sheet.write 'spec/out/lauraout2.jpg'
+      describe '#status' do
+        it 'returns the registration status for each of the four corners' do
+          expect(omr.status).to eq({ tl: :ok, tr: :ok, br: :ok, bl: :ok })
+        end
       end
 
-      it 'should be valid' do
-        expect(sheet.valid?).to be_truthy
+      describe '#barcode' do
+        it 'returns the integer form of the barcode' do
+          expect(omr.barcode).to eq img.barcode_int
+        end
+      end
+
+      describe '#barcode_string' do
+        it 'returns the binary string version of the barcode' do
+          expect(omr.barcode_string).to eq img.barcode_str
+        end
+      end
+
+      describe '#marked?' do
+        it 'returns true if the given cell was marked, false otherwise' do
+          expect(omr.marked?   0, 0).to be_truthy
+          expect(omr.marked?   0, 1).to be_falsy
+          expect(omr.marked? 119, 4).to be_truthy
+          expect(omr.marked? 119, 3).to be_falsy
+        end
+      end
+
+      describe '#mark_array' do
+        it 'returns an array of marked choices as position indexes' do
+          expect(omr.mark_array).to eq standard_mark_array(24)
+        end
+      end
+
+      describe '#mark_logical_array' do
+        it 'returns an array of logicals for the marked choices' do
+          expect(omr.mark_logical_array).to eq standard_mark_logical_array(24)
+        end
+      end
+
+      describe '#mark_char_array' do
+        it 'returns an array of characters for the marked choices' do
+          expect(omr.mark_char_array).to eq standard_mark_char_array(24)
+        end
+      end
+
+      context 'writing out the image' do
+        it 'registration highlighted' do
+          omr.write_registration "spec/out/registration/#{fn}"
+        end
+
+        it 'highlights all choice cells' do
+          omr.highlight_all_choices
+          omr.write "spec/out/highlight/#{fn}"
+        end
+
+        it 'crosses marked cells' do
+          omr.cross_marked
+          omr.write "spec/out/mark/#{fn}"
+        end
+
+        it 'outlines and crosses marked cells' do
+          omr.outline standard_mark_array(24)
+          omr.cross_marked
+          omr.write "spec/out/outline/#{fn}"
+        end
+
+        it 'highlights the barcode' do
+          omr.highlight_barcode
+          omr.write "spec/out/barcode/#{fn}"
+        end
+
+        it 'highlights all choice cells with image overwrite', focus: true do
+          nfile = "spec/out/highlight/over-#{fn}"
+          FileUtils.cp img.image_path, nfile
+          tsheet = SheetOMR.new nfile, nitems: [img.nchoices]*img.nitems, layout_file: img.grid_path
+          expect(tsheet.valid?).to be_truthy
+          tsheet.highlight_all_choices
+          tsheet.write
+        end
+
       end
     end
 
@@ -71,7 +114,7 @@ module Mork
       # since these specs change the @crop, they must be run in isolation
       # with the SheetOMR rebuilt each time, even though it is time consuming!
       let(:shinfo) { sample_img 'sample-gray' }
-      let(:sheet)  { SheetOMR.new shinfo.filename, [5]*120, shinfo.grid_file }
+      let(:sheet)  { SheetOMR.new shinfo.image_path, [5]*120, shinfo.grid_path }
 
       it 'writes the sheet with registrations highlighted' do
         sheet.write_registration 'spec/out/sample_gray_registered.jpg'
@@ -103,8 +146,8 @@ module Mork
       end
 
       it 'outlines some responses in-place (rewriting the source image)' do
-        FileUtils.cp shinfo.filename, 'spec/out/inplace.jpg'
-        tsheet = SheetOMR.new 'spec/out/inplace.jpg', [5]*100, shinfo.grid_file
+        FileUtils.cp shinfo.image_path, 'spec/out/inplace.jpg'
+        tsheet = SheetOMR.new 'spec/out/inplace.jpg', [5]*100, shinfo.grid_path
         tsheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
         tsheet.write
       end
@@ -117,14 +160,14 @@ module Mork
 
       it 'highlights marked cells of a problematic one' do
         si = sample_img 'silvia'
-        s = SheetOMR.new si.filename, [5]*100, si.grid_file
+        s = SheetOMR.new si.image_path, [5]*100, si.grid_path
         s.highlight_marked
         s.write 'spec/out/problem.jpg'
       end
 
       it 'highlights the barcode' do
         si = sample_img 'sample-gray'
-        s = SheetOMR.new si.filename, [5]*100, si.grid_file
+        s = SheetOMR.new si.image_path, [5]*100, si.grid_path
         s.highlight_barcode
         s.write 'spec/out/code_bits.jpg'
       end
@@ -133,7 +176,7 @@ module Mork
     context 'marking a nicely printed and scanned sheet' do
       before(:all) do
         @shinfo = sample_img 'sample-gray'
-        @sheet = SheetOMR.new @shinfo.filename, [5]*120, @shinfo.grid_file
+        @sheet = SheetOMR.new @shinfo.image_path, [5]*120, @shinfo.grid_path
       end
 
       describe '#valid?' do
@@ -208,7 +251,7 @@ module Mork
 
         it 'should read the 666 bit string' do
           sh = sample_img 'code666'
-          s2 = SheetOMR.new sh.filename, [5]*100, sh.grid_file
+          s2 = SheetOMR.new sh.image_path, [5]*100, sh.grid_path
           s2.barcode.should == sh.barcode_int
         end
       end

@@ -6,7 +6,7 @@ module Mork
 
     context 'new age on slanted' do
       let(:img) { sample_img 'slanted' }
-      let(:mim) { Mimage.new img.filename, qna, GridOMR.new(img.grid_file)  }
+      let(:mim) { Mimage.new img.image_path, qna, GridOMR.new(img.grid_path)  }
       describe 'basics' do
         it 'should be valid' do
           mim.highlight_rm_centers
@@ -53,7 +53,7 @@ module Mork
 
     context 'Old specs' do
       let(:sgi) { sample_img 'sample-gray' }
-      let(:sg)  { Mimage.new sgi.filename, qna, GridOMR.new(sgi.grid_file) }
+      let(:sg)  { Mimage.new sgi.image_path, qna, GridOMR.new(sgi.grid_path) }
 
       describe 'basics' do
         it 'returns the pixels as an array' do
@@ -72,7 +72,7 @@ module Mork
       describe 'inspecting' do
         xit 'writes out average whiteness of choice cells' do
           qz = sample_img 'silvia'
-          s = Mimage.new qz.filename, [5] * 5, GridOMR.new(qz.grid_file)
+          s = Mimage.new qz.image_path, [5] * 5, GridOMR.new(qz.grid_path)
           File.open('spec/out/choices.txt', 'w') do |f|
             5.times do |q|
               t = (0..4).collect do |c|

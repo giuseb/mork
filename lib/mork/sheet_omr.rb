@@ -5,9 +5,9 @@ require 'mork/mimage_list'
 module Mork
   class SheetOMR
 
-    def initialize(path, nitems=nil, grom=nil)
+    def initialize(path, nitems: nil, layout_file: nil)
       raise IOError, "File '#{path}' not found" unless File.exists? path
-      @grom   = GridOMR.new grom
+      @grom   = GridOMR.new layout_file
       @nitems = case nitems
                 when nil
                   [@grom.max_choices_per_question] * @grom.max_questions
@@ -143,7 +143,8 @@ module Mork
     # i.e. the original source image is overwritten.
     def write(fname=nil)
       return if not_registered
-      @mim.write(fname)
+      puts "I WAS HERE"
+      @mim.write(fname, true)
     end
 
     # # write_raw(output_path_file_name)
