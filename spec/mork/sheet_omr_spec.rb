@@ -15,10 +15,6 @@ module Mork
         it 'raises an error if the provided path is invalid' do
           expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
         end
-
-        it 'writes out the registration' do
-          omr.write_registration 'spec/out/slanted2.jpg'
-        end
       end
 
       describe '#valid?' do
@@ -58,6 +54,14 @@ module Mork
         it 'returns an array of marked choices as position indexes' do
           expect(omr.mark_array).to eq standard_mark_array(24)
         end
+
+        it 'returns a subset of marked choices as position indexes ' do
+          expect(omr.mark_array 10).to eq standard_mark_array(2)
+        end
+
+        it 'returns a subset of marked choices as position indexes ' do
+          expect(omr.mark_array (10..19).to_a).to eq standard_mark_array(2)
+        end
       end
 
       describe '#mark_logical_array' do
@@ -72,6 +76,17 @@ module Mork
         end
       end
 
+      it 'writes out markedness' do
+        mf = File.open('spec/out/text/marked.txt', 'w')
+        img.nitems.times do |q|
+          x = 5.times.collect do |c|
+            omr.marked?(q,c) ? '1' : '0'
+          end
+          mf.puts x.join(' ')
+        end
+        mf.close
+      end
+
       context 'writing out the image' do
         it 'registration highlighted' do
           omr.write_registration "spec/out/registration/#{fn}"
@@ -80,6 +95,11 @@ module Mork
         it 'highlights all choice cells' do
           omr.highlight_all_choices
           omr.write "spec/out/highlight/#{fn}"
+        end
+
+        it 'highlights marked cells' do
+          omr.highlight_marked
+          omr.write "spec/out/highlight/marked-#{fn}"
         end
 
         it 'crosses marked cells' do
@@ -98,206 +118,36 @@ module Mork
           omr.write "spec/out/barcode/#{fn}"
         end
 
-        it 'highlights all choice cells with image overwrite', focus: true do
-          nfile = "spec/out/highlight/over-#{fn}"
-          FileUtils.cp img.image_path, nfile
-          tsheet = SheetOMR.new nfile, nitems: [img.nchoices]*img.nitems, layout_file: img.grid_path
-          expect(tsheet.valid?).to be_truthy
-          tsheet.highlight_all_choices
-          tsheet.write
-        end
-
-      end
-    end
-
-    context 'highlighting' do
-      # since these specs change the @crop, they must be run in isolation
-      # with the SheetOMR rebuilt each time, even though it is time consuming!
-      let(:shinfo) { sample_img 'sample-gray' }
-      let(:sheet)  { SheetOMR.new shinfo.image_path, [5]*120, shinfo.grid_path }
-
-      it 'writes the sheet with registrations highlighted' do
-        sheet.write_registration 'spec/out/sample_gray_registered.jpg'
-      end
-
-      it 'highlights all choice cells' do
-        sheet.highlight_all_choices
-        sheet.write 'spec/out/all_highlights.jpg'
-      end
-
-      it 'highlights marked cells' do
-        sheet.highlight_marked
-        sheet.write 'spec/out/marked_highlights.jpg'
-      end
-
-      it 'crossed marked cells' do
-        sheet.cross_marked
-        sheet.write 'spec/out/marked_crosses.jpg'
-      end
-
-      it 'outlines some responses' do
-        sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
-        sheet.write 'spec/out/outlines.jpg'
-      end
-
-      it 'cross some responses' do
-        sheet.cross [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
-        sheet.write 'spec/out/crosses.jpg'
-      end
-
-      it 'outlines some responses in-place (rewriting the source image)' do
-        FileUtils.cp shinfo.image_path, 'spec/out/inplace.jpg'
-        tsheet = SheetOMR.new 'spec/out/inplace.jpg', [5]*100, shinfo.grid_path
-        tsheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
-        tsheet.write
-      end
-
-      it 'highlights marked cells and outline correct responses' do
-        sheet.highlight_marked
-        sheet.outline [[1],[1],[2],[2],[3,4],[],[0,1,2,3,4], [],[1],[2],[2],[3,4],[],[0,1,2,3,4]]
-        sheet.write 'spec/out/marks_and_outs.jpg'
-      end
-
-      it 'highlights marked cells of a problematic one' do
-        si = sample_img 'silvia'
-        s = SheetOMR.new si.image_path, [5]*100, si.grid_path
-        s.highlight_marked
-        s.write 'spec/out/problem.jpg'
-      end
-
-      it 'highlights the barcode' do
-        si = sample_img 'sample-gray'
-        s = SheetOMR.new si.image_path, [5]*100, si.grid_path
-        s.highlight_barcode
-        s.write 'spec/out/code_bits.jpg'
-      end
-    end
-
-    context 'marking a nicely printed and scanned sheet' do
-      before(:all) do
-        @shinfo = sample_img 'sample-gray'
-        @sheet = SheetOMR.new @shinfo.image_path, [5]*120, @shinfo.grid_path
-      end
-
-      describe '#valid?' do
-        it 'returns true' do
-          @sheet.valid?.should be_truthy
-        end
-      end
-
-      describe '#marked?' do
-        it 'returns true for some darkened choices' do
-          expect(@sheet.marked?(0,0)).to be_truthy
-          expect(@sheet.marked?(1,1)).to be_truthy
-          expect(@sheet.marked?(2,2)).to be_truthy
-        end
-
-        it 'return false for some blank choices' do
-          expect(@sheet.marked?(0,1)).to be_falsy
-          expect(@sheet.marked?(1,0)).to be_falsy
-          expect(@sheet.marked?(2,3)).to be_falsy
-        end
-
-        it 'writes out markedness' do
-          mf = File.open('spec/out/marked.txt', 'w')
-          120.times do |q|
-            x = 5.times.collect do |c|
-              @sheet.marked?(q,c) ? '1' : '0'
-            end
-            mf.puts x.join(' ')
-          end
-          mf.close
-        end
-      end
-
-      describe '#mark_array' do
-        it 'should return an array of marked choices for each of the first 5 questions' do
-          @sheet.mark_array(5).should == [[0], [1], [2], [3], [4]]
-        end
-
-        it 'should return an array of marked choices for the specified question set' do
-          @sheet.mark_array([0, 1, 13, 16, 31, 104, 21]).should == [[0], [1], [3,4], [2], [1], [], [0,1,2,3,4]]
-        end
-
-        it 'should return an array of @grid.max_questions length if called without arguments' do
-          @sheet.mark_array.length.should == 120
-        end
-      end
-
-      describe '#mark_logical_array' do
-        it 'should return an array of booleans for each of the first questions' do
-          @sheet.mark_logical_array(5).should == [
-            [true, false, false, false, false],
-            [false, true, false, false, false],
-            [false, false, true, false, false],
-            [false, false, false, true, false],
-            [false, false, false, false, true],
-          ]
-        end
-      end
-
-      describe 'barcodes' do
-        it 'should read the bit string as all ones' do
-          @sheet.barcode_string.should == '1111111111111111111111111111111111111111'
-          @sheet.barcode.should == 1099511627775
-        end
-
-        it 'should read another bit string' do
-          barcode_string = '0000000000000000000000000010000110100000'
-          s2 = SheetOMR.new('spec/samples/sample02.jpg', [5]*100)
-          s2.barcode_string.should == barcode_string
-          s2.barcode.should == 8608
-        end
-
-        it 'should read the 666 bit string' do
-          sh = sample_img 'code666'
-          s2 = SheetOMR.new sh.image_path, [5]*100, sh.grid_path
-          s2.barcode.should == sh.barcode_int
-        end
-      end
-
-    end
-
-    context 'marking a problematic sheet' do
-      let(:sheet) { SheetOMR.new 'spec/samples/out-1.jpg', [5]*100, 'spec/samples/grid.yml' }
-
-      it 'highlights the registration' do
-        sheet.write_registration 'spec/out/problematic.jpg'
-      end
-
-      it 'highlights the barcode' do
-        sheet.highlight_barcode
-        sheet.write 'spec/out/barcode.jpg'
       end
     end
 
     context 'systematic tests' do
       let(:bila)  { 'CCEBEBCEEACCDCABDBEBCADEADDCCCACCACDBBDAECDDABDEEBCEEDCBAAADEEEEDCADEABCBDECCCCDDDCABBECAADADBBEEABA'.split '' }
-      let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bila2) { SheetOMR.new 'spec/samples/syst/bila2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bila3) { SheetOMR.new 'spec/samples/syst/bila3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bila4) { SheetOMR.new 'spec/samples/syst/bila4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bila2) { SheetOMR.new 'spec/samples/syst/bila2.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bila3) { SheetOMR.new 'spec/samples/syst/bila3.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bila4) { SheetOMR.new 'spec/samples/syst/bila4.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
       let(:dald)  { 'DDDBECAAADBAEEEAEEEBAACAEDBDECDBDCDCDDEDCCDCDBDCADEEDBCCBEBBAADDCDBBECBBBDEABADABADADBABAEABACBDADDA'.split '' }
-      let(:dald0) { SheetOMR.new 'spec/samples/syst/dald0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:dald1) { SheetOMR.new 'spec/samples/syst/dald1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:dald2) { SheetOMR.new 'spec/samples/syst/dald2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:dald3) { SheetOMR.new 'spec/samples/syst/dald3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:dald4) { SheetOMR.new 'spec/samples/syst/dald4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:dald0) { SheetOMR.new 'spec/samples/syst/dald0.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:dald1) { SheetOMR.new 'spec/samples/syst/dald1.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:dald2) { SheetOMR.new 'spec/samples/syst/dald2.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:dald3) { SheetOMR.new 'spec/samples/syst/dald3.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:dald4) { SheetOMR.new 'spec/samples/syst/dald4.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
       let(:cost)  { 'ABBDDBAEAEBAADEAAECBCDBBDABABADEECCACBCAEDDAEBEABBCDABECAACEEEBADECBBEAADBBBEABDAEBDEEABBABEBEDDAEEC'.split '' }
-      let(:cost0) { SheetOMR.new 'spec/samples/syst/cost0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:cost1) { SheetOMR.new 'spec/samples/syst/cost1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:cost2) { SheetOMR.new 'spec/samples/syst/cost2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:cost3) { SheetOMR.new 'spec/samples/syst/cost3.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:cost4) { SheetOMR.new 'spec/samples/syst/cost4.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:cost0) { SheetOMR.new 'spec/samples/syst/cost0.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:cost1) { SheetOMR.new 'spec/samples/syst/cost1.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:cost2) { SheetOMR.new 'spec/samples/syst/cost2.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:cost3) { SheetOMR.new 'spec/samples/syst/cost3.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:cost4) { SheetOMR.new 'spec/samples/syst/cost4.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
       let(:bone)  { 'CECBBABAECADEDCACBBDEECBADBECDCEDECABCAADCBDEDACAEEDCCADBEDCEBCCBBDCCACDEDDAAECEBDBADCBAAEBAEDABCBDC'.split '' }
-      let(:bone0) { SheetOMR.new 'spec/samples/syst/bone0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bone1) { SheetOMR.new 'spec/samples/syst/bone1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:bone2) { SheetOMR.new 'spec/samples/syst/bone2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:bone0) { SheetOMR.new 'spec/samples/syst/bone0.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bone1) { SheetOMR.new 'spec/samples/syst/bone1.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:bone2) { SheetOMR.new 'spec/samples/syst/bone2.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
       let(:barr)  { 'ACECAAADDBCECCCDBEBECDEDAECEDDEEDCDEADDCCBCCCBBEACBCAEDEEDDDABBBBABEBDCEADEEDEBCBADBCEDCDBACEBCBDCDA'.split '' }
-      let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
-      let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', [5]*100,  'spec/samples/syst_grid.yml'}
+      let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
+      let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', nitems: [5]*100, layout_file: 'spec/samples/syst/layout.yml'}
 
       it 'checks bila' do
         expect(bila0.mark_char_array.flatten).to eq(bila)

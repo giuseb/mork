@@ -100,18 +100,11 @@ module Mork
     end
 
     def write(fname, reg)
-      if fname.nil?
-        puts "MACKO HERE #{@path.inspect} name #{fname.inspect}"
-        MiniMagick::Tool::Mogrify.new(whiny: false) do |img|
-          img << @path
-          exec_mm_cmd img, reg
-        end
-      else
-        MiniMagick::Tool::Convert.new(whiny: false) do |img|
-          img << @path
-          exec_mm_cmd img, reg
-          img << fname
-        end
+      MiniMagick::Tool::Convert.new(whiny: false) do |img|
+        img << @path
+        img.distort(:perspective, pps(reg)) if reg
+        @cmd.each { |cmd| img.send(*cmd) }
+        img << fname
       end
     end
 
@@ -123,13 +116,6 @@ module Mork
       s = "|convert #{@path} #{params} gray:-"
       IO.read(s).unpack 'C*'
     end
-
-    def exec_mm_cmd(c, pp)
-      puts "THE PP #{pp}"
-      c.distort(:perspective, pps(pp)) if pp
-      @cmd.each { |cmd| c.send(*cmd) }
-    end
-
 
     # perspective points: brings the found registration area centers to the
     # original image boundaries; the result is that the registered image is
@@ -162,3 +148,9 @@ end
 # def raw_patch
 #   @raw_pixels ||= patch
 # end
+
+# def exec_mm_cmd(c, pp)
+#   c.distort(:perspective, pps(pp)) if pp
+#   @cmd.each { |cmd| c.send(*cmd) }
+# end
+

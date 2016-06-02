@@ -41,7 +41,7 @@ module Mork
 
     it 'creates a basic PDF sheet' do
       s = SheetPDF.new(content)
-      s.save('spec/out/sheet.pdf')
+      s.save('spec/out/pdf/sheet.pdf')
     end
 
     it 'creates a boxed PDF sheet' do
@@ -52,39 +52,39 @@ module Mork
         signature: 'Signature'
       }
       s = SheetPDF.new(content.merge({header: h}), 'spec/samples/boxy.yml')
-      s.save('spec/out/boxy.pdf')
+      s.save('spec/out/pdf/boxy.pdf')
     end
 
     it 'creates a basic PDF sheet with a code of 15' do
       s = SheetPDF.new(content.merge({barcode: 15}))
-      s.save('spec/out/sheet16.pdf')
+      s.save('spec/out/pdf/sheet16.pdf')
     end
 
     it 'creates a basic PDF sheet with a code of 666666666666' do
       s = SheetPDF.new(content.merge({barcode: 666666666666}))
-      s.save('spec/out/sheet666.pdf')
+      s.save('spec/out/pdf/sheet666.pdf')
     end
 
     it 'creates a PDF sheet with the maximum possible barcode' do
       s = SheetPDF.new(content.merge({barcode: 1099511627775}))
-      s.save('spec/out/maxcode.pdf')
+      s.save('spec/out/pdf/maxcode.pdf')
     end
 
     it 'creates a PDF sheet with 160 items' do
       s = SheetPDF.new(content.merge({choices: [5] * 160}), 'spec/samples/grid160.yml')
-      s.save('spec/out/i160.pdf')
-      # system 'open spec/out/i160.pdf'
+      s.save('spec/out/pdf/i160.pdf')
+      # system 'open spec/out/pdf/i160.pdf'
     end
 
     it 'creates a PDF sheet with unequal choices per item' do
       s = SheetPDF.new(content.merge({choices: [5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, 3, 2, 1]}), 'spec/samples/layout.yml')
-      s.save('spec/out/uneq.pdf')
+      s.save('spec/out/pdf/uneq.pdf')
     end
 
     it 'creates 20 PDF sheets' do
       c = content
       s = SheetPDF.new([c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c])
-      s.save('spec/out/p20.pdf')
+      s.save('spec/out/pdf/p20.pdf')
     end
   end
 end

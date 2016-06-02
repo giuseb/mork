@@ -13,6 +13,8 @@ module Mork
         @params.merge! symbolize YAML.load_file('layout.yml')
       end
       case options
+      when NilClass
+        # do nothing
       when Hash
         @params.merge! symbolize options
       when String

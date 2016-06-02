@@ -138,24 +138,11 @@ module Mork
     # write(output_path_file_name)
     #
     # writes out a copy of the source image after registration;
-    # the output image will also contain any previously applied overlays;
-    # if the argument is omitted, the image is created in-place,
-    # i.e. the original source image is overwritten.
-    def write(fname=nil)
+    # the output image will also contain any previously applied overlays.
+    def write(fname)
       return if not_registered
-      puts "I WAS HERE"
       @mim.write(fname, true)
     end
-
-    # # write_raw(output_path_file_name)
-    # #
-    # # writes out a copy of the source image before registration;
-    # # the output image will also contain any previously applied overlays
-    # # if the argument is omitted, the image is created in-place,
-    # # i.e. the original source image is overwritten.
-    # def write_raw(fname=nil)
-    #   @mim.write(fname, false)
-    # end
 
     def write_registration(fname)
       @mim.highlight_rm_areas
@@ -192,3 +179,14 @@ module Mork
     end
   end
 end
+
+
+# # write_raw(output_path_file_name)
+# #
+# # writes out a copy of the source image before registration;
+# # the output image will also contain any previously applied overlays
+# # if the argument is omitted, the image is created in-place,
+# # i.e. the original source image is overwritten.
+# def write_raw(fname=nil)
+#   @mim.write(fname, false)
+# end

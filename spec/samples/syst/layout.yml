@@ -4,11 +4,10 @@ page_size:
 reg_marks:
   margin:  10
   radius:   2.5
-  crop:    20
   offset:   2
+  crop:    30
   blur:     2
   dilate:   5
-
 header:
   name:
     top:    5

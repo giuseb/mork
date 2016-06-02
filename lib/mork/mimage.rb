@@ -13,7 +13,6 @@ module Mork
       @grom   = grom.set_page_size @mack.width, @mack.height
       @rm     = {} # registration mark centers
       @valid = register
-      # @writing = nil
     end
 
     def valid?
@@ -78,7 +77,6 @@ module Mork
     # if the 2nd arg is false, then stretching is not applied
     def write(fname=nil, reg=true)
       pp = reg ? @rm : nil
-      puts pp.inspect
       @mack.write fname, pp
     end
 
