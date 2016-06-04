@@ -13,45 +13,9 @@ jdoe1:
   br:          [1178, 1704]
   bl:          [55, 1702]
 
-
-slanted:
-  image_path: spec/samples/slanted.jpg
-  grid_path: spec/samples/slanted.yml
-  barcode_int: 16471
-  width:  1241
-  height: 1754
-  tl: [63, 67]
-  tr: [1172, 68]
-  br: [1169, 1704]
-  bl: [55, 1702]
-  mark_array: [[4],[4],[0],[1],[2]]
-
-code666:
-  image_path: spec/samples/sheet666.jpg
-  grid_path: spec/samples/layout.yml
-  barcode_int: 666666666666
-
-silvia:
-  image_path: spec/samples/qzc013.jpg
-  grid_path: spec/samples/layout.yml
-
 reg-mark:
   image_path: spec/samples/reg_mark.jpg
   centroid-x: 92
   centroid-y: 91
 
-small:
-  image_path: spec/samples/small.jpg
-
-code-sample:
-  image_path: spec/samples/code_sample.png
-  code-string: "0000000000000000000000000000000000000000000000000001110001010001"
-  code-int:    7249
-
-code-zero:
-  image_path: spec/samples/code_zero.png
-
-two-pages:
-  image_path: spec/samples/two_pages.pdf
-  code-int: 17382938642823887837
 

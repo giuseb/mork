@@ -9,3 +9,5 @@ tmp/*
 .ruby-version
 .ruby-gemset
 .rspec
+.byebug_history
+doc

@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'guard-shell',   '~>  0.6'
   # s.add_development_dependency 'rb-fsevent'
   s.add_development_dependency 'awesome_print', '~>  1.2'
+  s.add_development_dependency 'byebug', '~>  9.0'
 end

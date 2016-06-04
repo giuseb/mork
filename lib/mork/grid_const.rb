@@ -14,8 +14,8 @@ module Mork
       radius:       3,
       offset:       2,
       crop:        20, # size of square where the regmark should be located
-      dilate:       2, # set to >0 to apply a dilate IM operation
-      blur:         5  # set to >0 to apply a blur IM operation
+      dilate:       5, # set to >0 to apply a dilate IM operation
+      blur:         2  # set to >0 to apply a blur IM operation
     },
     header: {
       name: {

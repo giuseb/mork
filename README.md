@@ -18,7 +18,7 @@ Mork is a low-level library, and very much work in progress. It is not, and will
   - a header area to print arbitrary information
   - a response area containing a list of numbered items (questions)
   - each item contains an arbitrary number of choice “cells”, each marked with a capital letter (A, B, C, ...)
-  - the far right side of the response area is reserved for a column of calibration cells that must remain blank
+  - the right edge of the response area is reserved for a column of calibration cells that must remain blank
 - it is entirely up to the user to provide parameters that produce the desired response sheet layout; in particular, making sure that the header elements and choice cells fit in the available space, as Mork does not provide any type of "sanity" check at this time.
 
 ## Getting started
@@ -90,37 +90,40 @@ page_size:                # all measurements in mm
   height:         297     # height of the paper sheet
 reg_marks:         
   margin:          10     # distance from each page border to registration mark center
-  radius:           2.5   # registration mark radius
-  crop:            12     # size of the registration mark search area (*)
+  radius:           3     # registration mark radius
+  crop:            20     # size of the registration mark search area (*)
   offset:           2     # distance between the search area and each page border (*)
-  blur:             2     # size of a gaussian blur filter to smooth overly pixelated registration marks (0 to skip)
-  dilate:           5     # size of a “dilate” filter to get rid of stray noise (0 to skip)
+  blur:             2     # size of a gaussian blur filter to smooth overly pixelated registration marks (0 to skip) (*)
+  dilate:           5     # size of a “dilate” filter to get rid of stray noise (0 to skip) (*)
 header:           
   name:                   # ‘name’ is just a label; you can add arbitrary header elements
     top:            5     # margin relative to registration frame top side
-    left:           7.5   # margin relative to registration frame left side
-    width:         170    # text will be fitted to this width
-    size:           14    # font size
+    left:          15     # margin relative to registration frame left side
+    width:        160     # text will be fitted to this width
+    height:         7
+    size:          14     # font size
   title:
-    top:            15
-    left:           7.5
-    width:         180
-    size:           12
+    top:           15
+    left:          15
+    width:        160
+    height:        12
+    size:          12
   code:
-    top:             5
-    left:          165
-    width:          20
-    size:           14
+    top:           35
+    left:         130
+    width:         57
+    height:        10
+    size:          14
   signature:
     top:            30
-    left:            7.5
+    left:           15
     width:         120
     height:         15
     size:            7
     box:          true    # header element will be enclosed in a box
 items:
-  top:              55.5  # response area margin, relative to reg frame
-  left:             10.5  # response area margin, relative to reg frame
+  top:              55    # response area margin, relative to reg frame
+  left:             11    # response area margin, relative to reg frame
   rows:             30    # number of items per column
   columns:           4    # number of columns
   column_width:     44    # 
@@ -136,7 +139,7 @@ barcode:
   bits:             40    # the maximum sheet identifier is 2 to the power or bits
   left:             15    # distance between registration frame side and the first barcode bit
   width:             3    # width of each barcode bit
-  height:            2.5  # height of each barcode bit from the registration frame bottom side
+  height:            3    # height of each barcode bit from the registration frame bottom side
   spacing:           4    # horizontal distance between adjacent barcode bit centers
 ```
 
@@ -156,15 +159,15 @@ If the `layout` argument is omitted, Mork will search for a file named `layout.y
 
 Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that the sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Three pieces of information must be provided to the object constructor:
 
-- **image**: the path/filename of the bitmap image (currently accepts JPG, JPEG, PNG, PDF extensions; a resolution of 150-200 dpi is usually more than sufficient to obtain accurate readings)
-- **choices**: equivalent to the `choices` array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above)
-- **layout**: same as for the `SheetPDF` class
+- **path**: mandatory path/filename of the bitmap image (accepts JPG, JPEG, PNG, PDF extensions; a resolution of 150-200 dpi is usually more than sufficient to obtain accurate readings)
+- **choices**: a named argument (ruby-2 style) equivalent to the `choices` array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above). If omitted, the `choices` parameter is inferred from the layout
+- **layout_file**: same as for the `SheetPDF` class
 
 The following code shows how to create and analyze a SheetOMR based on a bitmap file named `image.jpg`:
 
 ```ruby
 # instantiating the object
-s = SheetOMR.new 'image.jpg', [5]*100, 'layout.yml'
+s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
 # detecting darkened choice cells for the 100 items
 chosen = s.mark_array
 ```
@@ -172,11 +175,15 @@ chosen = s.mark_array
 If all goes well, the `chosen` array will contain 100 sub-arrays, each containing the list of darkened choices for that item, where the first cell is indicated by a 0, the second by a 1, etc. It is also possible to show the scoring graphically:
 
 ```ruby
-s = SheetOMR.new 'image.jpg', 'layout.yml'
-s.highlight
-s.write 'highlights.jpg'
-system 'open highlights.jpg' # OSX only
+s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
+s.cross_marked
+s.write 'marked_choices.jpg'
+system 'open marked_choices.jpg' # this works in OSX
 ```
+
+Scoring can only be performed if the sheet gets properly registered, which in turn depends on the quality of the scanned image
+
+### Improving sheet registration
 
 #### Wait, why Mork?
 

@@ -4,6 +4,7 @@ require 'mork/magicko'
 module Mork
   # The class Mimage processes the image.
   # Note that Mimage is NOT intended as public API, it should only be called by SheetOMR
+
   class Mimage
     attr_reader :rm
 

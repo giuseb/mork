@@ -3,69 +3,93 @@ require 'mork/mimage'
 require 'mork/mimage_list'
 
 module Mork
+  # Optical mark recognition of a response sheet that was: 1) generated
+  # with SheetPDF, 2) printed on plain paper, 3) filled out by a responder,
+  # and 4) acquired as a image file.
+  #
+  # The sheet is automatically registered upon object creation, after which it
+  # is possible to perform queries, as well as save a copy of the scanned
+  # image with various overlays superimposed, highlighting the expected correc
+  # choices, the actually marked ones, etc.
   class SheetOMR
-
-    def initialize(path, nitems: nil, layout_file: nil)
+    # @param path [String] the required path/filename to the saved image
+    #   (.jpg, .jpeg, .png, or .pdf)
+    # @param choices [Fixnum, Array] the questions/choices we want scored, as
+    #   an optional named argument. Scoring is done on all available questions,
+    #   if the argument is omitted, on the first N questions, If an integer
+    #   is passed, or on the indicated questions, if the argument is an array.
+    # @param layout [String, Hash] the sheet description. Use a string to
+    #   specify the path/filename of a YAML file containing the parameters,
+    #   or directly a hash of parameters. See the README file for a full listing
+    #   of the available parameters.
+    def initialize(path, choices: nil, layout: nil)
       raise IOError, "File '#{path}' not found" unless File.exists? path
-      @grom   = GridOMR.new layout_file
-      @nitems = case nitems
+      @grom   = GridOMR.new layout
+      @nitems = case choices
                 when nil
                   [@grom.max_choices_per_question] * @grom.max_questions
                 when Fixnum
-                  [@grom.max_choices_per_question] * nitems
+                  [@grom.max_choices_per_question] * choices
                 when Array
-                  nitems
+                  choices
                 end
       @mim    = Mimage.new path, @nitems, @grom
     end
 
+    # True if sheet registration completed successfully
+    #
+    # @return [Boolean]
     def valid?
       @mim.valid?
     end
 
+    # Registration status for each of the four corners
+    #
+    # @return [Hash] { tl: Symbol, tr: Symbol, br: Symbol, bl: Symbol } where
+    #   symbol is either `:ok` or `:edgy`, meaning that the centroid was found
+    #   to be too close to the edge of the search area to be considered reliable
     def status
       @mim.status
     end
 
-    # barcode
+    # Sheet barcode as an integer
     #
-    # returns the sheet barcode as an integer
+    # @return [Fixnum]
     def barcode
       return if not_registered
       barcode_string.to_i(2)
     end
 
-    # barcode_string
+    # Sheet barcode as a binary-like string
     #
-    # returns the sheet barcode as a string of 0s and 1s. The string is barcode_bits
-    # bits long, with most significant bits to the left
+    # @return [String] a string of 0s and 1s; the string is `barcode_bits`
+    #   bits long, with most significant bits to the left
     def barcode_string
       return if not_registered
       cs = @grom.barcode_bits.times.inject("") { |c, v| c << barcode_bit_string(v) }
       cs.reverse
     end
 
-    # marked?(question, choice)
+    # True if the specified question/choice cell has been darkened
     #
-    # returns true if the specified question/choice cell has been darkened
-    # false otherwise
-    def marked?(q, c)
+    # @param question [Fixnum] the question number, zero-based
+    # @param choice [Fixnum] the choice number, zero-based
+    # @return [Boolean]
+    def marked?(question, choice)
       return if not_registered
-      @mim.marked? q, c
+      @mim.marked? question, choice
     end
 
-    # TODO: define method ‘mark’ to retrieve the choice array for a single item
-
-
-    # mark_array(range)
+    # Array of arrays of marked choices.
     #
-    # returns an array of arrays of marked choices.
-    # takes either a range of questions, an array of questions, or a fixnum,
-    # in which case the choices for the first n questions will be returned.
-    # if called without arguments, all available choices will be evaluated.
-    def mark_array(r = nil)
+    # @param questions [Fixnum, Range, or Array] look for the first n questions
+    #   If the argument is omitted, all available choices are evaluated.
+    # @return [Array] The list of marked choices as an array (one element per
+    #   question) of arrays (the indices of all marked choices for the question)
+    def mark_array(questions = nil)
       return if not_registered
-      question_range(r).collect do |q|
+      # byebug
+      question_range(questions).collect do |q|
         [].tap do |cho|
           (0...@grom.max_choices_per_question).each do |c|
             cho << c if marked?(q, c)
@@ -74,16 +98,15 @@ module Mork
       end
     end
 
-    # mark_char_array(range)
+    # Array of arrays of the characters corresponding to marked choices.
+    # At this time, only the latin sequence 'A, B, C...' is supported.
     #
-    # returns an array of arrays of the characters corresponding to marked choices.
-    # WARNING: at this time, only the latin sequence 'A, B, C...' is supported.
-    # takes either a range of questions, an array of questions, or a fixnum,
-    # in which case the choices for the first n questions will be returned.
-    # if called without arguments, all available choices will be evaluated.
-    def mark_char_array(r = nil)
+    # @param questions [Fixnum, Range, Array] same as for `mark_array`
+    # @return [Array] The list of marked choices as an array (one element per
+    #   question) of arrays (the indices of all marked choices for the question)
+    def mark_char_array(questions = nil)
       return if not_registered
-      question_range(r).collect do |q|
+      question_range(questions).collect do |q|
         [].tap do |cho|
           (0...@grom.max_choices_per_question).each do |c|
             cho << (65+c).chr if marked?(q, c)
@@ -92,16 +115,15 @@ module Mork
       end
     end
 
+    # Array of logical arrays of marked choices
+    #
+    # @param [Fixnum, Range, Array]
     def mark_logical_array(r = nil)
       return if not_registered
       question_range(r).collect do |q|
         (0...@grom.max_choices_per_question).collect {|c| marked?(q, c)}
       end
     end
-
-    # ================
-    # = HIGHLIGHTING =
-    # ================
 
     def outline(cells)
       return if not_registered
@@ -120,14 +142,15 @@ module Mork
       @mim.cross mark_array
     end
 
-    def highlight_marked
-      return if not_registered
-      @mim.highlight_cells mark_array
-    end
 
     def highlight_all_choices
       return if not_registered
       @mim.highlight_all_choices
+    end
+
+    def highlight_marked
+      return if not_registered
+      @mim.highlight_cells mark_array
     end
 
     def highlight_barcode
@@ -135,13 +158,17 @@ module Mork
       @mim.highlight_barcode barcode_string
     end
 
-    # write(output_path_file_name)
-    #
     # writes out a copy of the source image after registration;
     # the output image will also contain any previously applied overlays.
     def write(fname)
       return if not_registered
       @mim.write(fname, true)
+    end
+
+    def write_out(fname)
+      return if not_registered
+      yield self
+      @mim.write fname, true
     end
 
     def write_registration(fname)
