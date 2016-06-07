@@ -13,7 +13,6 @@ module Mork
 
     def to_hash
       { w: @w, h: @h, x: @x, y: @y }
-      5
     end
 
     def print

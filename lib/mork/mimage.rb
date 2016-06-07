@@ -29,61 +29,90 @@ module Mork
       }
     end
 
-    def marked?(q,c)
-      shade_of(q,c) < choice_threshold
+    def marked
+      @logical_array_of_marked_cells ||= begin # memoization necessary?
+        itemator { |q, c| shade_of(q, c) < choice_threshold }
+      end
     end
 
-    def barcode_bit?(i)
-      reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
+    def marked_int
+      marked.map do |q|
+        [].tap do |choices|
+          q.each_with_index do |choice, idx|
+            choices << idx if choice
+          end
+        end
+      end
     end
 
-    def outline(cells)
-      return if cells.empty?
-      @mack.outline coordinates_of(cells)
+    def barcode_bits
+      @barcode_bits ||= begin
+        @grom.barcode_bits.times.collect do |b|
+          reg_pixels.average(@grom.barcode_bit_area b+1) < barcode_threshold
+        end
+      end
     end
 
-    # highlight_cells(cells, roundedness)
-    #
-    # partially transparent yellow on top of choice cells
-    def highlight_cells(cells)
-      return if cells.empty?
-      @mack.highlight_cells coordinates_of(cells)
-    end
+    # def barcode_bit?(i)
+    #   reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
+    # end
 
-    def highlight_all_choices
-      cells = (0...@grom.max_questions).collect { |i| (0...@grom.max_choices_per_question).to_a }
-      highlight_cells cells
-    end
-
-    def highlight_barcode(bitstring)
-      @mack.highlight_rect @grom.barcode_bit_areas bitstring
-    end
-
-    def highlight_rm_centers
-      each_corner { |c| @mack.plus @rm[c][:x], @rm[c][:y], 20 }
-    end
-
-    def highlight_rm_areas
-      each_corner { |c| @mack.highlight_area @grom.rm_crop_area(c) }
-    end
-
-    def cross(cells)
-      return if cells.empty?
-      cells = [cells] if cells.is_a? Hash
-      @mack.cross coordinates_of(cells)
+    def overlay(what, where)
+      areas = case where
+              when :barcode
+                @grom.barcode_areas barcode_bits
+              when :cal
+                @grom.calibration_cell_areas
+              when :marked
+                choice_cell_areas marked_int
+              when :all
+                all_choice_cell_areas
+              when :max
+                @grom.max_questions.times.map { |i| (0...@grom.max_choices_per_question).to_a }
+              when Array
+                choice_cell_areas where
+              else
+                raise 'Invalid overlay argument “where”'
+              end
+      @mack.send what, areas, rounded: (where != :barcode)
     end
 
     # write the underlying MiniMagick::Image to disk;
     # if no file name is given, image is processed in-place;
     # if the 2nd arg is false, then stretching is not applied
-    def write(fname=nil, reg=true)
+    def save(fname=nil, reg=true)
       pp = reg ? @rm : nil
-      @mack.write fname, pp
+      @mack.save fname, pp
+    end
+
+    def save_registration(fname)
+      each_corner { |c| @mack.plus @rm[c][:x], @rm[c][:y], 30 }
+      each_corner { |c| @mack.outline [@grom.rm_crop_area(c)], false }
+      @mack.save fname, nil
     end
 
     # ============================================================#
     private                                                       #
     # ============================================================#
+
+    def itemator(items=@nitems)
+      items.map.with_index do |cho, q|
+        if cho.is_a? Fixnum
+          cho.times.map { |c| yield q, c }
+        else
+          cho.map { |c| yield q, c }
+        end
+      end
+    end
+
+    def choice_cell_areas(cells)
+      itemator(cells) { |q,c| @grom.choice_cell_area q, c }.flatten
+    end
+
+    def all_choice_cell_areas
+      @all_choice_cell_areas ||= choice_cell_areas(@nitems)
+    end
+
     def each_corner
       [:tl, :tr, :br, :bl].each { |c| yield c }
     end
@@ -94,11 +123,7 @@ module Mork
 
     def choice_cell_averages
       @choice_cell_averages ||= begin
-        @nitems.each_with_index.collect do |cho, q|
-          cho.times.collect do |c|
-            reg_pixels.average @grom.choice_cell_area(q, c)
-          end
-        end
+        itemator { |q, c| reg_pixels.average @grom.choice_cell_area(q, c) }
       end
     end
 
@@ -196,3 +221,38 @@ end
 #   @mack.raw_patch
 # end
 
+# def outline(cells)
+#   return if cells.empty?
+#   @mack.outline coordinates_of(cells)
+# end
+
+# # highlight_cells(cells, roundedness)
+# #
+# # partially transparent yellow on top of choice cells
+# def highlight_cells(cells)
+#   return if cells.empty?
+#   @mack.highlight_cells coordinates_of(cells)
+# end
+
+# def highlight_all_choices
+#   cells = (0...@grom.max_questions).collect { |i| (0...@grom.max_choices_per_question).to_a }
+#   highlight_cells cells
+# end
+
+# def highlight_barcode(bitstring)
+#   @mack.highlight_rect @grom.barcode_bit_areas bitstring
+# end
+
+# def highlight_rm_centers
+#   each_corner { |c| @mack.plus @rm[c][:x], @rm[c][:y], 20 }
+# end
+
+# def highlight_rm_areas
+#   each_corner { |c| @mack.highlight_area @grom.rm_crop_area(c) }
+# end
+
+# def cross(cells)
+#   return if cells.empty?
+#   cells = [cells] if cells.is_a? Hash
+#   @mack.cross coordinates_of(cells)
+# end

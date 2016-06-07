@@ -13,12 +13,6 @@ module Mork
           expect(mim.valid?).to be_truthy
         end
 
-        it 'writes the registration highlights' do
-          mim.highlight_rm_centers
-          mim.highlight_rm_areas
-          mim.write "spec/out/registration/mim-#{fn}", false
-        end
-
         it 'should return the correct regmark coordinates' do
           [:tl, :tr, :br, :bl].each do |corner|
             crn = mim.rm[corner]
@@ -51,3 +45,9 @@ module Mork
     end
   end
 end
+
+# it 'writes the registration highlights' do
+#   mim.highlight_rm_centers
+#   mim.highlight_rm_areas
+#   mim.save "spec/out/registration/mim-#{fn}", false
+# end

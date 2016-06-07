@@ -32,26 +32,28 @@ module Mork
       read_bytes "-crop #{c.cropper}#{b}#{d}"
     end
 
-    # MiniMagick stuff
+    ##################################
+    # Constructing MiniMagick commands
+    ##################################
 
-    def highlight_cells(coords)
-      @cmd << [:stroke, 'none']
-      @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
-      coords.each do |c|
-        @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
-      end
+    def write_registration(fname)
+
     end
 
-    def outline(coords)
+    def highlight(coords, rounded)
+      @cmd << [:stroke, 'none']
+      @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
+      coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
+    end
+
+    def outline(coords, rounded)
       @cmd << [:stroke, 'green']
       @cmd << [:strokewidth, '2']
       @cmd << [:fill, 'none']
-      coords.each do |c|
-        @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
-      end
+      coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
     end
 
-    def cross(coords)
+    def check(coords, rounded)
       @cmd << [:stroke, 'red']
       @cmd << [:strokewidth, '3']
       coords.each do |c|
@@ -99,7 +101,7 @@ module Mork
       @cmd << [:draw, "polygon #{pts}"]
     end
 
-    def write(fname, reg)
+    def save(fname, reg)
       MiniMagick::Tool::Convert.new(whiny: false) do |img|
         img << @path
         img.distort(:perspective, pps(reg)) if reg
@@ -109,6 +111,10 @@ module Mork
     end
 
     private
+
+    def shape(c, rounded)
+      rounded ? "roundrectangle #{c.choice_cell}" : "rectangle #{c.rect_points}"
+    end
 
     # calling imagemagick and capturing the converted image
     # into an array of bytes
@@ -152,5 +158,22 @@ end
 # def exec_mm_cmd(c, pp)
 #   c.distort(:perspective, pps(pp)) if pp
 #   @cmd.each { |cmd| c.send(*cmd) }
+# end
+
+# def highlight_cells(coords)
+#   @cmd << [:stroke, 'none']
+#   @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
+#   coords.each do |c|
+#     @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
+#   end
+# end
+
+# def outline(coords)
+#   @cmd << [:stroke, 'green']
+#   @cmd << [:strokewidth, '2']
+#   @cmd << [:fill, 'none']
+#   coords.each do |c|
+#     @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
+#   end
 # end
 

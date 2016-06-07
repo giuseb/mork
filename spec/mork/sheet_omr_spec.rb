@@ -50,29 +50,32 @@ module Mork
         end
       end
 
-      describe '#mark_array' do
+      describe '#marked_choices' do
+        it 'returns an array of marked choices as position indices' do
+          expect(omr.marked_choices).to eq standard_mark_array(24)
+        end
+      end
+
+      describe '#marked_choices' do
         it 'returns an array of marked choices as position indexes' do
-          expect(omr.mark_array).to eq standard_mark_array(24)
+          expect(omr.marked_choices ).to eq standard_mark_array(24)
         end
 
-        it 'returns a subset of marked choices as position indexes ' do
-          expect(omr.mark_array 10).to eq standard_mark_array(2)
-        end
-
-        it 'returns a subset of marked choices as position indexes ' do
-          expect(omr.mark_array (10..19).to_a).to eq standard_mark_array(2)
+        let(:om2) { SheetOMR.new img.image_path, choices: [5, 4, 3, 2, 1], layout: img.grid_path }
+        it 'returns marked choices only for existing choice cells' do
+          expect(om2.marked_choices).to eq [[0], [1], [2], [], []]
         end
       end
 
-      describe '#mark_logical_array' do
+      describe '#marked_logicals' do
         it 'returns an array of logicals for the marked choices' do
-          expect(omr.mark_logical_array).to eq standard_mark_logical_array(24)
+          expect(omr.marked_logicals).to eq standard_mark_logical_array(24)
         end
       end
 
-      describe '#mark_char_array' do
+      describe '#marked_letters' do
         it 'returns an array of characters for the marked choices' do
-          expect(omr.mark_char_array).to eq standard_mark_char_array(24)
+          expect(omr.marked_letters).to eq standard_mark_char_array(24)
         end
       end
 
@@ -87,42 +90,35 @@ module Mork
         mf.close
       end
 
-      context 'writing out the image' do
+      context 'creating overlays' do
         it 'registration highlighted' do
-          omr.write_registration "spec/out/registration/#{fn}"
+          omr.save_registration "spec/out/registration/#{fn}"
         end
 
         it 'highlights all choice cells' do
-          omr.highlight_all_choices
-          omr.write "spec/out/highlight/#{fn}"
+          omr.overlay :highlight, :all
+          omr.save "spec/out/highlight/#{fn}"
         end
 
         it 'highlights marked cells' do
-          omr.highlight_marked
-          omr.write "spec/out/highlight/marked-#{fn}"
+          omr.overlay :highlight, :marked
+          omr.save "spec/out/highlight/marked-#{fn}"
         end
 
-        it 'crosses marked cells' do
-          omr.cross_marked
-          omr.write "spec/out/mark/#{fn}"
+        it 'checks marked cells' do
+          omr.overlay :check, :marked
+          omr.save "spec/out/mark/#{fn}"
         end
 
         it 'outlines and crosses marked cells' do
-          omr.outline standard_mark_array(24)
-          omr.cross_marked
-          omr.write "spec/out/outline/#{fn}"
+          omr.overlay :outline, standard_mark_array(24)
+          omr.overlay :check
+          omr.save "spec/out/outline/#{fn}"
         end
 
         it 'highlights the barcode' do
-          omr.highlight_barcode
-          omr.write "spec/out/barcode/#{fn}"
-        end
-
-        it 'writes out' do
-          omr.write_out "spec/out/test.jpg" do |mim|
-            mim.highlight_all_choices
-            mim.cross_marked
-          end
+          omr.overlay :outline, :barcode
+          omr.save "spec/out/barcode/#{fn}"
         end
       end
     end

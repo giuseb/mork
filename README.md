@@ -147,7 +147,7 @@ Assuming that the above text is written in a file named `layout.yml`, here's how
 
 ```ruby
 s = SheetPDF.new content, 'layout.yml'
-s.write 'sheet.pdf'
+s.save 'sheet.pdf'
 system 'open sheet.pdf' # this works in OSX
 ```
 
@@ -177,7 +177,7 @@ If all goes well, the `chosen` array will contain 100 sub-arrays, each containin
 ```ruby
 s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
 s.cross_marked
-s.write 'marked_choices.jpg'
+s.save 'marked_choices.jpg'
 system 'open marked_choices.jpg' # this works in OSX
 ```
 

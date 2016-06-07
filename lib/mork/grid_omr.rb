@@ -13,12 +13,12 @@ module Mork
       self
     end
 
-    def barcode_bit_areas(bitstring = '1' * barcode_bits)
-      areas = []
-      bitstring.reverse.each_char.with_index do |c, i|
-        areas << barcode_bit_area(i+1) if c=='1'
+    def barcode_areas(bits)
+      [].tap do |areas|
+        bits.each_with_index do |b, i|
+          areas << barcode_bit_area(i+1) if b
+        end
       end
-      areas
     end
 
     # ===========================================
@@ -117,3 +117,11 @@ end
 #   (d[:w]-d[:h]).abs
 # end
 
+# # GET RID OF THIS!
+# def barcode_bit_areas(bitstring = '1' * barcode_bits)
+#   areas = []
+#   bitstring.reverse.each_char.with_index do |c, i|
+#     areas << barcode_bit_area(i+1) if c=='1'
+#   end
+#   areas
+# end

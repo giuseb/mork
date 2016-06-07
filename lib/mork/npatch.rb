@@ -32,13 +32,13 @@ module Mork
       return xp.find_index(xp.min), yp.find_index(yp.min), @patch.stddev
     end
 
-    private
+    # private
 
-    def sufficient_contrast?(p)
-      # puts "Contrast: #{p.stddev}"
-      # tested with the few examples: spec/samples/rm0x.jpeg
-      p.stddev > 20
-    end
+    # def sufficient_contrast?(p)
+    #   # puts "Contrast: #{p.stddev}"
+    #   # tested with the few examples: spec/samples/rm0x.jpeg
+    #   p.stddev > 20
+    # end
   end
 end
 
