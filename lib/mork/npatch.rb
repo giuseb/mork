@@ -1,6 +1,7 @@
 require 'narray'
 
 module Mork
+  # @private
   # NPatch handles low-level computations on pixels by leveraging NArray
   class NPatch
     # NPatch.new(source, width, height) constructs an NPatch object

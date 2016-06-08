@@ -36,6 +36,7 @@ header:
     size:    7
     box:  true
 items:
+  # threshold:     0.75
   top:          55
   left:         11
   columns:       4

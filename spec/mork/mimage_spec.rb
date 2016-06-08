@@ -45,9 +45,3 @@ module Mork
     end
   end
 end
-
-# it 'writes the registration highlights' do
-#   mim.highlight_rm_centers
-#   mim.highlight_rm_areas
-#   mim.save "spec/out/registration/mim-#{fn}", false
-# end

@@ -1,7 +1,8 @@
 # require 'RMagick'
 
 module Mork
-  # The class MimageList
+  # @private
+  # The class MimageList, currently abandoned
   class MimageList
     def initialize(fname)
       raise "Initializing a MimageList requires a string" unless fname.class == String
@@ -11,17 +12,17 @@ module Mork
         @images = Magick::ImageList.new(fname)
       end
     end
-    
+
     def shift
       Mimage.new @images.shift
     end
-    
+
     def [] (i)
       # puts "I: #{i}"
       # puts @images[i].inspect
       Mimage.new @images[i]
     end
-    
+
     def each
       @images.each do |i|
         yield Mimage.new i

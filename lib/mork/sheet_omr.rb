@@ -95,20 +95,6 @@ module Mork
     def marked_choices
       return if not_registered
       @mim.marked_int
-      # marked_logicals.map do |q|
-      #   [].tap do |choices|
-      #     q.each_with_index do |choice, idx|
-      #       choices << idx if choice
-      #     end
-      #   end
-      # end
-      # @nitems.map.with_index do |nchoices, q|
-      #   [].tap do |choices|
-      #     nchoices.times do |choice|
-      #       choices << choice if marked? q, choice
-      #     end
-      #   end
-      # end
     end
 
     # The set of letters marked on the response sheet. At this time, only the
@@ -152,24 +138,29 @@ module Mork
       @mim.overlay what, where
     end
 
-    # writes out a copy of the source image after registration;
+    # Saves a copy of the source image after registration;
     # the output image will also contain any previously applied overlays.
+    #
+    # @param fname [String] the path/filename of the target image, including
+    #   the extension (`.jpg`, `.png`)
     def save(fname)
       return if not_registered
       @mim.save(fname, true)
     end
 
+    # Saves a copy of the original image with overlays showing the crop areas
+    # used to localize the registration marks and the detected registration
+    # mark centers.
+    #
+    # @param fname [String] the path/filename of the target image, including
+    #   the extension (`.jpg`, `.png`)
     def save_registration(fname)
       @mim.save_registration fname
-      # @mim.highlight_rm_areas
-      # @mim.highlight_rm_centers
-      # @mim.save fname, false
     end
 
     # ============================================================#
     private                                                       #
     # ============================================================#
-
 
     def not_registered
       unless valid?

@@ -1,6 +1,7 @@
 require 'mork/grid'
 
 module Mork
+  # @private
   # GridPDF gets coordinates and measurements from a Grid and
   # provides SheetPDF with the properly computed values
   class GridPDF < Grid

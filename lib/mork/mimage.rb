@@ -2,9 +2,7 @@ require 'mork/npatch'
 require 'mork/magicko'
 
 module Mork
-  # The class Mimage processes the image.
-  # Note that Mimage is NOT intended as public API, it should only be called by SheetOMR
-
+  # @private
   class Mimage
     attr_reader :rm
 
@@ -53,10 +51,6 @@ module Mork
       end
     end
 
-    # def barcode_bit?(i)
-    #   reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
-    # end
-
     def overlay(what, where)
       areas = case where
               when :barcode
@@ -72,9 +66,10 @@ module Mork
               when Array
                 choice_cell_areas where
               else
-                raise 'Invalid overlay argument “where”'
+                raise ArgumentError, 'Invalid overlay argument “where”'
               end
-      @mack.send what, areas, rounded: (where != :barcode)
+      round = where != :barcode
+      @mack.send what, areas, round
     end
 
     # write the underlying MiniMagick::Image to disk;
@@ -129,7 +124,8 @@ module Mork
 
     # TODO: 0.75 should be a parameter
     def choice_threshold
-      @choice_threshold ||= (cal_cell_mean - darkest_cell_mean) * 0.75 + darkest_cell_mean
+      # puts "CT #{@grom.choice_threshold.inspect}"
+      @choice_threshold ||= (cal_cell_mean - darkest_cell_mean) * @grom.choice_threshold + darkest_cell_mean
     end
 
     def barcode_threshold
@@ -166,10 +162,6 @@ module Mork
     # plus the stdev of the search area as quality control
     def register
       each_corner { |c| @rm[c] = rm_centroid_on c }
-      # puts "TL: #{@rm[:tl].inspect}"
-      # puts "TR: #{@rm[:tr].inspect}"
-      # puts "BR: #{@rm[:br].inspect}"
-      # puts "BL: #{@rm[:bl].inspect}"
       @rm.all? { |k,v| v[:status] == :ok }
     end
 
@@ -178,7 +170,6 @@ module Mork
     def rm_centroid_on(corner)
       c = @grom.rm_crop_area(corner)
       p = @mack.rm_patch(c, @grom.rm_blur, @grom.rm_dilate)
-      # puts "REG #{@grom.rm_blur} - #{@grom.rm_dilate} - C #{c.inspect}"
       n = NPatch.new(p, c.w, c.h)
       cx, cy, sd = n.centroid
       st = (cx < 2) or (cy < 2) or (cy > c.h-2) or (cx > c.w-2)
@@ -256,3 +247,14 @@ end
 #   cells = [cells] if cells.is_a? Hash
 #   @mack.cross coordinates_of(cells)
 # end
+
+# def barcode_bit?(i)
+#   reg_pixels.average(@grom.barcode_bit_area i+1) < barcode_threshold
+# end
+
+# puts "TL: #{@rm[:tl].inspect}"
+# puts "TR: #{@rm[:tr].inspect}"
+# puts "BR: #{@rm[:br].inspect}"
+# puts "BL: #{@rm[:bl].inspect}"
+
+# puts "REG #{@grom.rm_blur} - #{@grom.rm_dilate} - C #{c.inspect}"

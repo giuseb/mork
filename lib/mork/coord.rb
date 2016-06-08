@@ -1,4 +1,5 @@
 module Mork
+  # @private
   # The Coord class takes coordinates in the standard unit (e.g. mm)
   # and provides pixel-based coordinates useful for image manipulation
   class Coord

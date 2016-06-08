@@ -2,6 +2,7 @@ require 'mork/grid'
 require 'mork/coord'
 
 module Mork
+  # @private
   class GridOMR < Grid
     def initialize(options=nil)
       super options

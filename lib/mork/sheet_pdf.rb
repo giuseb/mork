@@ -3,13 +3,14 @@ require 'prawn'
 
 module Mork
 
-  #TODO: read the prawn manual, we should probably use views
-
+  # Generating response sheets as PDF files.
+  # See the README file for usage
   class SheetPDF < Prawn::Document
-    def initialize(content, grip=GridPDF.new)
-      @grip = case grip
-              when String, Hash; GridPDF.new grip
-              when Mork::GridPDF; grip
+    def initialize(content, layout=nil)
+      @grip = case layout
+              when NilClass; GridPDF.new
+              when String, Hash; GridPDF.new layout
+              when Mork::GridPDF; layout
               else raise ArgumentError, 'Invalid initialization parameter'
               end
       super my_page_params
@@ -19,10 +20,14 @@ module Mork
       process
     end
 
-    def save(fn)
+    # Saving the PDF file to disk
+    #
+    # @param fname [String] the path/filename for the target PDF document
+    def save(fname)
       render_file fn
     end
 
+    # The PDF document as a string
     def to_pdf
       render
     end

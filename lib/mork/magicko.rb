@@ -1,6 +1,7 @@
 require 'mini_magick'
 
 module Mork
+  # @private
   # Magicko: image management, done in two ways: 1) direct system calls to
   # imagemagick tools; 2) via the MiniMagick gem
   class Magicko

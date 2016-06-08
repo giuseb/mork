@@ -52,5 +52,5 @@ barcode:
   bits:          40    # the maximum sheet identifier is 2 to the power or bits
   left:          15    # distance between registration frame side and the first barcode bit
   width:          3    # width of each barcode bit
-  height:         2.5  # height of each barcode bit from the registration frame bottom side
+  height:         3  # height of each barcode bit from the registration frame bottom side
   spacing:        4    # horizontal distance between adjacent barcode bit centers

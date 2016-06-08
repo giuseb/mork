@@ -12,10 +12,11 @@ module Mork
     reg_marks: {
       margin:      10,
       radius:       3,
-      offset:       2,
+      offset:       2, # distance between page edge and registraton mark search area
       crop:        20, # size of square where the regmark should be located
       dilate:       5, # set to >0 to apply a dilate IM operation
-      blur:         2  # set to >0 to apply a blur IM operation
+      blur:         2, # set to >0 to apply a blur IM operation
+      contrast:    20  # minimum contrast between registration mark circles and the white paper
     },
     header: {
       name: {
@@ -50,6 +51,7 @@ module Mork
       }
     }, # header end
     items: {
+      threshold:     0.75,
       columns:       4,
       column_width: 44,
       rows:         30,
@@ -71,7 +73,7 @@ module Mork
       # distance between right side of q num and left side of first choice cell
       number_width:  8,
       # width of question number text box
-      number_margin: 2,
+      number_margin: 2
     }, # items end
     barcode: {
       bits:         40,

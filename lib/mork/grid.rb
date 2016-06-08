@@ -2,6 +2,7 @@ require 'yaml'
 require 'mork/grid_const'
 
 module Mork
+  # @private
   # The Grid is a set of expectations on what the response sheet should look like
   # It knows nothing about the actual scanned image.
   # All returned values are in the arbitrary units given in the configuration file
@@ -10,17 +11,17 @@ module Mork
     def initialize(options=nil)
       @params = DGRID
       if File.exists?('layout.yml')
-        @params.merge! symbolize YAML.load_file('layout.yml')
+        @params.morks_deep_merge symbolize YAML.load_file('layout.yml')
       end
       case options
       when NilClass
         # do nothing
       when Hash
-        @params.merge! symbolize options
+        @params.morks_deep_merge symbolize options
       when String
-        @params.merge! symbolize YAML.load_file(options)
+        @params.morks_deep_merge symbolize YAML.load_file(options)
       else
-        raise "Invalid parameter in the Grid constructor: #{options.class.inspect}"
+        raise ArgumentError, "Invalid parameter in the Grid constructor: #{options.class.inspect}"
       end
     end
 
@@ -54,6 +55,10 @@ module Mork
 
     def rm_blur
       @params[:reg_marks][:blur].to_i
+    end
+
+    def choice_threshold
+      @params[:items][:threshold].to_f
     end
 
     #====================#
@@ -119,6 +124,7 @@ module Mork
     def reg_off()          @params[:reg_marks][:offset].to_f   end
     def reg_frame_width()  page_width  - reg_margin * 2        end
     def reg_frame_height() page_height - reg_margin * 2        end
+    def reg_min_contrast() @params[:reg_marks][:contrast]      end
     def page_width()       @params[:page_size][:width].to_f    end
     def page_height()      @params[:page_size][:height].to_f   end
     def reg_margin()       @params[:reg_marks][:margin].to_f   end
