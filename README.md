@@ -249,6 +249,7 @@ items:
 
 If Mork fails to register/mark scoring sheets that you believe **should** be valid, please open an issue and attach a sample image.
 
-#### Wait, why Mork?
+## API Reference
+The online rubygems docs are [here](http://www.rubydoc.info/gems/mork)
 
-Because I used to have a crush on Mindy
+_(Wait, why Mork? Because I used to have a crush on Mindy)_
