@@ -24,7 +24,7 @@ module Mork
     #
     # @param fname [String] the path/filename for the target PDF document
     def save(fname)
-      render_file fn
+      render_file fname
     end
 
     # The PDF document as a string
