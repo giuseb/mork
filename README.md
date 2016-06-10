@@ -144,7 +144,7 @@ Assuming that the above text is written in a file named `layout.yml`, here's how
 
 ```ruby
 s = SheetPDF.new content, 'layout.yml'
-s.write 'sheet.pdf'
+s.save 'sheet.pdf'
 system 'open sheet.pdf' # this works in OSX
 ```
 
