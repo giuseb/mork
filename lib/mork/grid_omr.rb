@@ -1,5 +1,6 @@
 require 'mork/grid'
 require 'mork/coord'
+require 'deep_merge/rails_compat'
 
 module Mork
   # @private

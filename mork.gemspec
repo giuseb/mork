@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'narray',      '~> 0.6'
   s.add_dependency 'mini_magick', '~> 4.5'
   s.add_dependency 'prawn',       '~> 2.1'
+  s.add_dependency 'deep_merge', '~> 1.0'
   s.add_development_dependency 'rake',          '~> 10.3'
   s.add_development_dependency 'rspec',         '~>  3.1'
   s.add_development_dependency 'guard',         '~>  2.6'

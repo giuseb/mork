@@ -3,12 +3,13 @@ require 'spec_helper'
 module Mork
   describe GridOMR do
     before(:each) do
-      @grom = GridOMR.new 'spec/samples/layout.yml'
+      @grom = GridOMR.new 'spec/samples/grid_omr_layout.yml'
       @grom.set_page_size 1601, 2281
     end
 
     describe '#choice_cell_area' do
       it 'returns the coordinates of the first choice cell' do
+        puts
         expect(@grom.choice_cell_area(0,0)).to have_coords(63, 436, 51, 41)
       end
 
