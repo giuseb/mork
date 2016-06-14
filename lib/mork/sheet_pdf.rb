@@ -54,6 +54,7 @@ module Mork
         start_new_page if i>0
         barcode content[:barcode]
         header content[:header]
+        uid
         unless equal_choice_number?
           questions_and_choices ch_len[i]
         end
@@ -130,6 +131,23 @@ module Mork
       create_stamp('barcode') do
         fill do
           rectangle [0,0], @grip.barcode_width, @grip.barcode_height
+        end
+      end
+    end
+
+    def create_uid_stamps
+      create_stamp('uid') do
+        10.times do |i|
+          offx = uid_spacing_x * i
+          stroke_rounded_rectangle [offx, 0],
+                                   @grip.width_of_uid,
+                                   @grip.height_of_uid,
+                                   @grip.uround
+          text_box i, at: [offx, 0],
+                      width: @grip.width_of_uid,
+                      height: @grip.height_of_uid,
+                      align: :center,
+                      valign: :center
         end
       end
     end

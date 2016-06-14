@@ -129,5 +129,12 @@ module Mork
     def page_height()      @params[:page_size][:height].to_f   end
     def reg_margin()       @params[:reg_marks][:margin].to_f   end
     def reg_radius()       @params[:reg_marks][:radius].to_f   end
+    def uid_digits()       @params[:uid][:digits].to_i         end
+    def uid_x()            @params[:uid][:left].to_f           end
+    def uid_y()            @params[:uid][:top].to_f            end
+    def uid_width()        @params[:uid][:width].to_f          end
+    def uid_height()       @params[:uid][:height].to_f         end
+    def uid_cell_width()   @params[:uid][:cell_width].to_f     end
+    def uid_cell_height()  @params[:uid][:cell_height].to_f    end
   end
 end

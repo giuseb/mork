@@ -70,6 +70,27 @@ module Mork
       @cround ||= [width_of_cell, height_of_cell].min / 2
     end
 
+    # UIDs
+    def width_of_uid
+      uid_cell_width.mm
+    end
+
+    def height_of_uid
+      uid_cell_height.mm
+    end
+
+    def uid_spacing_x
+      (uid_width / 11).mm
+    end
+
+    def uid_spacing_y
+      (uid_height / (uid_digits+1)).mm
+    end
+
+    def uround
+      @uround ||= [width_of_uid, height_of_uid].min / 2
+    end
+
     def page_size()      [page_width.mm, page_height.mm]         end
     def margins()        reg_margin.mm                           end
     def qnum_margin()    @params[:items][:number_margin].to_f.mm end
