@@ -73,7 +73,6 @@ module Mork
     it 'creates a PDF sheet with 160 items' do
       s = SheetPDF.new(content.merge({choices: [5] * 160}), 'spec/samples/grid160.yml')
       s.save('spec/out/pdf/i160.pdf')
-      # system 'open spec/out/pdf/i160.pdf'
     end
 
     it 'creates a PDF sheet with unequal choices per item' do

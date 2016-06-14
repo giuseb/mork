@@ -10,36 +10,28 @@ module Mork
     def initialize(source, width, height)
       @patch = NArray.float(width, height)
       @patch[true] = source
-      @width  = width
-      @height = height
+      # @width  = width
+      # @height = height
     end
 
-    def average(c)
-      @patch[c.x_rng, c.y_rng].mean
+    def average(coord)
+      @patch[coord.x_rng, coord.y_rng].mean
     end
 
-    def stddev(c)
-      @patch[c.x_rng, c.y_rng].stddev
+    def stddev(coord)
+      @patch[coord.x_rng, coord.y_rng].stddev
     end
 
-    def length
-      # is this only going to be used for testing purposes?
-      @patch.length
-    end
+    # def length
+    #   # is this only going to be used for testing purposes?
+    #   @patch.length
+    # end
 
     def centroid
       xp = @patch.sum(1).to_a
       yp = @patch.sum(0).to_a
       return xp.find_index(xp.min), yp.find_index(yp.min), @patch.stddev
     end
-
-    # private
-
-    # def sufficient_contrast?(p)
-    #   # puts "Contrast: #{p.stddev}"
-    #   # tested with the few examples: spec/samples/rm0x.jpeg
-    #   p.stddev > 20
-    # end
   end
 end
 
@@ -62,3 +54,8 @@ end
 #   p
 # end
 
+# def sufficient_contrast?(p)
+#   # puts "Contrast: #{p.stddev}"
+#   # tested with the few examples: spec/samples/rm0x.jpeg
+#   p.stddev > 20
+# end
