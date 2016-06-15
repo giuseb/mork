@@ -85,6 +85,17 @@ module Mork
       s = SheetPDF.new([c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c])
       s.save('spec/out/pdf/p20.pdf')
     end
+
+    it 'creates a pdf with minimal content' do
+      s = SheetPDF.new({choices: [4] * 30})
+      s.save 'spec/out/pdf/mincont.pdf'
+    end
+
+    it 'creates a PDF with the maximum possible choice cells if none are specified' do
+      ct = [{}, {choices: [3]*20}]
+      s = SheetPDF.new ct
+      s.save 'spec/out/pdf/nocontent.pdf'
+    end
   end
 end
 
