@@ -53,8 +53,8 @@ module Mork
       # for each response sheet
       @content.each_with_index do |content, i|
         start_new_page if i>0
-        barcode(content[:barcode]) if content[:barcode]
-        header(content[:header]) if content[:header]
+        barcode(content[:barcode] || 0)
+        header(content[:header] || [])
         unless equal_choice_number?
           questions_and_choices ch_len[i]
         end
