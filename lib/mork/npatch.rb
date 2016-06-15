@@ -10,8 +10,6 @@ module Mork
     def initialize(source, width, height)
       @patch = NArray.float(width, height)
       @patch[true] = source
-      # @width  = width
-      # @height = height
     end
 
     def average(coord)
@@ -21,11 +19,6 @@ module Mork
     def stddev(coord)
       @patch[coord.x_rng, coord.y_rng].stddev
     end
-
-    # def length
-    #   # is this only going to be used for testing purposes?
-    #   @patch.length
-    # end
 
     def centroid
       xp = @patch.sum(1).to_a
@@ -58,4 +51,9 @@ end
 #   # puts "Contrast: #{p.stddev}"
 #   # tested with the few examples: spec/samples/rm0x.jpeg
 #   p.stddev > 20
+# end
+
+# def length
+#   # is this only going to be used for testing purposes?
+#   @patch.length
 # end

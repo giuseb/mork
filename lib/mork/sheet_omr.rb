@@ -131,8 +131,8 @@ module Mork
     #   specified by the `choices` argument during object creation
     #   (this is the default); `:all`: all cells in `choices`;
     #   `:max`: maximum number of cells allowed by the layout (can be larger
-    #    than `:all`); `:barcode`: the dark barcode elements; `:cal` the
-    #    calibration cells
+    #   than `:all`); `:barcode`: the dark barcode elements; `:cal` the
+    #   calibration cells
     def overlay(what, where=:marked)
       return if not_registered
       @mim.overlay what, where

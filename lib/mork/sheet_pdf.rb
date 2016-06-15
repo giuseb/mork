@@ -47,14 +47,14 @@ module Mork
       # for all sheets
       line_width 0.3
       font_size @grip.item_font_size
+      ensure_presence_of_choices
       create_stamps
       make_repeaters
       # for each response sheet
       @content.each_with_index do |content, i|
         start_new_page if i>0
-        barcode content[:barcode]
-        header content[:header]
-        uid
+        barcode(content[:barcode] || 0)
+        header(content[:header] || [])
         unless equal_choice_number?
           questions_and_choices ch_len[i]
         end
@@ -181,6 +181,14 @@ module Mork
         return false unless ch_len.all? { |x| c == x[i] }
       end
       true
+    end
+
+    def ensure_presence_of_choices
+      @content.each do |c|
+        if c[:choices].nil?
+          c[:choices] = [@grip.max_choices_per_question] * @grip.max_questions
+        end
+      end
     end
 
     def ch_len
