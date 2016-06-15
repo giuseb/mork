@@ -11,15 +11,15 @@ module Mork
     def initialize(options=nil)
       @params = DGRID
       if File.exists?('layout.yml')
-        @params.morks_deep_merge symbolize YAML.load_file('layout.yml')
+        @params.deeper_merge! symbolize YAML.load_file('layout.yml')
       end
       case options
       when NilClass
         # do nothing
       when Hash
-        @params.morks_deep_merge symbolize options
+        @params.deeper_merge! symbolize options
       when String
-        @params.morks_deep_merge symbolize YAML.load_file(options)
+        @params.deeper_merge! symbolize YAML.load_file(options)
       else
         raise ArgumentError, "Invalid parameter in the Grid constructor: #{options.class.inspect}"
       end
