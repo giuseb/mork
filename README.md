@@ -5,6 +5,10 @@ A ruby [optical mark recognition](http://en.wikipedia.org/wiki/Optical_mark_reco
 1. generating [response sheets](/spec/samples/sheet.jpg) in PDF format
 2. capturing the responses provided on the [printed sheet](/spec/samples/sample_gray.jpg) by a human with a pen or a pencil.
 
+## First, a word of caution
+
+__Please note that this library is under active development. Until v.1.0 is reached, the API should be regarded as unstable and bound to change.__
+
 ## Assumptions and limitations
 
 Mork is a low-level library, and very much work in progress. It is not, and will likely never be a complete OMR solution. While suggestions and contributions are more than welcome, for the time being several assumptions and restrictions apply.

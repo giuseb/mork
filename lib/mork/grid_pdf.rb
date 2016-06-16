@@ -70,6 +70,10 @@ module Mork
       @cround ||= [width_of_cell, height_of_cell].min / 2
     end
 
+    def missing_header?(k)
+      @params[:header][k].nil?
+    end
+
     def page_size()      [page_width.mm, page_height.mm]         end
     def margins()        reg_margin.mm                           end
     def qnum_margin()    @params[:items][:number_margin].to_f.mm end

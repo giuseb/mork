@@ -90,8 +90,11 @@ module Mork
       @grip.barcode_xy_for(code).each { |c| stamp_at 'barcode', c }
     end
 
-    def header(content)
-      content.each do |k,v|
+    def header(elements)
+      elements.each do |k,v|
+        if @grip.missing_header? k
+          raise ArgumentError, "The header element '#{k}' is not described in the layout"
+        end
         font_size @grip.header_size(k) do
           align = @grip.header_align(k).nil?? :left : @grip.header_align(k).to_sym
           if @grip.header_boxed?(k)
