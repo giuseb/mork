@@ -7,7 +7,7 @@ A ruby [optical mark recognition](http://en.wikipedia.org/wiki/Optical_mark_reco
 
 ## First, a word of caution
 
-__Please note that this library is under active development. Until v.1.0 is reached, the API should be regarded as unstable and bound to change.__
+__Please note that this library is under active development. Until v.1.0 is reached, the API should be regarded as unstable and bound to change without notice.__
 
 ## Assumptions and limitations
 
@@ -88,13 +88,13 @@ content = {
 
 These are the key-value pairs that the `content` hash may contain:
 
-- **choices**: an array of integers, specifiying the number of items in the test (the length of the array) and the number of choices available for each item (the array values); if omitted, the maximum number of items and choices per item are printed
+- **choices**: an array of integers, specifiying the number of items in the test (the length of the array) and the number of choices available for each item (the array values); if omitted, the maximum number of items and choices per item allowed by the layout (see below) are printed
 - **header**: optional; a (sub)hash of key-value pairs defining the content of named header elements; in each pair, the key is the name of one header element, while the value is the rendered content; the actually available elements are defined in the `layout` (see below)
 - **barcode**: optional; an integer number, the sheet's unique identifier to be printed as a binary barcode along the bottom edge of the sheet
 
 ### layout
 
-The layout argument is also defined as a hash, but because of its length and since the layout often stays identical across many response sheets, it is usually more convenient to write the information in a YAML file and pass its path/filename to the `SheetPDF` constructor instead. Here is the YAML version of a standard layout hash. Please note that the parameters with an (*) in the comment have no effect on PDF production, but are relevant to OMR scan (see further below).
+The layout is also defined as a hash, but because of its length and since the layout often stays identical across many response sheets, it is usually more convenient to write the information in a YAML file and pass its path/filename to the `SheetPDF` constructor instead. Here is the YAML version of a standard layout hash. Please note that the parameters with an (*) in the comment have no effect on PDF production, but are relevant to OMR scan (see further below).
 
 ```yaml
 page_size:                # all measurements in mm
@@ -165,31 +165,69 @@ s.save 'sheet.pdf'
 system 'open sheet.pdf' # this works in OSX
 ```
 
-It's easy to see that by iterating over a series of `content` hashes you can produce any number of sheets, all based on the same layout but each containing unique information (notably the barcode, but also names, dates, etc.)
-
 If the `layout` argument is omitted, Mork will search for a file named `layout.yml` and load it. If such file cannot be found, Mork will fall back to a default, boilerplate layout (incidentally, this is the layout shown above).
 
-## Scoring response sheets with `SheetOMR`
+Importantly, if `content` is an array of hashes, Mork will produce one sheet for each hash, all based on the same layout but each containing unique information (the barcode, names, dates, a specific number of questions/choices, etc.)
 
-Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that the sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Three pieces of information must be provided to the object constructor:
+## Analyzing response sheets with `SheetOMR`
+
+### Preparing a `SheetOMR` object
+
+Assuming that a person has filled out a response sheet by darkening with a pen the selected choices, and that the sheet has been acquired as an image file, response scoring is performed by the `Mork::SheetOMR` class. Two pieces of information must be provided to the object constructor:
 
 - **path**: mandatory path/filename of the bitmap image (accepts JPG, JPEG, PNG, PDF extensions; a resolution of 150-200 dpi is usually more than sufficient to obtain accurate readings)
-- **choices**: a named argument (ruby-2 style) equivalent to the `choices` array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above). If omitted, the `choices` parameter is inferred from the layout
 - **layout_file**: same as for the `SheetPDF` class
 
-The following code shows how to create and analyze a SheetOMR based on a bitmap file named `image.jpg`:
+The following code shows how to create a SheetOMR based on a bitmap file named `image.jpg`:
 
 ```ruby
 # instantiating the object
-s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
-# detecting darkened choice cells for the 100 items
-chosen = s.marked_choices
+s = SheetOMR.new 'image.jpg', 'layout.yml'
 ```
 
-If all goes well, the `chosen` array will contain 100 sub-arrays, each containing the list of marked choices for that item, where the first cell is indicated by a 0, the second by a 1, etc. It is also possible to show the scoring graphically by applying an overlay on top of the scanned image.
+When the object is initialized, Mork attempts to register the image, a necessary step before marking can be performed. To find out if registration succeeded:
 
 ```ruby
-s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
+s.valid?
+```
+
+Next, we need to indicate the questions/choices of interest for subsequent operations. For example, the following instructs Mork to evaluate 5 choices for each of the first 50 questions:
+
+```ruby
+choices = [5] * 50
+s.set_choices choices
+```
+
+`choices` is equivalent to the array of integers passed to the `SheetPDF` constructor as part of the `content` parameter (see above).
+
+### Marking the response sheet
+
+We are now ready to mark the sheet:
+
+```ruby
+mc = s.marked_choices
+```
+
+Since the function `set_choices` returns true only if the sheet is properly registered, it can replace the call to `valid?`, allowing you to write something like:
+
+```ruby
+s = SheetOMR.new 'image.jpg', 'layout.yml'
+if s.set_choices [5] * 50
+  marked = s.marked_choices
+else
+  puts "The sheet is not registered!"
+end
+```
+
+If all goes well, the `marked` array will contain 100 sub-arrays, each containing the list of marked choices for that item, where the first cell is indicated by a 0, the second by a 1, etc.
+
+Read the [API documentation](http://www.rubydoc.info/gems/mork) to learn about additional methods to extract marked responses.
+
+### Applying overlays on the original image
+
+It is also possible to show the scoring graphically by applying an overlay on top of the scanned image.
+
+```ruby
 s.overlay :check, :marked
 s.save 'marked_choices.jpg'
 system 'open marked_choices.jpg' # this works in OSX
@@ -198,13 +236,12 @@ system 'open marked_choices.jpg' # this works in OSX
 More than one overlay can be applied on a sheet. For example, in addition to checking the marked choice cells, the expected choices can be outlined to show correct vs. wrong responses:
 
 ```ruby
-...
 correct = [[3], [0], [2], [1], [2]] # and so on...
-s.overlay :check, :marked
 s.overlay :outline, correct
-...
+s.overlay :check, :marked
+s.save 'marked_choices_and_outlines.jpg'
+system 'open marked_choices_and_outlines.jpg' # this works in OSX
 ```
-
 
 Scoring can only be performed if the sheet gets properly registered, which in turn depends on the quality of the scanned image.
 
@@ -217,14 +254,14 @@ Mork tries to be tolerant of variations in the above parameters, but you should 
 Check for object “validity” to make sure that registration succeeded:
 
 ```ruby
-s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
+s = SheetOMR.new 'image.jpg', 'layout.yml'
 s.valid?
 ```
 
 When registration fails, it is possible to get some information by displaying the status and by applying a dedicated overlay on the original image:
 
 ```ruby
-s = SheetOMR.new 'image.jpg', choices: [5]*100, layout_file: 'layout.yml'
+s = SheetOMR.new 'image.jpg', 'layout.yml'
 unless s.valid?
   s.save_registration 'unregistered.jpg'
 end

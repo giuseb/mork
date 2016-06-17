@@ -6,7 +6,7 @@ module Mork
     context 'with a valid response sheet' do
       let(:img) { sample_img 'jdoe1' }
       let(:fn)  { File.basename(img.image_path) }
-      let(:omr) { SheetOMR.new img.image_path, choices: [img.nchoices]*img.nitems, layout: img.grid_path }
+      let(:omr) { SheetOMR.new img.image_path, layout: img.grid_path }
       describe '#new' do
         it 'creates a SheetOMR object' do
           expect(omr).to be_a SheetOMR
@@ -14,6 +14,12 @@ module Mork
 
         it 'raises an error if the provided path is invalid' do
           expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
+        end
+      end
+
+      describe '#set_choices' do
+        it 'returns true if all goes well' do
+          expect(omr.set_choices(10)).to be_truthy
         end
       end
 
@@ -51,25 +57,14 @@ module Mork
       end
 
       describe '#marked_choices' do
-        it 'returns an array of marked choices as position indices' do
-          expect(omr.marked_choices).to eq standard_mark_array(24)
-        end
-      end
-
-      describe '#marked_choices' do
         it 'returns an array of marked choices as position indexes' do
           expect(omr.marked_choices ).to eq standard_mark_array(24)
         end
 
-        let(:om2) { SheetOMR.new img.image_path, choices: [5, 4, 3, 2, 1], layout: img.grid_path }
+        let(:om2) { SheetOMR.new img.image_path, layout: img.grid_path }
         it 'returns marked choices only for existing choice cells' do
+          om2.set_choices [5, 4, 3, 2, 1]
           expect(om2.marked_choices).to eq [[0], [1], [2], [], []]
-        end
-      end
-
-      describe '#marked_logicals' do
-        it 'returns an array of logicals for the marked choices' do
-          expect(omr.marked_logicals).to eq standard_mark_logical_array(24)
         end
       end
 
@@ -96,8 +91,15 @@ module Mork
         end
 
         it 'highlights all choice cells' do
+          omr.set_choices [5] * 32
           omr.overlay :highlight, :all
-          omr.save "spec/out/highlight/#{fn}"
+          omr.save "spec/out/highlight/all-#{fn}"
+        end
+
+        it 'highlights all possible choice cells' do
+          omr.set_choices [5] * 30
+          omr.overlay :highlight, :max
+          omr.save "spec/out/highlight/max-#{fn}"
         end
 
         it 'highlights marked cells' do
@@ -108,6 +110,12 @@ module Mork
         it 'checks marked cells' do
           omr.overlay :check, :marked
           omr.save "spec/out/mark/#{fn}"
+        end
+
+        it 'checks the first 32 marked cells' do
+          omr.set_choices [5] * 32
+          omr.overlay :check, :marked
+          omr.save "spec/out/mark/part-#{fn}"
         end
 
         it 'outlines and crosses marked cells' do
