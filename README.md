@@ -2,8 +2,8 @@
 
 A ruby [optical mark recognition](http://en.wikipedia.org/wiki/Optical_mark_recognition) (OMR) library aimed at accomplishing two tasks in the context of paper-based, multiple-choice tests and surveys:
 
-1. generating [response sheets](/spec/samples/sheet.jpg) in PDF format
-2. detecting the responses provided on the [printed sheet](/spec/samples/sample_gray.jpg) by a human with a pen or a pencil.
+1. generating [response sheets](https://github.com/giuseb/mork/blob/master/spec/samples/standard.png) in PDF format
+2. detecting the responses provided on the [printed sheet](https://github.com/giuseb/mork/blob/master/spec/samples/jdoe/JohnDoe1.jpeg) by a human with a pen or a pencil.
 
 ## Roadmap
 
