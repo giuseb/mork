@@ -45,11 +45,11 @@ module Mork
     #
     # @return [Boolean] True if the sheet is properly registered and ready to
     #   be marked; false otherwise.
-    def set_choices(cho)
+    def set_choices(choices)
       return false unless valid?
-      @mim.set_ch case cho
-                  when Fixnum; @mim.choxq[0...cho]
-                  when Array; cho
+      @mim.set_ch case choices
+                  when Fixnum; @mim.choxq[0...choices]
+                  when Array; choices
                   else raise ArgumentError, 'Invalid choice set'
                   end
       true
