@@ -7,7 +7,7 @@ module Mork
     context 'John Doe' do
       let(:img) { sample_img 'jdoe1' }
       let(:fn)  { File.basename(img.image_path) }
-      let(:mim) { Mimage.new img.image_path, [img.nchoices]*img.nitems, GridOMR.new(img.grid_path)  }
+      let(:mim) { Mimage.new img.image_path, GridOMR.new(img.grid_path)  }
       describe 'basics' do
         it 'should be valid' do
           expect(mim.valid?).to be_truthy

@@ -91,6 +91,10 @@ module Mork
       @uround ||= [width_of_uid, height_of_uid].min / 2
     end
 
+    def missing_header?(k)
+      @params[:header][k].nil?
+    end
+
     def page_size()      [page_width.mm, page_height.mm]         end
     def margins()        reg_margin.mm                           end
     def qnum_margin()    @params[:items][:number_margin].to_f.mm end

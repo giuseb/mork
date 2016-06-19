@@ -5,12 +5,13 @@ module Mork
   # @private
   class Mimage
     attr_reader :rm
+    attr_reader :choxq # choices per question
 
-    def initialize(path, nitems, grom)
-      @mack   = Magicko.new path
-      @nitems = nitems
-      @grom   = grom.set_page_size @mack.width, @mack.height
-      @rm     = {} # registration mark centers
+    def initialize(path, grom)
+      @mack  = Magicko.new path
+      @grom  = grom.set_page_size @mack.width, @mack.height
+      @choxq = [grom.max_choices_per_question] * grom.max_questions
+      @rm    = {} # registration mark centers
       @valid = register
     end
 
@@ -27,17 +28,19 @@ module Mork
       }
     end
 
-    def marked
-      @logical_array_of_marked_cells ||= begin # memoization necessary?
-        itemator { |q, c| shade_of(q, c) < choice_threshold }
-      end
+    def set_ch(cho)
+      @choxq = cho
+      # if set_ch is called more than once, discard memoization
+      @marked_choices = nil
     end
 
-    def marked_int
-      marked.map do |q|
-        [].tap do |choices|
-          q.each_with_index do |choice, idx|
-            choices << idx if choice
+    def marked
+      @marked_choices ||= begin
+        @choxq.map.with_index do |ncho, q|
+          [].tap do |choices|
+            ncho.times do |c|
+              choices << c if shade_of(q, c) < choice_threshold
+            end
           end
         end
       end
@@ -58,11 +61,12 @@ module Mork
               when :cal
                 @grom.calibration_cell_areas
               when :marked
-                choice_cell_areas marked_int
+                choice_cell_areas marked
               when :all
                 all_choice_cell_areas
               when :max
-                @grom.max_questions.times.map { |i| (0...@grom.max_choices_per_question).to_a }
+                choice_cell_areas [@grom.max_choices_per_question] * @grom.max_questions
+                # @grom.max_questions.times.map { |i| (0...@grom.max_choices_per_question).to_a }
               when Array
                 choice_cell_areas where
               else
@@ -90,7 +94,7 @@ module Mork
     private                                                       #
     # ============================================================#
 
-    def itemator(items=@nitems)
+    def itemator(items=@choxq)
       items.map.with_index do |cho, q|
         if cho.is_a? Fixnum
           cho.times.map { |c| yield q, c }
@@ -105,7 +109,7 @@ module Mork
     end
 
     def all_choice_cell_areas
-      @all_choice_cell_areas ||= choice_cell_areas(@nitems)
+      @all_choice_cell_areas ||= choice_cell_areas(@choxq)
     end
 
     def each_corner
@@ -122,10 +126,10 @@ module Mork
       end
     end
 
-    # TODO: 0.75 should be a parameter
     def choice_threshold
-      # puts "CT #{@grom.choice_threshold.inspect}"
-      @choice_threshold ||= (cal_cell_mean - darkest_cell_mean) * @grom.choice_threshold + darkest_cell_mean
+      @choice_threshold ||= begin
+        (cal_cell_mean-darkest_cell_mean) * @grom.choice_threshold + darkest_cell_mean
+      end
     end
 
     def barcode_threshold
@@ -258,3 +262,13 @@ end
 # puts "BL: #{@rm[:bl].inspect}"
 
 # puts "REG #{@grom.rm_blur} - #{@grom.rm_dilate} - C #{c.inspect}"
+
+# def marked_int
+#   marked.map do |q|
+#     [].tap do |choices|
+#       q.each_with_index do |choice, idx|
+#         choices << idx if choice
+#       end
+#     end
+#   end
+# end

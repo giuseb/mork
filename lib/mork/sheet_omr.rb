@@ -14,26 +14,14 @@ module Mork
   class SheetOMR
     # @param path [String] the required path/filename to the saved image
     #   (.jpg, .jpeg, .png, or .pdf)
-    # @param choices [Fixnum, Array] the questions/choices we want scored, as
-    #   an optional named argument. Scoring is done on all available questions,
-    #   if the argument is omitted, on the first N questions, If an integer
-    #   is passed, or on the indicated questions, if the argument is an array.
-    # @param layout [String, Hash] the sheet description. Use a string to
-    #   specify the path/filename of a YAML file containing the parameters,
-    #   or directly a hash of parameters. See the README file for a full listing
+    # @param layout [String, Hash] the sheet description. Send a hash of
+    #   parameters or a string to specify the path/filename of a YAML file
+    #   containing the parameters. See the README file for a full listing
     #   of the available parameters.
-    def initialize(path, choices: nil, layout: nil)
+    def initialize(path, layout=nil)
       raise IOError, "File '#{path}' not found" unless File.exists? path
-      grom    = GridOMR.new layout
-      nitems  = case choices
-                when NilClass
-                  [grom.max_choices_per_question] * grom.max_questions
-                when Fixnum
-                  [grom.max_choices_per_question] * choices
-                when Array
-                  choices
-                end
-      @mim    = Mimage.new path, nitems, grom
+      grom = GridOMR.new layout
+      @mim = Mimage.new path, grom
     end
 
     # True if sheet registration completed successfully
@@ -41,6 +29,30 @@ module Mork
     # @return [Boolean]
     def valid?
       @mim.valid?
+    end
+
+    # Setting the choices/questions to analyze. If this function is not called,
+    # the maximum number of choices/questions allowed by the layout will be
+    # evaluated.
+    #
+    # @param choices [Fixnum, Array] the questions/choices we want subsequent
+    #   scoring/overlaying to apply to. Normally, `choices` should be an array
+    #   of integers, with each element indicating the number of available
+    #   choices for the corresponding question (i.e. `choices.length` is the
+    #   number of questions). As a shortcut, `choices` can also be a single
+    #   integer value, indicating the number of questions; in such case, the
+    #   maximum number of choices allowed by the layout will be considered.
+    #
+    # @return [Boolean] True if the sheet is properly registered and ready to
+    #   be marked; false otherwise.
+    def set_choices(cho)
+      return false unless valid?
+      @mim.set_ch case cho
+                  when Fixnum; @mim.choxq[0...cho]
+                  when Array; cho
+                  else raise ArgumentError, 'Invalid choice set'
+                  end
+      true
     end
 
     # Registration status for each of the four corners
@@ -78,7 +90,7 @@ module Mork
     # @return [Boolean]
     def marked?(question, choice)
       return if not_registered
-      @mim.marked[question][choice]
+      marked_choices[question].find {|x| x==choice} ? true : false
     end
 
     # The set of choice indices marked on the response sheet
@@ -89,12 +101,22 @@ module Mork
     #   indicates that the responder has marked the first choice for the first
     #   question, none for the second, and the fourth and fifth choices for the
     #   third question.
-    #
-    # Note that only the questions/choices indicated via the `choices` argument
-    # during object creation are evaluated.
     def marked_choices
       return if not_registered
-      @mim.marked_int
+      @mim.marked
+    end
+
+    # The set of choice indices marked on the response sheet. If more than one
+    # choice was marked for a question, the response is regarded as invalid and
+    # treated as if it had been left blank.
+    #
+    # @return [Array] an array of integers; each element contains
+    #   the (zero-based) marked choice for the corresponding question.
+    def marked_choices_unique
+      return if not_registered
+      marked_choices.map do |c|
+        c.length == 1 ? c.first : nil
+      end
     end
 
     # The set of letters marked on the response sheet. At this time, only the
@@ -102,9 +124,6 @@ module Mork
     #
     # @return [Array] an array of arrays of 1-character strings; each element
     #   contains the list of letters marked for the corresponding question.
-    #
-    # Note that only the questions/choices indicated via the `choices` argument
-    # during object creation are evaluated.
     def marked_letters
       return if not_registered
       marked_choices.map do |q|
@@ -112,13 +131,17 @@ module Mork
       end
     end
 
-    # Marked choices as boolean values
+    # The set of letters marked on the response sheet. At this time, only the
+    # latin sequence 'A, B, C...' is supported. If more than one choice was
+    # marked for an item, the response is regarded as invalid and treated as if
+    # it had been left blank.
     #
-    # @return [Array] an array of arrays of true/false values corresponding to
-    #   marked vs unmarked choice cells.
-    def marked_logicals
+    # @return [Array] an array of 1-character strings
+    def marked_letters_unique
       return if not_registered
-      @mim.marked
+      marked_choices_unique.map do |c|
+        c.nil?? '' : (65+c).chr
+      end
     end
 
     # Apply an overlay on the image
@@ -276,3 +299,26 @@ end
 # def barcode_bit_string(i)
 #   @mim.barcode_bit?(i) ? "1" : "0"
 # end
+
+# def validate_choices(ch=nil)
+#   return false unless valid?
+#   cho = case ch
+#         when NilClass; [@mc] * @mq
+#         when Fixnum;   [@mc] * [[ch, @mq].min, 1].max
+#         when Array;     ch
+#         else raise ArgumentError, 'Invalid choice set'
+#         end
+#   @marked_choices = @mim.marked cho
+#   true
+# end
+
+# # Marked choices as boolean values
+# #
+# # @return [Array] an array of arrays of true/false values corresponding to
+# #   marked vs unmarked choice cells.
+# def marked_logicals
+#   return if not_registered
+#   # this is the only marking function calling the mimage object
+#   @marked_choices ||= @mim.marked
+# end
+
