@@ -1,5 +1,6 @@
 module Mork
   class Grid
+    # @private
     # this is the default grid!
     # default units are millimiters
     def default_grid
@@ -26,7 +27,8 @@ module Mork
             left:      15,
             width:    160,
             height:    12,
-            size:      12
+            size:      12,
+            box:    false
           }
         },
         # questions and answers
@@ -43,8 +45,8 @@ module Mork
           cell_height:   5, # choice cell size
           max_cells:     5, # the maximum number of choices per question
           font_size:     9, # for the question number and choice letters
-          number_width:  8, # distance between right side of q num and left side of first choice cell
-          number_margin: 2  # width of question number text box
+          number_width:  8, # width of question number text box
+          number_margin: 2  # distance between right side of q num and left side of first choice cell
         },
         # unique sheet ID as a binary barcode
         barcode: {
