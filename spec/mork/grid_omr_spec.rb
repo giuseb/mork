@@ -52,7 +52,7 @@ module Mork
 
     describe '#max_choices_per_question' do
       it 'returns the maximum number of choice cells per question' do
-        @grom.max_choices_per_question.should == 5
+        expect(@grom.max_choices_per_question).to eq 5
       end
     end
 

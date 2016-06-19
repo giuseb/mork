@@ -7,39 +7,45 @@ module Mork
         barcode: 183251937962,
         choices: [5] * 120,
         header: {
-          title: 'A serious, difficult test - 31 December 1999',
+          title: 'A serious, difficult test - 31 December 1999'
         }
       }
     }
+    def sp(cnt: {title: 'Hello world'}, grip: nil)
+      SheetPDF.new cnt, grip
+    end
 
     it 'assigns the grid to @grid' do
-      s = SheetPDF.new(content)
-      s.instance_variable_get('@grip').should be_a GridPDF
+      expect(sp.instance_variable_get('@grip')).to be_a GridPDF
+    end
+
+    it 'uses a yaml file as content' do
+      s = 'spec/samples/content.yml'
+      c = sp(cnt: s).instance_variable_get('@content')[0][:choices]
+      expect(c).to eq [5,5,5,4,5,5,5]
     end
 
     it 'creates a grid by loading the specified file' do
-      s = SheetPDF.new(content, 'spec/samples/layout.yml')
-      s.instance_variable_get('@grip').should be_a GridPDF
+      s = 'spec/samples/layout.yml'
+      expect(sp(grip: s).instance_variable_get('@grip')).to be_a GridPDF
     end
 
     it 'raises an error with an invalid init parameter' do
-      lambda { SheetPDF.new(content, 2) }.should raise_error ArgumentError
+      expect { SheetPDF.new(content, 2) }.to raise_error ArgumentError
     end
 
     it 'raises an error if a header part is not described in the layout' do
-      lambda {
-        SheetPDF.new({header: {dummy: 'yes I am'}})
-        }.should raise_error ArgumentError
+      expect {
+        sp(cnt: {header: {dummy: 'yes I am'}})
+        }.to raise_error ArgumentError
     end
 
     it 'assigns an array to @content' do
-      s = SheetPDF.new(content)
-      s.instance_variable_get('@content').should be_an Array
+      expect(sp.instance_variable_get('@content')).to be_an Array
     end
 
     it 'assigns an array of hashes to @content' do
-      s = SheetPDF.new(content)
-      s.instance_variable_get('@content').first.should be_a Hash
+      expect(sp.instance_variable_get('@content').first).to be_a Hash
     end
 
     it 'creates a minimal PDF sheet' do
@@ -53,6 +59,17 @@ module Mork
     end
 
     it 'creates a PDF sheet with several boxed header elements' do
+      h = {
+        name: 'John Doe UI354320',
+        title: 'A serious, difficult test - 31 December 1999',
+        code: '201.48',
+        signature: 'Signature'
+      }
+      s = SheetPDF.new({header: h, barcode: 2384685871}, 'spec/samples/standard.yml')
+      s.save dest 'standard'
+    end
+
+    it 'creates a PDF sheet with several header elements' do
       h = {
         name: lorem,
         title: lorem,
@@ -75,8 +92,8 @@ module Mork
     end
 
     it 'creates a PDF sheet with 160 items' do
-      s = SheetPDF.new(content.merge({choices: [5] * 160}), 'spec/samples/grid160.yml')
-      s.save dest 'i160'
+      c = { header: {title: '160 items, tighter layout'}, choices: [5]*160}
+      sp(cnt: c, grip: 'spec/samples/grid160.yml').save dest 'i160'
     end
 
     it 'creates a PDF sheet with unequal choices per item' do
