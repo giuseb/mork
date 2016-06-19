@@ -4,6 +4,8 @@ require 'mork/magicko'
 module Mork
   # @private
   class Mimage
+    include Extensions
+
     attr_reader :rm
     attr_reader :choxq # choices per question
 
@@ -137,7 +139,8 @@ module Mork
     end
 
     def cal_cell_mean
-      @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }.mean
+      m = @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }
+      m.inject(:+) / m.length.to_f
     end
 
     def darkest_cell_mean
