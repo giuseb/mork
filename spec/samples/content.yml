@@ -1,0 +1,9 @@
+- choices: [5,5,5,4,5,5,5]
+  barcode: 122
+  header:
+    title: 'A difficult test'
+
+- choices: [2]
+  barcode: 123
+  header:
+    title: 'An easier test'
