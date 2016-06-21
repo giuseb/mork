@@ -6,17 +6,24 @@ module Mork
   # Generating response sheets as PDF files.
   # See the README file for usage
   class SheetPDF < Prawn::Document
+    include Extensions
     def initialize(content, layout=nil)
-      @grip = case layout
-              when NilClass; GridPDF.new
-              when String, Hash; GridPDF.new layout
-              when Mork::GridPDF; layout
-              else raise ArgumentError, 'Invalid initialization parameter'
-              end
+      @content =
+        case content
+        when Array; content
+        when Hash; [content]
+        when String
+          raise IOError, "File '#{content}' not found" unless File.exists? content
+          symbolize YAML.load_file(content)
+        end
+      @grip =
+        case layout
+        when NilClass; GridPDF.new
+        when String, Hash; GridPDF.new layout
+        when Mork::GridPDF; layout
+        else raise ArgumentError, 'Invalid initialization parameter'
+        end
       super my_page_params
-      # @content should be an array of hashes, one per page;
-      # convert to array if a single hash was passed
-      @content = content.class == Hash ? [content] : content
       process
     end
 

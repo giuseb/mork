@@ -1,4 +1,3 @@
-require 'yaml'
 require 'mork/grid_const'
 
 module Mork
@@ -7,6 +6,7 @@ module Mork
   # It knows nothing about the actual scanned image.
   # All returned values are in the arbitrary units given in the configuration file
   class Grid
+    include Extensions
     # Calling Grid.new without arguments creates the default boilerplate Grid
     def initialize(options=nil)
       @params = default_grid
@@ -67,11 +67,11 @@ module Mork
 
     # recursively turn hash keys into symbols. pasted from
     # http://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-    def symbolize(obj)
-      return obj.inject({}){|memo,(k,v)| memo[k.to_sym] =  symbolize(v); memo} if obj.is_a? Hash
-      return obj.inject([]){|memo,v    | memo           << symbolize(v); memo} if obj.is_a? Array
-      return obj
-    end
+    # def symbolize(obj)
+    #   return obj.inject({}){|memo,(k,v)| memo[k.to_sym] =  symbolize(v); memo} if obj.is_a? Hash
+    #   return obj.inject([]){|memo,v    | memo           << symbolize(v); memo} if obj.is_a? Array
+    #   return obj
+    # end
 
     # cell_y(q)
     #
