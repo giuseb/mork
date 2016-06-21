@@ -65,14 +65,6 @@ module Mork
     private
     #====================#
 
-    # recursively turn hash keys into symbols. pasted from
-    # http://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-    # def symbolize(obj)
-    #   return obj.inject({}){|memo,(k,v)| memo[k.to_sym] =  symbolize(v); memo} if obj.is_a? Hash
-    #   return obj.inject([]){|memo,v    | memo           << symbolize(v); memo} if obj.is_a? Array
-    #   return obj
-    # end
-
     # cell_y(q)
     #
     # the distance from the registration frame to the top edge

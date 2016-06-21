@@ -144,37 +144,3 @@ module Mork
     end
   end
 end
-
-# def patch(shape: nil, wid: width, hei: height)
-#   s = "|convert #{@path} #{shape} gray:-"
-#   bytes = IO.read(s).unpack 'C*'
-#   NPatch.new bytes, wid, hei
-# end
-
-# # raw_patch returns an array containing the pixels of the original image
-# def raw_patch
-#   @raw_pixels ||= patch
-# end
-
-# def exec_mm_cmd(c, pp)
-#   c.distort(:perspective, pps(pp)) if pp
-#   @cmd.each { |cmd| c.send(*cmd) }
-# end
-
-# def highlight_cells(coords)
-#   @cmd << [:stroke, 'none']
-#   @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
-#   coords.each do |c|
-#     @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
-#   end
-# end
-
-# def outline(coords)
-#   @cmd << [:stroke, 'green']
-#   @cmd << [:strokewidth, '2']
-#   @cmd << [:fill, 'none']
-#   coords.each do |c|
-#     @cmd << [:draw, "roundrectangle #{c.choice_cell}"]
-#   end
-# end
-
