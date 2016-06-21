@@ -54,6 +54,7 @@ module Mork
           height:        3,
           spacing:       4
         },
+        # student's unique id
         uid: {
           digits:  6,
           left:  150,
