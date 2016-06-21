@@ -19,7 +19,7 @@ module Mork
 
       describe '#set_choices' do
         it 'returns true if all goes well' do
-          expect(omr.set_choices(10)).to be_truthy
+          expect(omr.set_choices([10])).to be_truthy
         end
       end
 
@@ -98,7 +98,7 @@ module Mork
 
         it 'highlights all possible choice cells' do
           omr.set_choices [5] * 30
-          omr.overlay :highlight, :max
+            omr.overlay :highlight, :max
           omr.save "spec/out/highlight/max-#{fn}"
         end
 
@@ -116,6 +116,11 @@ module Mork
           omr.set_choices [5] * 32
           omr.overlay :check, :marked
           omr.save "spec/out/mark/part-#{fn}"
+        end
+
+        it 'outlines arbitrary cells' do
+          omr.overlay :outline, [[1,2], [], [0,1,2,3,4], [3]]
+          omr.save "spec/out/outline/some-#{fn}"
         end
 
         it 'outlines and crosses marked cells' do

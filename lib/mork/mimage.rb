@@ -10,7 +10,8 @@ module Mork
     def initialize(path, grom)
       @mack  = Magicko.new path
       @grom  = grom.set_page_size @mack.width, @mack.height
-      @choxq = [grom.max_choices_per_question] * grom.max_questions
+      # @choxq = [grom.max_choices_per_question] * grom.max_questions
+      @choxq = [(0...@grom.max_choices_per_question).to_a] * grom.max_questions
       @rm    = {} # registration mark centers
       @valid = register
     end
@@ -28,19 +29,15 @@ module Mork
       }
     end
 
-    def set_ch(cho)
-      @choxq = cho
+    def set_ch(choxq)
+      @choxq =  choxq.map { |ncho| (0...ncho).to_a }
       # if set_ch is called more than once, discard memoization
       @marked_choices = @choice_mean_darkness = nil
     end
 
     def choice_mean_darkness
       @choice_mean_darkness ||= begin
-        @choxq.map.with_index do |cho, q|
-          cho.times.map do |c|
-            reg_pixels.average @grom.choice_cell_area(q, c)
-          end
-        end
+        itemator(@choxq) { |q,c| reg_pixels.average @grom.choice_cell_area(q, c) }
       end
     end
 
@@ -75,9 +72,7 @@ module Mork
               when :all
                 choice_cell_areas @choxq
               when :max
-                @grom.choice_cell_areas
-                # choice_cell_areas [@grom.max_choices_per_question] * @grom.max_questions
-                # @grom.max_questions.times.map { |i| (0...@grom.max_choices_per_question).to_a }
+                @grom.choice_cell_areas.flatten
               when Array
                 choice_cell_areas where
               else
@@ -105,13 +100,9 @@ module Mork
     private                                                       #
     # ============================================================#
 
-    def itemator(items=@choxq)
-      items.map.with_index do |cho, q|
-        if cho.is_a? Fixnum
-          cho.times.map { |c| yield q, c }
-        else
-          cho.map { |c| yield q, c }
-        end
+    def itemator(cells)
+      cells.map.with_index do |cho, q|
+        cho.map { |c| yield q, c }
       end
     end
 
