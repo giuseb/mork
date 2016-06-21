@@ -31,15 +31,25 @@ module Mork
     def set_ch(cho)
       @choxq = cho
       # if set_ch is called more than once, discard memoization
-      @marked_choices = nil
+      @marked_choices = @choice_mean_darkness = nil
+    end
+
+    def choice_mean_darkness
+      @choice_mean_darkness ||= begin
+        @choxq.map.with_index do |cho, q|
+          cho.times.map do |c|
+            reg_pixels.average @grom.choice_cell_area(q, c)
+          end
+        end
+      end
     end
 
     def marked
       @marked_choices ||= begin
-        @choxq.map.with_index do |ncho, q|
+        choice_mean_darkness.map do |cho|
           [].tap do |choices|
-            ncho.times do |c|
-              choices << c if shade_of(q, c) < choice_threshold
+            cho.map.with_index do |drk, c|
+              choices << c if drk < choice_threshold
             end
           end
         end
@@ -48,7 +58,7 @@ module Mork
 
     def barcode_bits
       @barcode_bits ||= begin
-        @grom.barcode_bits.times.collect do |b|
+        @grom.barcode_bits.times.map do |b|
           reg_pixels.average(@grom.barcode_bit_area b+1) < barcode_threshold
         end
       end
@@ -63,9 +73,10 @@ module Mork
               when :marked
                 choice_cell_areas marked
               when :all
-                all_choice_cell_areas
+                choice_cell_areas @choxq
               when :max
-                choice_cell_areas [@grom.max_choices_per_question] * @grom.max_questions
+                @grom.choice_cell_areas
+                # choice_cell_areas [@grom.max_choices_per_question] * @grom.max_questions
                 # @grom.max_questions.times.map { |i| (0...@grom.max_choices_per_question).to_a }
               when Array
                 choice_cell_areas where
@@ -108,40 +119,23 @@ module Mork
       itemator(cells) { |q,c| @grom.choice_cell_area q, c }.flatten
     end
 
-    def all_choice_cell_areas
-      @all_choice_cell_areas ||= choice_cell_areas(@choxq)
-    end
-
     def each_corner
       [:tl, :tr, :br, :bl].each { |c| yield c }
     end
 
-    def shade_of(q,c)
-      choice_cell_averages[q][c]
-    end
-
-    def choice_cell_averages
-      @choice_cell_averages ||= begin
-        itemator { |q, c| reg_pixels.average @grom.choice_cell_area(q, c) }
-      end
-    end
-
     def choice_threshold
       @choice_threshold ||= begin
-        (cal_cell_mean-darkest_cell_mean) * @grom.choice_threshold + darkest_cell_mean
+        dcm = choice_mean_darkness.flatten.min
+        (cal_cell_mean-dcm) * @grom.choice_threshold + dcm
       end
-    end
-
-    def barcode_threshold
-      @barcode_threshold ||= (paper_white + ink_black) / 2
     end
 
     def cal_cell_mean
       @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }.mean
     end
 
-    def darkest_cell_mean
-      choice_cell_averages.flatten.min
+    def barcode_threshold
+      @barcode_threshold ||= (paper_white + ink_black) / 2
     end
 
     def ink_black
@@ -154,12 +148,6 @@ module Mork
 
     def reg_pixels
       @reg_pixels ||= NPatch.new @mack.registered_bytes(@rm), @mack.width, @mack.height
-    end
-
-    def coordinates_of(cells)
-      cells.collect.each_with_index do |q, i|
-        q.collect { |c| @grom.choice_cell_area(i, c) }
-      end.flatten
     end
 
     # find the XY coordinates of the 4 registration marks,
@@ -272,3 +260,18 @@ end
 #     end
 #   end
 # end
+
+# def coordinates_of(cells)
+#   cells.collect.each_with_index do |q, i|
+#     q.collect { |c| @grom.choice_cell_area(i, c) }
+#   end.flatten
+# end
+
+# def shade_of(q,c)
+#   choice_mean_darkness[q][c]
+# end
+
+# def all_choice_cell_areas
+#   choice_cell_areas(@choxq)
+# end
+

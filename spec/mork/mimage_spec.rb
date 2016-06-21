@@ -8,6 +8,18 @@ module Mork
       let(:img) { sample_img 'jdoe1' }
       let(:fn)  { File.basename(img.image_path) }
       let(:mim) { Mimage.new img.image_path, GridOMR.new(img.grid_path)  }
+      describe '#choice_mean_darkness' do
+        it 'returns all choices as darkness averaga' do
+          d = mim.choice_mean_darkness
+          d.each do |q|
+            p = q.map do |c|
+              c.round
+            end.join ' '
+            # puts p
+          end
+        end
+      end
+
       describe 'basics' do
         it 'should be valid' do
           expect(mim.valid?).to be_truthy
