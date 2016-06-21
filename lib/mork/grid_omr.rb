@@ -26,8 +26,18 @@ module Mork
     # ===========================================
     # = Returning Coord sets for area locations =
     # ===========================================
+    def choice_cell_areas
+      @choice_cell_areas ||= begin
+        max_questions.times.map do |q|
+          max_choices_per_question.times.map do |c|
+            coord cell_x(q,c), cell_y(q), cell_width, cell_height
+          end
+        end
+      end
+    end
+
     def choice_cell_area(q, c)
-      coord cell_x(q,c), cell_y(q), cell_width, cell_height
+      choice_cell_areas[q][c]
     end
 
     def calibration_cell_areas
