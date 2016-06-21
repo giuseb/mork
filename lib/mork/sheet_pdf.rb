@@ -145,6 +145,23 @@ module Mork
       end
     end
 
+    def create_uid_stamps
+      create_stamp('uid') do
+        10.times do |i|
+          offx = uid_spacing_x * i
+          stroke_rounded_rectangle [offx, 0],
+                                   @grip.width_of_uid,
+                                   @grip.height_of_uid,
+                                   @grip.uround
+          text_box i, at: [offx, 0],
+                      width: @grip.width_of_uid,
+                      height: @grip.height_of_uid,
+                      align: :center,
+                      valign: :center
+        end
+      end
+    end
+
     def create_choice_stamps
       ch_len.flatten.uniq.each do |t|
         create_stamp("s#{t}") do
