@@ -1,6 +1,5 @@
 require 'mork/grid_omr'
 require 'mork/mimage'
-require 'mork/mimage_list'
 
 module Mork
   # Optical mark recognition of a response sheet that was: 1) generated
