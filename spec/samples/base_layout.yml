@@ -38,3 +38,12 @@ barcode:
   width:          3    # width of each barcode bit
   height:         3    # height of each barcode bit from the registration frame bottom side
   spacing:        4    # horizontal distance between adjacent barcode bit centers
+uid:
+  digits:         6
+  left:         150
+  top:           30
+  width:         50
+  height:        40
+  cell_width:     4
+  cell_height:    3
+  box:         true
