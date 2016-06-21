@@ -27,33 +27,3 @@ module Mork
     end
   end
 end
-
-# def dark_centroid(c = nil)
-#   p = crop c
-#   sufficient_contrast?(p) or return
-#   xp = p.sum(1).to_a
-#   yp = p.sum(0).to_a
-#   # find the intensity trough
-#   ctr_x = xp.find_index(xp.min)
-#   ctr_y = yp.find_index(yp.min)
-#   # puts "Centroid: #{ctr_x}, #{ctr_y} - MinX #{xp.min/xp.length}, MaxX #{xp.max/xp.length}, MinY #{yp.min/yp.length}, MaxY #{yp.max/yp.length}"
-#   return ctr_x, ctr_y
-# end
-
-# def crop(c)
-#   raise "crop HELL" if c.nil?
-#   p = NArray.float c.w, c.h
-#   p[true,true] = @patch[c.x_rng, c.y_rng]
-#   p
-# end
-
-# def sufficient_contrast?(p)
-#   # puts "Contrast: #{p.stddev}"
-#   # tested with the few examples: spec/samples/rm0x.jpeg
-#   p.stddev > 20
-# end
-
-# def length
-#   # is this only going to be used for testing purposes?
-#   @patch.length
-# end

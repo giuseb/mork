@@ -55,6 +55,17 @@ module Mork
           width:         3,
           height:        3,
           spacing:       4
+        },
+        # student's unique id
+        uid: {
+          digits:  6,
+          left:  150,
+          top:    30,
+          width:  50,
+          height: 40,
+          cell_width: 4,
+          cell_height: 3,
+          box:    true
         }
       }
     end
