@@ -1,0 +1,27 @@
+header:
+  name:                # ‘name’ is just a label; you can add arbitrary header elements
+    top:          5    # margin relative to registration frame top side
+    left:        15    # margin relative to registration frame left side
+    width:      160    # text will be fitted to this width
+    height:       7    # text will be fitted to this height
+    size:        14    # font size
+  title:
+    top:         15
+    left:        15
+    width:      160
+    height:      12
+    size:        12
+  code:
+    top:         30
+    left:       152
+    width:       35
+    height:      10
+    size:        14
+    align:    right
+  signature:
+    top:         30
+    left:        15
+    width:      120
+    height:      15
+    size:         7
+    box:       true
