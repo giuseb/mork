@@ -29,7 +29,7 @@ module Mork
 
     def barcode_xy_for(code)
       black = barcode_bits.times.reject { |x| (code>>x)[0]==0 }
-      black.collect { |x| barcode_xy x+1 }
+      black.map { |x| barcode_xy x+1 }
     end
 
     def ink_black_xy
@@ -37,7 +37,7 @@ module Mork
     end
 
     def calibration_cells_xy
-      rows.times.collect do |q|
+      rows.times.map do |q|
         [(reg_frame_width-cell_spacing).mm, item_y(q).mm]
       end
     end

@@ -41,7 +41,7 @@ module Mork
     end
 
     def calibration_cell_areas
-      rows.times.collect do |q|
+      rows.times.map do |q|
         coord cal_cell_x, cell_y(q), cell_width, cell_height
       end
     end

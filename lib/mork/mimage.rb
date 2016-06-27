@@ -124,7 +124,7 @@ module Mork
     end
 
     def cal_cell_mean
-      m = @grom.calibration_cell_areas.collect { |c| reg_pixels.average c }
+      m = @grom.calibration_cell_areas.map { |c| reg_pixels.average c }
       m.inject(:+) / m.length.to_f
     end
 

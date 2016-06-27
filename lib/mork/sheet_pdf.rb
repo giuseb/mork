@@ -202,7 +202,7 @@ module Mork
     end
 
     def ch_len
-      @all_choice_lengths ||= @content.collect { |c| c[:choices] }
+      @all_choice_lengths ||= @content.map { |c| c[:choices] }
     end
 
     # Choices are labeled 'A', 'B', ...

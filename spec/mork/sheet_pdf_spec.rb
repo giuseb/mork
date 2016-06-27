@@ -107,7 +107,7 @@ module Mork
     end
 
     it 'creates 20 PDF sheets' do
-      c = 20.times.collect do |x|
+      c = 20.times.map do |x|
         content.merge({ header: {title: "Test #{x+1}"}, barcode: x})
       end
       SheetPDF.new(c).save dest('p20')
