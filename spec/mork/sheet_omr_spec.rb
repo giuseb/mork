@@ -3,6 +3,31 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
+    context 'with a problematic sheet provided by Raffa', focus: true do
+      let(:img) { sample_img 'raffa-ige' }
+      let(:fn) { File.basename img.image_path }
+      let(:omr) { SheetOMR.new img.image_path, img.grid_path }
+      describe 'working' do
+        it 'registers' do
+          expect(omr.valid?).to be_truthy
+        end
+
+        it 'returns the barcode' do
+          expect(omr.barcode).to eq 19294
+        end
+
+        it 'provides the marked choices' do
+          expect(omr.marked_choices[ 0] ).to eq [1]
+          expect(omr.marked_choices[59] ).to eq [4]
+        end
+
+        pending 'outlining a cell beyond nchoices' do
+          omr.overlay :outline, [[1,2], [], [0,1,2,3,4,5], [3]]
+          omr.save "spec/out/outline/some-#{fn}"
+        end
+      end
+    end
+
     context 'with a valid response sheet' do
       let(:img) { sample_img 'jdoe1' }
       let(:fn)  { File.basename(img.image_path) }
