@@ -18,4 +18,6 @@ reg-mark:
   centroid-x: 92
   centroid-y: 91
 
-
+raffa-ige:
+  image_path: spec/samples/raffa-ige.jpg
+  grid_path:   spec/samples/base_layout.yml
