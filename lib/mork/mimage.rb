@@ -22,6 +22,10 @@ module Mork
       @valid
     end
 
+    def low_contrast?
+      @rm.any? { |k,v| v < @grom.reg_min_contrast }
+    end
+
     def status
       {
         tl: @rm[:tl][:status],

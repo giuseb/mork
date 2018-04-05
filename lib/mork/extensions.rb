@@ -1,5 +1,5 @@
 # @private
-class Fixnum
+class Integer
   def mm
     self * 2.83464566929134
   end

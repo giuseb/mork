@@ -1,0 +1,2566 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"im",
+				"image_path"
+			],
+			[
+				"sample",
+				"sample_img"
+			],
+			[
+				"con",
+				"context\tcontext"
+			],
+			[
+				"allow_l",
+				"allow_blank"
+			],
+			[
+				"pre",
+				"presence"
+			],
+			[
+				"desc",
+				"description\t(course.rb)"
+			],
+			[
+				"val",
+				"validates"
+			],
+			[
+				"max",
+				"maximum\t(course.rb)"
+			],
+			[
+				"prese",
+				"presence\t(course.rb)"
+			],
+			[
+				"first",
+				"first_name"
+			],
+			[
+				"vali",
+				"validates\t(course.rb)"
+			],
+			[
+				"uni",
+				"uniqueness\t(course.rb)"
+			],
+			[
+				"mi",
+				"minimum\t(course.rb)"
+			],
+			[
+				"fail",
+				"fail_string"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"cre",
+				"creator_id"
+			],
+			[
+				"creator",
+				"creator_id\t(grabber.rb)"
+			],
+			[
+				"each",
+				"each_with_index"
+			],
+			[
+				"disc",
+				"discipline_id"
+			],
+			[
+				"disci",
+				"discipline_id\t(grabber.rb)"
+			],
+			[
+				"defa",
+				"default_correct_points\t(schema.rb)"
+			],
+			[
+				"def",
+				"default_correct_points"
+			],
+			[
+				"terms",
+				"terms_of_service"
+			],
+			[
+				"link",
+				"link_to"
+			],
+			[
+				"ter",
+				"terms_of_service"
+			],
+			[
+				"_",
+				"_blank\t(application_helper.rb)"
+			],
+			[
+				"curre",
+				"current_password\t(edit.html.haml)"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"content",
+				"content_tag"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"Omr",
+				"OmrScanStatus"
+			],
+			[
+				"OmrS",
+				"OmrScanStatus\t(omr_scan.rb)"
+			],
+			[
+				"OMR_a",
+				"OMR_ANON_FORM\t(omr_scan.rb)"
+			],
+			[
+				"perform",
+				"perform_later\t(form_pdfs_controller.rb)"
+			],
+			[
+				"que",
+				"queue_as\t(import_job.rb)"
+			],
+			[
+				"assi",
+				"assign_forms\t(index.html.haml)"
+			],
+			[
+				"before",
+				"before_filter"
+			],
+			[
+				"send",
+				"send_file\t(form_pdfs_controller.rb)"
+			],
+			[
+				"app",
+				"application"
+			],
+			[
+				"mod",
+				"mod\tmodule .. module_function .. end"
+			],
+			[
+				"org",
+				"org_id"
+			],
+			[
+				"rm",
+				"rm_rf\t(p_path.rb)"
+			],
+			[
+				"omr",
+				"omr_pdf"
+			],
+			[
+				"File",
+				"FileUtils"
+			],
+			[
+				"Fil",
+				"FileUtils\t(p_path.rb)"
+			],
+			[
+				"or",
+				"org_id"
+			],
+			[
+				"spt",
+				"sprintf\t(form_printout.rb)"
+			],
+			[
+				"the",
+				"thepath"
+			],
+			[
+				"cla",
+				"cla\tclass .. < ParentClass .. initialize .. end"
+			],
+			[
+				"rm_",
+				"rm_rf\t(omr_worker.rb)"
+			],
+			[
+				"pro",
+				"proceed\t(grabber_spec.rb)"
+			],
+			[
+				"topi",
+				"topic_selectors"
+			],
+			[
+				"sorte",
+				"sorted_topic_selectors"
+			],
+			[
+				"total_req",
+				"total_requested_questions"
+			],
+			[
+				"the_sco",
+				"the_scoring_with_id\t(index.xls.haml)"
+			],
+			[
+				"fir",
+				"first_name"
+			],
+			[
+				"last",
+				"last_name"
+			],
+			[
+				"updat",
+				"update_attribute\t(grabber.rb)"
+			],
+			[
+				"multi",
+				"multi_pos\t(grabber.rb)"
+			],
+			[
+				"invali",
+				"invalid_pos\t(grabber.rb)"
+			],
+			[
+				"missi",
+				"missing_score\t(grabber.rb)"
+			],
+			[
+				"invalid",
+				"invalid_discipline\t(grabber.rb)"
+			],
+			[
+				"inva",
+				"invalid_topic\t(grabber.rb)"
+			],
+			[
+				"make",
+				"make_grabber"
+			],
+			[
+				"missing_",
+				"missing_question\t(grabber_spec.rb)"
+			],
+			[
+				"fac",
+				"FactoryGirl"
+			],
+			[
+				"ques",
+				"question"
+			],
+			[
+				"it",
+				"it\tit"
+			],
+			[
+				"gra",
+				"grabbed_items"
+			],
+			[
+				"wa",
+				"warning_count"
+			],
+			[
+				"succ",
+				"success_count\t(show.html.haml)"
+			],
+			[
+				"warnin",
+				"warning_count\t(grabber_spec.rb)"
+			],
+			[
+				"vers",
+				"versions_count"
+			],
+			[
+				"grabb",
+				"grabbed_item"
+			],
+			[
+				"ITX",
+				"ITXT5"
+			],
+			[
+				"IT",
+				"ITMS4"
+			],
+			[
+				"from",
+				"from_question"
+			],
+			[
+				"update",
+				"update_attribute\t(multi_choice.rb)"
+			],
+			[
+				"Grabb",
+				"GrabbedItem\t(grabber.rb)"
+			],
+			[
+				"qu",
+				"questions"
+			],
+			[
+				"grabbe",
+				"grabber"
+			],
+			[
+				"exc",
+				"except"
+			],
+			[
+				"curren",
+				"current_org"
+			],
+			[
+				"Active",
+				"ActiveRecord::Base"
+			],
+			[
+				"wro",
+				"wrong_points"
+			],
+			[
+				"ans",
+				"answers"
+			],
+			[
+				"dis",
+				"discipline"
+			],
+			[
+				"up",
+				"update_topic_disc_from"
+			],
+			[
+				"ITM",
+				"ITMS3"
+			],
+			[
+				"Pi",
+				"Pitems::ITMS2"
+			],
+			[
+				"Pa",
+				"ParseItem"
+			],
+			[
+				"Gra",
+				"GrabbedItem"
+			],
+			[
+				"grabbed",
+				"grabbed_items"
+			],
+			[
+				"Jo",
+				"JobStatus\t(import_job.rb)"
+			],
+			[
+				"Job",
+				"JobStatus"
+			],
+			[
+				"ag",
+				"arguments"
+			],
+			[
+				"to_",
+				"to_sym\t(omr_scan.rb)"
+			],
+			[
+				"R",
+				"Remi\t(grabber_status.rb)"
+			],
+			[
+				"perf",
+				"perform_later"
+			],
+			[
+				"param",
+				"params[:id"
+			],
+			[
+				"click_",
+				"click_link"
+			],
+			[
+				"click",
+				"click_button"
+			],
+			[
+				"tota",
+				"total_count"
+			],
+			[
+				"tag",
+				"tag_id\t(grabber.rb)"
+			],
+			[
+				"tag_",
+				"tag_icon"
+			],
+			[
+				"cu",
+				"current_org\t(show.html.haml)"
+			],
+			[
+				"itm",
+				"itm_ids"
+			],
+			[
+				"succes",
+				"success_count"
+			],
+			[
+				"all",
+				"all_items"
+			],
+			[
+				"appl",
+				"apply_tag_to"
+			],
+			[
+				"in",
+				"integer"
+			],
+			[
+				"John",
+				"John"
+			],
+			[
+				"cou",
+				"course_id"
+			],
+			[
+				"enro",
+				"enrolled_on"
+			],
+			[
+				"fie",
+				"field_3"
+			],
+			[
+				"stu",
+				"student_grab"
+			],
+			[
+				"I",
+				"Item2text\t(item2text_spec.rb)"
+			],
+			[
+				"co",
+				"codes"
+			],
+			[
+				"pos",
+				"position\t(grabber_spec.rb)"
+			],
+			[
+				"item",
+				"item[:discipline\t(grabber.rb)"
+			],
+			[
+				"qe",
+				"question\t(grabber_spec.rb)"
+			],
+			[
+				"multi_choi",
+				"multi_choice\t(org.rb)"
+			],
+			[
+				"creat",
+				"creator_id\t(exam.rb)"
+			],
+			[
+				"ex",
+				"expect"
+			],
+			[
+				"glo",
+				"global_discipline"
+			],
+			[
+				"topics",
+				"topics_count\t(version_spec.rb)"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "lib/mork/npatch.rb",
+			"settings":
+			{
+				"buffer_size": 742,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "spec/mork/sheet_omr_spec.rb",
+			"settings":
+			{
+				"buffer_size": 10846,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/mork/grid_pdf.rb",
+			"settings":
+			{
+				"buffer_size": 3152,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/mork/grid.rb",
+			"settings":
+			{
+				"buffer_size": 4517,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/mork/sheet_omr.rb",
+			"settings":
+			{
+				"buffer_size": 7418,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/mork/coord.rb",
+			"settings":
+			{
+				"buffer_size": 1059,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/mork/mimage.rb",
+			"settings":
+			{
+				"buffer_size": 4707,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 58 files for \"sample_img\" (regex, case sensitive)\n\n/Users/giuseppe/dev/ruby/mork/spec/spec_helper.rb:\n   62  end\n   63  \n   64: def sample_img(which)\n   65    SampleImager.new(which)\n   66  end\n\n/Users/giuseppe/dev/ruby/mork/spec/mork/magicko_spec.rb:\n    3  module Mork\n    4    describe Magicko do\n    5:     let(:sh) { sample_img :jdoe1 }\n    6      let(:ma) { Magicko.new sh.image_path }\n    7      let(:co) { Coord.new 50}\n\n/Users/giuseppe/dev/ruby/mork/spec/mork/mimage_spec.rb:\n    6  \n    7      context 'John Doe' do\n    8:       let(:img) { sample_img 'jdoe1' }\n    9        let(:fn)  { File.basename(img.image_path) }\n   10        let(:mim) { Mimage.new img.image_path, GridOMR.new(img.grid_path)  }\n\n/Users/giuseppe/dev/ruby/mork/spec/mork/sheet_omr_spec.rb:\n    5    describe SheetOMR do\n    6      context 'with a valid response sheet' do\n    7:       let(:img) { sample_img 'jdoe1' }\n    8        let(:fn)  { File.basename(img.image_path) }\n    9        let(:omr) { SheetOMR.new img.image_path, layout: img.grid_path }\n\n4 matches across 4 files\n",
+			"settings":
+			{
+				"buffer_size": 1070,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "spec/spec_helper.rb",
+			"settings":
+			{
+				"buffer_size": 1890,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "spec/samples/info.yml",
+			"settings":
+			{
+				"buffer_size": 1036,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 398.0,
+		"last_filter": "packins",
+		"selected_items":
+		[
+			[
+				"packins",
+				"Package Control: Install Package"
+			],
+			[
+				"colors",
+				"Colorsublime: Browse Themes"
+			],
+			[
+				"color",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"pinsa",
+				"Package Control: Install Package"
+			],
+			[
+				"packin",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"sytmata",
+				"Set Syntax: MATLAB"
+			]
+		],
+		"width": 599.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/giuseppe/dev/ruby/mork",
+		"/Users/giuseppe/dev/ruby/mork/lib",
+		"/Users/giuseppe/dev/ruby/mork/spec"
+	],
+	"file_history":
+	[
+		"/Users/giuseppe/dev/ruby/mork/spec/mork/sheet_pdf_spec.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/sheet_pdf.rb",
+		"/Users/giuseppe/dev/ruby/mork/Guardfile",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/coord.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/magicko.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/grid_const.rb",
+		"/Users/giuseppe/dev/ruby/mork/mork.gemspec",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/sheet_omr.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/version.rb",
+		"/Users/giuseppe/dev/ruby/mork/spec/mork/sheet_omr_spec.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/mimage.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/grid_pdf.rb",
+		"/Users/giuseppe/dev/ruby/mork/lib/mork/grid_omr.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/shared/_subnav.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/poros/remi.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/environment.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/Gemfile",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/registrations_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/courses_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/disciplines_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/exam_grades_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/exams_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/forms_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/multi_choices_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/orgs_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/students_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/versions_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/helpers/application_helper.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/helpers/table_helper.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/form.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/db/seeds.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/poros/omr_scan_status.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/scoring.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/assets/stylesheets/qc_boot.sass",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/scorings_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/orgs/edit.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/orgs/_form.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/omr_sheet.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/omr_scan.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/scorings/show.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/discipline.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/db/schema.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/features/step_definitions/qc_domain_steps.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/spec/factories.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/tagging.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/db/migrate/20160527105725_drop_global_topics.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/global_discipline.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/item.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/grid.yml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/forms/index.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/scorings/index.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/scorings/_invalids.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/jobs/omr_job.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/scorings/_summary.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/form_item.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/jobs/import_job.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/forms/_pdf_available.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/choice.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/multi_choice.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/notice.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/course.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/spec/models/discipline_spec.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/spec/models/tagging_spec.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/locales/en.yml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/student_grab.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/student.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/spec/controllers/preset_exams_controller_spec.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/spec/models/version_spec.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/tag.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/target.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/topic.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/user.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/taggings_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/enrollment.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/exam_grade.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/exam.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/figure.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/grabbed_item.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/grading_system.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/language.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/grabber.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/invitation.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/org.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/preset_exam.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/preset_grade.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/Guardfile",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/omr_scans/refresh.js.erb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/workers/omr_worker.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/helpers/scorings_helper.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/db/migrate/20160527161643_add_pages_to_omr_scans.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/exams/_students.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/features/support/env.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/assets/javascript/utilities.coffee",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/grabbers/show.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/scorings/_new_scoring.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/figures/show.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/grabbers_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/db/migrate/20160426174245_add_default_correct_points_to_orgs.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/item_scoring.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/lib/sandbox.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/omr_scans_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/application_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/models/version_item.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/.ruby-version",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/multi_choices/_form.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/multi_choices/new.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/public/maintenance.html",
+		"/Users/giuseppe/dev/rails/quizzi3/config/nginx.conf",
+		"/Users/giuseppe/dev/rails/quizzi3/config/recipes/nginx.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/recipes/templates/nginx_unicorn.erb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/routes.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/controllers/figures_controller.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/deploy.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/config/deploy/production.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/layouts/operationw.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/poros/job_status.rb",
+		"/Users/giuseppe/dev/rails/quizzi3/Gemfile.lock",
+		"/Users/giuseppe/dev/rails/quizzi3/features/selections.feature",
+		"/Users/giuseppe/dev/rails/quizzi3/features/preset_eams.feature",
+		"/Users/giuseppe/dev/rails/quizzi3/features/protect_memberships.feature",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/students/new.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/config/locales/it.yml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/devise/registrations/new.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/student_grabs/new.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/student_grabs/_form.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/views/layouts/help.html.haml",
+		"/Users/giuseppe/dev/rails/quizzi3/app/assets/javascript/application.js",
+		"/Users/giuseppe/dev/rails/quizzi3/app/assets/stylesheets/application.sass"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 111.0,
+		"where_history":
+		[
+			"",
+			"urinario",
+			"",
+			"*i",
+			"*",
+			"*spec.rb",
+			"*",
+			"*sass",
+			"*spec*",
+			"*",
+			"*.sass",
+			"",
+			"*.yml,*.haml",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"sample_img",
+			"x_rng",
+			"identify",
+			"s_repeater",
+			"repeat_",
+			"registration_marks",
+			"calibration_cells",
+			"uid",
+			"\\.collect\\b",
+			"def cancelink",
+			".to_f",
+			"stale",
+			"@invalid_sheets",
+			"render",
+			"omr",
+			"stale",
+			"fresh_w",
+			"with_qna",
+			"correct_choice_list",
+			"OMR_BAD_FORM",
+			"def my",
+			"OmrScanStatus",
+			"literal_choice_array",
+			"scoring_sheet_l",
+			"qc-alert-warning",
+			"recaptcha",
+			"dummy",
+			"too short",
+			" in: ",
+			"in:",
+			"\\bar",
+			"minimum: ",
+			"minimum:",
+			"  # validates :name,\n  #             presence: true,\n",
+			"grabber",
+			"4",
+			"\\.text",
+			"tg",
+			"PresetG",
+			"scan_file_name",
+			"\\bmessage\\b",
+			"message",
+			"grading_system",
+			"tag_stub",
+			"add_n",
+			"for",
+			"d1",
+			"compute_scores",
+			"logger",
+			"inline",
+			"maintenance",
+			"system",
+			"image/",
+			"OMR_BAD_IMAGE",
+			"invalid_im",
+			"def",
+			"gsub!",
+			"fill_out_the_sign_up_form",
+			"unscorable",
+			"change_form",
+			"manual-scoring",
+			"\"errors",
+			"'errors",
+			"accepted: ",
+			"accettata",
+			"modal-dialog",
+			"moda-dialog",
+			".modal.fade",
+			"as: :boolean",
+			"\\.confirm\\b",
+			"\\.confirm",
+			"field_1",
+			"f.association",
+			"docs_link",
+			"omr_email",
+			"Docs",
+			"edit_profile",
+			"docs_link",
+			"Hello, worl",
+			"Hello, Worl",
+			"Hello Worl",
+			"Hello Help",
+			"@body",
+			"BodyClas",
+			"body_classer",
+			"body_class",
+			"BodyClass",
+			"welcom",
+			"radius",
+			"@inclu",
+			"@extend",
+			"/$",
+			":(\\w+) *=> *",
+			"macboo",
+			"'Mod'",
+			"spacer",
+			".org-buttons",
+			"e_tag",
+			"etag",
+			"panel-headi",
+			"navbar-ex1-collapse",
+			"\\.confirm\\b",
+			"\\bconfirm\\b",
+			"confirm",
+			"membership",
+			"mytable",
+			"%table",
+			"org-btns",
+			"btn btn-default btn-lg",
+			"org-btn-wide",
+			"tipper",
+			"org-buttons",
+			"@mixin",
+			"@include",
+			"@mixin",
+			"btn-stud",
+			"students",
+			"%table",
+			"flash[:scoring",
+			"Cachea",
+			"root_",
+			"dashboard",
+			"tipper",
+			"pdf_icon",
+			"pdf_",
+			"pdf",
+			"LIKE",
+			"where!"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": true,
+		"regex": true,
+		"replace_history":
+		[
+			".map",
+			"",
+			"$1: ",
+			"urinario",
+			"",
+			":grabber",
+			"ss.page",
+			"ss.reset_page",
+			"ss.next_page",
+			"ss.tot_pages",
+			"ss.status",
+			"config.serve_static_files",
+			"RH",
+			"CRH",
+			"RH",
+			"TRH",
+			" PIF",
+			"PIF",
+			"Morgagni",
+			"GH ",
+			"GH",
+			"STH",
+			"Langerhans",
+			"TSH",
+			"LH",
+			"FSH",
+			"ACTH",
+			"MSH",
+			"ADH",
+			"E) tutt$1\\n\\n",
+			"E) tutte$1\\n\\n",
+			"D) tutte",
+			"’",
+			"zero_questions_requested?",
+			"invite-to-org",
+			"code-num",
+			"‘",
+			"’"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "lib/mork/npatch.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 742,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								556,
+								556
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"color_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "spec/mork/sheet_omr_spec.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10846,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								715,
+								715
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										715,
+										716
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/single_quote.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										682,
+										683
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/InactivePanes/Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"default_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"history_list_is_closing": true,
+							"syntax": "Packages/Better RSpec/Better RSpec.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 52.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lib/mork/grid_pdf.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3152,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/InactivePanes/Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"default_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "lib/mork/grid.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4517,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/InactivePanes/Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"default_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "lib/mork/sheet_omr.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7418,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/InactivePanes/Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"default_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 5,
+					"file": "lib/mork/coord.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								210,
+								210
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"color_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"history_list_is_closing": true,
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "lib/mork/mimage.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4707,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								831,
+								831
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										832,
+										833
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/round_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										826,
+										827
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"history_list_is_closing": true,
+							"syntax": "Packages/Ruby/Ruby.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1809.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1070,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										142,
+										152
+									],
+									[
+										332,
+										342
+									],
+									[
+										561,
+										571
+									],
+									[
+										888,
+										898
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								131,
+								137
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "spec/spec_helper.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1890,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								480,
+								480
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										560,
+										563
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/dot.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										458,
+										461
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"syntax": "Packages/Better RSpec/Better RSpec.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "spec/samples/info.yml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1036,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1036,
+								1036
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/ArtSchool.tmTheme",
+							"history_list_is_closing": true,
+							"syntax": "Packages/YAML/YAML.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 110.0
+	},
+	"pinned_build_system": "",
+	"project": "mork.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"shee",
+				"lib/mork/sheet_omr.rb"
+			],
+			[
+				"gri",
+				"lib/mork/grid.rb"
+			],
+			[
+				"pdf",
+				"lib/mork/grid_pdf.rb"
+			],
+			[
+				"info",
+				"spec/samples/info.yml"
+			],
+			[
+				"s",
+				"spec/mork/sheet_omr_spec.rb"
+			],
+			[
+				"mima",
+				"lib/mork/mimage.rb"
+			],
+			[
+				"coor",
+				"lib/mork/coord.rb"
+			],
+			[
+				"npa",
+				"lib/mork/npatch.rb"
+			],
+			[
+				"guar",
+				"Guardfile"
+			],
+			[
+				"shepd",
+				"lib/mork/sheet_pdf.rb"
+			],
+			[
+				"sheepd",
+				"lib/mork/sheet_pdf.rb"
+			],
+			[
+				"sheepdsp",
+				"spec/mork/sheet_pdf_spec.rb"
+			],
+			[
+				"",
+				"spec/mork/sheet_pdf_spec.rb"
+			],
+			[
+				"sheepdf",
+				"lib/mork/sheet_pdf.rb"
+			],
+			[
+				"shepdf",
+				"spec/mork/sheet_pdf_spec.rb"
+			],
+			[
+				"she",
+				"lib/mork/sheet_omr.rb"
+			],
+			[
+				"cons",
+				"lib/mork/grid_const.rb"
+			],
+			[
+				"verson",
+				"lib/mork/version.rb"
+			],
+			[
+				"gem",
+				"mork.gemspec"
+			],
+			[
+				"sheeomr",
+				"lib/mork/sheet_omr.rb"
+			],
+			[
+				"grab",
+				"app/models/grabber.rb"
+			],
+			[
+				"grabbshow",
+				"app/views/grabbers/show.html.haml"
+			],
+			[
+				"subnav",
+				"app/views/shared/_subnav.html.haml"
+			],
+			[
+				"muchoind",
+				"app/views/multi_choices/index.html.haml"
+			],
+			[
+				"grabbnew",
+				"app/views/grabbers/new.html.haml"
+			],
+			[
+				"grabbers",
+				"spec/features/grabbers_spec.rb"
+			],
+			[
+				"user",
+				"app/models/user.rb"
+			],
+			[
+				"grabber",
+				"app/models/grabber.rb"
+			],
+			[
+				"sche",
+				"db/schema.rb"
+			],
+			[
+				"gracon",
+				"app/controllers/grabbers_controller.rb"
+			],
+			[
+				"rem",
+				"app/poros/remi.rb"
+			],
+			[
+				"omscasta",
+				"app/poros/omr_scan_status.rb"
+			],
+			[
+				"omscacon",
+				"app/controllers/omr_scans_controller.rb"
+			],
+			[
+				"orgfor",
+				"app/views/orgs/_form.html.haml"
+			],
+			[
+				"orgedi",
+				"app/views/orgs/edit.html.haml"
+			],
+			[
+				"summa",
+				"app/views/scorings/_summary.html.haml"
+			],
+			[
+				"scosho",
+				"app/views/scorings/show.html.haml"
+			],
+			[
+				"omrsc",
+				"app/models/omr_scan.rb"
+			],
+			[
+				"refre",
+				"app/views/omr_scans/refresh.js.erb"
+			],
+			[
+				"omrscacon",
+				"app/controllers/omr_scans_controller.rb"
+			],
+			[
+				"gemfi",
+				"Gemfile"
+			],
+			[
+				"formcon",
+				"app/controllers/forms_controller.rb"
+			],
+			[
+				"formite",
+				"app/models/form_item.rb"
+			],
+			[
+				"for",
+				"app/models/form.rb"
+			],
+			[
+				"omrsca",
+				"app/models/omr_scan.rb"
+			],
+			[
+				"omrw",
+				"app/workers/omr_worker.rb"
+			],
+			[
+				"remi",
+				"app/poros/remi.rb"
+			],
+			[
+				"omrjob",
+				"app/jobs/omr_job.rb"
+			],
+			[
+				"grid",
+				"config/grid.yml"
+			],
+			[
+				"job",
+				"app/jobs/import_job.rb"
+			],
+			[
+				"16164",
+				"db/migrate/20160527161643_add_pages_to_omr_scans.rb"
+			],
+			[
+				"omr",
+				"app/models/omr_scan.rb"
+			],
+			[
+				"omrcon",
+				"app/controllers/omr_scans_controller.rb"
+			],
+			[
+				"omrjo",
+				"app/jobs/omr_job.rb"
+			],
+			[
+				"omrshe",
+				"app/models/omr_sheet.rb"
+			],
+			[
+				"invali",
+				"app/views/scorings/_invalids.html.haml"
+			],
+			[
+				"scocon",
+				"app/controllers/scorings_controller.rb"
+			],
+			[
+				"scorin",
+				"app/models/scoring.rb"
+			],
+			[
+				"exastu",
+				"app/views/exams/_students.html.haml"
+			],
+			[
+				"scoshow",
+				"app/views/scorings/show.html.haml"
+			],
+			[
+				"scoriinde",
+				"app/views/scorings/index.html.haml"
+			],
+			[
+				"pdfava",
+				"app/views/forms/_pdf_available.html.haml"
+			],
+			[
+				"formsindex",
+				"app/views/forms/index.html.haml"
+			],
+			[
+				"facto",
+				"spec/factories.rb"
+			],
+			[
+				"taggin",
+				"app/models/tagging.rb"
+			],
+			[
+				"fact",
+				"spec/factories.rb"
+			],
+			[
+				"taggingspe",
+				"spec/models/tagging_spec.rb"
+			],
+			[
+				"en.",
+				"config/locales/en.yml"
+			],
+			[
+				"dis",
+				"spec/models/discipline_spec.rb"
+			],
+			[
+				"discip",
+				"app/models/discipline.rb"
+			],
+			[
+				"course",
+				"app/models/course.rb"
+			],
+			[
+				"guard",
+				"Guardfile"
+			],
+			[
+				"versionspe",
+				"spec/models/version_spec.rb"
+			],
+			[
+				"factorei",
+				"spec/factories.rb"
+			],
+			[
+				"preseconspe",
+				"spec/controllers/preset_exams_controller_spec.rb"
+			],
+			[
+				"cdoma",
+				"features/step_definitions/qc_domain_steps.rb"
+			],
+			[
+				"stud",
+				"app/models/student.rb"
+			],
+			[
+				"stugra",
+				"app/models/student_grab.rb"
+			],
+			[
+				"prese",
+				"app/models/preset_exam.rb"
+			],
+			[
+				"org",
+				"app/models/org.rb"
+			],
+			[
+				"notic",
+				"app/models/notice.rb"
+			],
+			[
+				"mu",
+				"app/models/multi_choice.rb"
+			],
+			[
+				"lang",
+				"app/models/language.rb"
+			],
+			[
+				"gradisy",
+				"app/models/grading_system.rb"
+			],
+			[
+				"grait",
+				"app/models/grabbed_item.rb"
+			],
+			[
+				"glodi",
+				"app/models/global_discipline.rb"
+			],
+			[
+				"figu",
+				"app/models/figure.rb"
+			],
+			[
+				"exam",
+				"app/models/exam.rb"
+			],
+			[
+				"enro",
+				"app/models/enrollment.rb"
+			],
+			[
+				"choice",
+				"app/models/choice.rb"
+			],
+			[
+				"topic",
+				"app/models/topic.rb"
+			],
+			[
+				"target",
+				"app/models/target.rb"
+			],
+			[
+				"taggcon",
+				"app/controllers/taggings_controller.rb"
+			],
+			[
+				"tag",
+				"app/models/tag.rb"
+			],
+			[
+				"studgra",
+				"app/models/student_grab.rb"
+			],
+			[
+				"presegra",
+				"app/models/preset_grade.rb"
+			],
+			[
+				"invita",
+				"app/models/invitation.rb"
+			],
+			[
+				"grabb",
+				"app/models/grabber.rb"
+			],
+			[
+				"572",
+				"db/migrate/20160527105725_drop_global_topics.rb"
+			],
+			[
+				"glo",
+				"app/models/global_discipline.rb"
+			],
+			[
+				"disci",
+				"app/models/discipline.rb"
+			],
+			[
+				"figure",
+				"app/models/figure.rb"
+			],
+			[
+				"exagra",
+				"app/models/exam_grade.rb"
+			],
+			[
+				"enroll",
+				"app/models/enrollment.rb"
+			],
+			[
+				"mul",
+				"app/models/multi_choice.rb"
+			],
+			[
+				"choc",
+				"app/models/choice.rb"
+			],
+			[
+				"formscon",
+				"app/controllers/forms_controller.rb"
+			],
+			[
+				"gemlo",
+				"Gemfile.lock"
+			],
+			[
+				"applcon",
+				"app/controllers/application_controller.rb"
+			],
+			[
+				"sle",
+				"features/selections.feature"
+			],
+			[
+				"prote",
+				"features/protect_memberships.feature"
+			],
+			[
+				"presetea",
+				"features/preset_eams.feature"
+			],
+			[
+				"ruby",
+				".ruby-version"
+			],
+			[
+				"item",
+				"app/models/item.rb"
+			],
+			[
+				"disccon",
+				"app/controllers/disciplines_controller.rb"
+			],
+			[
+				"sand",
+				"lib/sandbox.rb"
+			],
+			[
+				"exgracon",
+				"app/controllers/exam_grades_controller.rb"
+			],
+			[
+				"itemsco",
+				"app/models/item_scoring.rb"
+			],
+			[
+				"scoring",
+				"app/models/scoring.rb"
+			],
+			[
+				"itesco",
+				"app/models/item_scoring.rb"
+			],
+			[
+				"versioit",
+				"app/models/version_item.rb"
+			],
+			[
+				"mucho",
+				"app/models/multi_choice.rb"
+			],
+			[
+				"muchnew",
+				"app/views/multi_choices/new.html.haml"
+			],
+			[
+				"mufor",
+				"app/views/multi_choices/_form.html.haml"
+			],
+			[
+				"orgfo",
+				"app/views/orgs/_form.html.haml"
+			],
+			[
+				"env",
+				"config/environment.rb"
+			],
+			[
+				"4245",
+				"db/migrate/20160426174245_add_default_correct_points_to_orgs.rb"
+			],
+			[
+				"rout",
+				"config/routes.rb"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 284.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -30,28 +30,8 @@ module Mork
       @mim.valid?
     end
 
-    # Setting the choices/questions to analyze. If this function is not called,
-    # the maximum number of choices/questions allowed by the layout will be
-    # evaluated.
-    #
-    # @param choices [Fixnum, Array] the questions/choices we want subsequent
-    #   scoring/overlaying to apply to. Normally, `choices` should be an array
-    #   of integers, with each element indicating the number of available
-    #   choices for the corresponding question (i.e. `choices.length` is the
-    #   number of questions). As a shortcut, `choices` can also be a single
-    #   integer value, indicating the number of questions; in such case, the
-    #   maximum number of choices allowed by the layout will be considered.
-    #
-    # @return [Boolean] True if the sheet is properly registered and ready to
-    #   be marked; false otherwise.
-    def set_choices(choices)
-      return false unless valid?
-      @mim.set_ch case choices
-                  when Fixnum; @mim.choxq[0...choices]
-                  when Array; choices
-                  else raise ArgumentError, 'Invalid choice set'
-                  end
-      true
+    def low_contrast?
+      @mim.low_contrast?
     end
 
     # Registration status for each of the four corners
@@ -65,7 +45,7 @@ module Mork
 
     # Sheet barcode as an integer
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def barcode
       return if not_registered
       barcode_string.to_i(2)
@@ -82,10 +62,34 @@ module Mork
       end.join.reverse
     end
 
+    # Setting the choices/questions to analyze. If this function is not called,
+    # the maximum number of choices/questions allowed by the layout will be
+    # evaluated.
+    #
+    # @param choices [Integer, Array] the questions/choices we want subsequent
+    #   scoring/overlaying to apply to. Normally, `choices` should be an array
+    #   of integers, with each element indicating the number of available
+    #   choices for the corresponding question (i.e. `choices.length` is the
+    #   number of questions). As a shortcut, `choices` can also be a single
+    #   integer value, indicating the number of questions; in such case, the
+    #   maximum number of choices allowed by the layout will be considered.
+    #
+    # @return [Boolean] True if the sheet is properly registered and ready to
+    #   be marked; false otherwise.
+    def set_choices(choices)
+      return false unless valid?
+      @mim.set_ch case choices
+                  when Integer; @mim.choxq[0...choices]
+                  when Array; choices
+                  else raise ArgumentError, 'Invalid choice set'
+                  end
+      true
+    end
+
     # True if the specified question/choice cell has been marked
     #
-    # @param question [Fixnum] the question number, zero-based
-    # @param choice [Fixnum] the choice number, zero-based
+    # @param question [Integer] the question number, zero-based
+    # @param choice [Integer] the choice number, zero-based
     # @return [Boolean]
     def marked?(question, choice)
       return if not_registered

@@ -80,7 +80,7 @@ end
 #     @grom.rm_edgy_x.should == 24
 #   end
 #   it 'returns an integer' do
-#     @grom.rm_edgy_x.should be_a Fixnum
+#     @grom.rm_edgy_x.should be_an Integer
 #   end
 # end
 
@@ -89,7 +89,7 @@ end
 #     @grom.rm_edgy_y.should == 24
 #   end
 #   it 'returns an integer' do
-#     @grom.rm_edgy_y.should be_a Fixnum
+#     @grom.rm_edgy_y.should be_an Integer
 #   end
 # end
 
@@ -98,6 +98,6 @@ end
 #     @grom.rm_max_search_area_side.should == 400
 #   end
 #   it 'returns an integer' do
-#     @grom.rm_max_search_area_side.should be_a Fixnum
+#     @grom.rm_max_search_area_side.should be_an Integer
 #   end
 # end

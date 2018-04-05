@@ -3,9 +3,9 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
-    context 'with a problematic sheet provided by Raffa', focus: true do
+    context 'with a problematic sheet provided by Raffa' do
       let(:img) { sample_img 'raffa-ige' }
-      let(:fn) { File.basename img.image_path }
+      let(:fn ) { File.basename img.image_path }
       let(:omr) { SheetOMR.new img.image_path, img.grid_path }
       describe 'working' do
         it 'registers' do
@@ -21,7 +21,7 @@ module Mork
           expect(omr.marked_choices[59] ).to eq [4]
         end
 
-        pending 'outlining a cell beyond nchoices' do
+        xit 'outlining a cell beyond nchoices' do
           omr.overlay :outline, [[1,2], [], [0,1,2,3,4,5], [3]]
           omr.save "spec/out/outline/some-#{fn}"
         end
@@ -102,7 +102,7 @@ module Mork
       it 'writes out markedness' do
         mf = File.open('spec/out/text/marked.txt', 'w')
         img.nitems.times do |q|
-          x = 5.times.collect do |c|
+          x = 5.times.map do |c|
             omr.marked?(q,c) ? '1' : '0'
           end
           mf.puts x.join(' ')
@@ -157,6 +157,11 @@ module Mork
         it 'highlights the barcode' do
           omr.overlay :outline, :barcode
           omr.save "spec/out/barcode/#{fn}"
+        end
+
+        it 'refuses to outline an out-of-bounds cell', focus: true do
+          omr.overlay :outline, [[5]]
+          omr.save "spec/out/outline/invalid-cell-#{fn}"
         end
       end
     end

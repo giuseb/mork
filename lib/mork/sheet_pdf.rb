@@ -76,16 +76,20 @@ module Mork
       end
 
       repeat(:all) do
-        calibration_cells
-        fill do
-          @grip.reg_marks.each do |r|
-            circle r[:p], r[:r]
-          end
+        calibration_cell_repeater
+        registration_mark_repeater
+      end
+    end
+
+    def registration_mark_repeater
+      fill do
+        @grip.reg_marks.each do |r|
+          circle r[:p], r[:r]
         end
       end
     end
 
-    def calibration_cells
+    def calibration_cell_repeater
       @grip.calibration_cells_xy.each { |c| stamp_at 'X', c }
     end
 
