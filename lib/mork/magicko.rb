@@ -1,21 +1,46 @@
 require 'mini_magick'
+require 'open3'
 
 module Mork
   # @private
-  # Magicko: image management, done in two ways: 1) direct system calls to
+  # Magicko: low-level image management, done in two ways: 1) direct system calls to
   # imagemagick tools; 2) via the MiniMagick gem
   class Magicko
+    attr_reader :width
+    attr_reader :height
+
     def initialize(path)
       @path = path
       @cmd = []
+      # a density is required for processing PDF or other vector-based images;
+      # a default of 150 dpi seems sensible. It should not affect bitmaps.
+      density = 150
+      # inspect the source file
+      s1, s2, s3 = Open3.capture3 "identify -density #{density} -format '%w %h %m' #{path}"
+      if s3.success?
+        # parse the identify command output
+        w, h, @type = s1.split(' ')
+        @width  = w.to_i
+        @height = h.to_i
+        if @type.downcase == 'pdf'
+          # remember density for later use
+          @density = density
+        end
+      else
+        # Inspect the stderr and raise appropriate errors
+        case s2
+        when /No such file/
+          fail Errno::ENOENT
+        when /The file has been damaged/
+          fail IOError, 'Invalid image. File may have been damaged'
+        else
+          fail IOError, 'Unknown problem with image file'
+        end
+      end
     end
 
-    def width
-      img_size[0]
-    end
-
-    def height
-      img_size[1]
+    def valid?
+      @valid
     end
 
     # registered_bytes returns an array of the same size as the original image,
@@ -26,7 +51,9 @@ module Mork
       read_bytes "-distort Perspective '#{pps pp}'"
     end
 
-    # def rm_patch(coord, blur_factor, dilate_factor)
+    # Reading from the image file the bytes from one of the four corner
+    # squares encompassing each registration mark; the blur and dilation
+    # manipulations may prevent registration misalignments due to stray dark pixels
     def rm_patch(c, blr=0, dlt=0)
       b = blr==0 ? '' : " -blur #{blr*3}x#{blr}"
       d = dlt==0 ? '' : " -morphology Dilate Octagon:#{dlt}"
@@ -37,10 +64,6 @@ module Mork
     # Constructing MiniMagick commands
     ##################################
 
-    def write_registration(fname)
-
-    end
-
     def highlight(coords, rounded)
       @cmd << [:stroke, 'none']
       @cmd << [:fill, 'rgba(255, 255, 0, 0.3)']
@@ -49,7 +72,7 @@ module Mork
 
     def outline(coords, rounded)
       @cmd << [:stroke, 'green']
-      @cmd << [:strokewidth, '2']
+      @cmd << [:strokewidth, '3']
       @cmd << [:fill, 'none']
       coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
     end
@@ -104,6 +127,7 @@ module Mork
 
     def save(fname, reg)
       MiniMagick::Tool::Convert.new(whiny: false) do |img|
+        img << '-density' << @density if @density
         img << @path
         img.distort(:perspective, pps(reg)) if reg
         @cmd.each { |cmd| img.send(*cmd) }
@@ -120,7 +144,8 @@ module Mork
     # calling imagemagick and capturing the converted image
     # into an array of bytes
     def read_bytes(params=nil)
-      s = "|convert #{@path} #{params} gray:-"
+      d = @density ? "-density #{@density}" : nil
+      s = "|convert -depth 8 #{d} #{@path} #{params} gray:-"
       IO.read(s).unpack 'C*'
     end
 
@@ -135,12 +160,33 @@ module Mork
         pp[:bl][:x], pp[:bl][:y],     0, height
       ].join ' '
     end
-
-    def img_size
-      @img_size ||= begin
-        s = "|identify -format '%w,%h' #{@path}"
-        IO.read(s).split(',').map(&:to_i)
-      end
-    end
   end
 end
+
+# @pdf = File.extname(path).strip.downcase[1..-1] == 'pdf'
+# @pdf_den = 150 # dpi
+# get_info_and_test_sanity
+
+# def width
+#   img_size[0]
+# end
+
+# def height
+#   img_size[1]
+# end
+# if s1.downcase=='pdf'
+#   @density = 150
+#   @den_str = "-density #{@density}"
+# end
+
+# def img_size
+#   @img_size ||= begin
+#     s = "|identify -format '%w,%h' #{@density} #{@path}"
+#     IO.read(s).split(',').map(&:to_i)
+#   end
+# end
+
+# def parse_from_stdout(s1)
+#   w, h, t = s1.split ','
+#   return w.to_i, h.to_i, t
+# end

@@ -7,10 +7,6 @@ module Mork
     let(:co) { Coord.new 50}
     let(:pp) { { tl: {x: 10, y: 10}, tr: {x: 1000, y: 10}, bl: {x: 10, y: 1700}, br: {x: 1000, y: 1700}} }
 
-    it 'exists' do
-      expect(Magicko.new 1).to be_a Magicko
-    end
-
     describe '#width' do
       it 'returns the image width' do
         expect(ma.width).to eq sh.width

@@ -18,7 +18,6 @@ module Mork
     #   containing the parameters. See the README file for a full listing
     #   of the available parameters.
     def initialize(path, layout=nil)
-      raise IOError, "File '#{path}' not found" unless File.exists? path
       grom = GridOMR.new layout
       @mim = Mimage.new path, grom
     end

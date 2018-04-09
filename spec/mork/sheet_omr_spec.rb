@@ -3,170 +3,167 @@ require 'fileutils'
 
 module Mork
   describe SheetOMR do
-    context 'with a problematic sheet provided by Raffa' do
-      let(:img) { sample_img 'raffa-ige' }
-      let(:fn ) { File.basename img.image_path }
-      let(:omr) { SheetOMR.new img.image_path, img.grid_path }
-      describe 'working' do
-        it 'registers' do
-          expect(omr.valid?).to be_truthy
+    context 'catching source file problems' do
+      describe 'trying to process a non existing file' do
+        it 'throws a file-not-found error' do
+          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error Errno::ENOENT, 'No such file or directory'
         end
+      end
 
-        it 'returns the barcode' do
-          expect(omr.barcode).to eq 19294
-        end
-
-        it 'provides the marked choices' do
-          expect(omr.marked_choices[ 0] ).to eq [1]
-          expect(omr.marked_choices[59] ).to eq [4]
-        end
-
-        xit 'outlining a cell beyond nchoices' do
-          omr.overlay :outline, [[1,2], [], [0,1,2,3,4,5], [3]]
-          omr.save "spec/out/outline/some-#{fn}"
+      describe 'trying to process a corrupted file' do
+        it 'throws an IO error' do
+          fn = sample_img('corrupted-pdf').image_path
+          expect { SheetOMR.new fn}.to raise_error(IOError, 'Invalid image. File may have been damaged')
         end
       end
     end
 
-    context 'with a valid response sheet' do
+    context 'using John Doe’s reference sheet' do
       let(:img) { sample_img 'jdoe1' }
       let(:fn)  { File.basename(img.image_path) }
       let(:omr) { SheetOMR.new img.image_path, layout: img.grid_path }
-      describe '#new' do
-        it 'creates a SheetOMR object' do
-          expect(omr).to be_a SheetOMR
-        end
 
-        it 'raises an error if the provided path is invalid' do
-          expect { SheetOMR.new 'non_existing_file.jpg'}.to raise_error IOError
-        end
-      end
-
-      describe '#set_choices' do
-        it 'returns true if all goes well' do
-          expect(omr.set_choices([10])).to be_truthy
-        end
-      end
-
-      describe '#valid?' do
-        it 'registers correctly' do
-          expect(omr.valid?).to be_truthy
-        end
-      end
-
-      describe '#status' do
-        it 'returns the registration status for each of the four corners' do
-          expect(omr.status).to eq({ tl: :ok, tr: :ok, br: :ok, bl: :ok })
-        end
-      end
-
-      describe '#barcode' do
-        it 'returns the integer form of the barcode' do
-          expect(omr.barcode).to eq img.barcode_int
-        end
-      end
-
-      describe '#barcode_string' do
-        it 'returns the binary string version of the barcode' do
-          expect(omr.barcode_string).to eq img.barcode_str
-        end
-      end
-
-      describe '#marked?' do
-        it 'returns true if the given cell was marked, false otherwise' do
-          expect(omr.marked?   0, 0).to be_truthy
-          expect(omr.marked?   0, 1).to be_falsy
-          expect(omr.marked? 119, 4).to be_truthy
-          expect(omr.marked? 119, 3).to be_falsy
-        end
-      end
-
-      describe '#marked_choices' do
-        it 'returns an array of marked choices as position indexes' do
-          expect(omr.marked_choices ).to eq standard_mark_array(24)
-        end
-
-        let(:om2) { SheetOMR.new img.image_path, layout: img.grid_path }
-        it 'returns marked choices only for existing choice cells' do
-          om2.set_choices [5, 4, 3, 2, 1]
-          expect(om2.marked_choices).to eq [[0], [1], [2], [], []]
-        end
-      end
-
-      describe '#marked_letters' do
-        it 'returns an array of characters for the marked choices' do
-          expect(omr.marked_letters).to eq standard_mark_char_array(24)
-        end
-      end
-
-      it 'writes out markedness' do
-        mf = File.open('spec/out/text/marked.txt', 'w')
-        img.nitems.times do |q|
-          x = 5.times.map do |c|
-            omr.marked?(q,c) ? '1' : '0'
+      context 'object creation' do
+        describe '#new' do
+          it 'creates a SheetOMR object' do
+            expect(omr).to be_a SheetOMR
           end
-          mf.puts x.join(' ')
+
+          it 'registers the image correctly' do
+            expect(omr.valid?).to be_truthy
+          end
         end
-        mf.close
       end
 
-      context 'creating overlays' do
-        it 'registration highlighted' do
-          omr.save_registration "spec/out/registration/#{fn}"
+      context 'querying and modifying the object' do
+        describe '#status' do
+          it 'returns the valid (:ok) registration status for each corner' do
+            expect(omr.status).to eq({ tl: :ok, tr: :ok, br: :ok, bl: :ok })
+          end
         end
 
-        it 'highlights all choice cells' do
+        describe '#set_choices' do
+          it 'returns true if all goes well' do
+            expect(omr.set_choices([10])).to be_truthy
+          end
+
+          it 'raises an Argument error if the choices argument is invalid' do
+            expect { omr.set_choices('a string').to raise_error ArgumentError }
+          end
+        end
+      end
+
+      context 'analyzing the barcode' do
+        describe '#barcode' do
+          it 'returns the integer form of the barcode' do
+            expect(omr.barcode).to eq img.barcode_int
+          end
+        end
+
+        describe '#barcode_string' do
+          it 'returns the binary string version of the barcode' do
+            expect(omr.barcode_string).to eq img.barcode_str
+          end
+        end
+      end
+
+      context 'analyzing response cells' do
+        describe '#marked?' do
+          it 'returns true if the given cell was marked, false otherwise' do
+            expect(omr.marked?   0, 0).to be_truthy
+            expect(omr.marked?   0, 1).to be_falsy
+            expect(omr.marked? 119, 4).to be_truthy
+            expect(omr.marked? 119, 3).to be_falsy
+          end
+        end
+
+        describe '#marked_choices' do
+          it 'returns an array of marked choices as position indexes' do
+            expect(omr.marked_choices ).to eq standard_mark_array(24)
+          end
+
+          it 'returns marked choices only for existing choice cells' do
+            omr.set_choices [5, 4, 3, 2, 1]
+            expect(omr.marked_choices).to eq [[0], [1], [2], [], []]
+          end
+        end
+
+        describe '#marked_letters' do
+          it 'returns an array of characters for the marked choices' do
+            charr = img.mark_chars.split('').map { |c| [c] }
+            expect(omr.marked_letters).to eq charr
+          end
+        end
+      end
+
+      context 'creating overlays and saving resulting JPEGs' do
+        it 'highlights registration' do
+          omr.save_registration "spec/out/JD-registration.jpeg"
+        end
+
+        it 'highlights the barcode' do
+          omr.overlay :highlight, :barcode
+          omr.save "spec/out/JD-highlight-barcode.jpeg"
+        end
+
+        it 'highlights all requested choice cells' do
           omr.set_choices [5] * 32
           omr.overlay :highlight, :all
-          omr.save "spec/out/highlight/all-#{fn}"
+          omr.save "spec/out/JD-highlight-all.jpeg"
         end
 
         it 'highlights all possible choice cells' do
-          omr.set_choices [5] * 30
-            omr.overlay :highlight, :max
-          omr.save "spec/out/highlight/max-#{fn}"
+          omr.set_choices [5] * 30 # this will be ignored
+          omr.overlay :highlight, :max
+          omr.save "spec/out/JD-highlight-max.jpeg"
         end
 
         it 'highlights marked cells' do
           omr.overlay :highlight, :marked
-          omr.save "spec/out/highlight/marked-#{fn}"
+          omr.save "spec/out/JD-highlight-marked.jpeg"
+        end
+
+        it 'highlights marked cells (as default overlay)' do
+          omr.overlay :highlight
+          omr.save "spec/out/JD-highlight-marked-def.jpeg"
+        end
+
+        it 'highlights arbitrary cells' do
+          omr.overlay :highlight, [[1,2], [], [0,1,2,3,4], [3]]
+          omr.save "spec/out/JD-highlight-some.jpeg"
+        end
+
+        it 'highlights and crosses marked cells' do
+          omr.overlay :highlight
+          omr.overlay :check
+          omr.save "spec/out/JD-highlight-and-cross.jpeg"
         end
 
         it 'checks marked cells' do
-          omr.overlay :check, :marked
-          omr.save "spec/out/mark/#{fn}"
-        end
-
-        it 'checks the first 32 marked cells' do
-          omr.set_choices [5] * 32
-          omr.overlay :check, :marked
-          omr.save "spec/out/mark/part-#{fn}"
-        end
-
-        it 'outlines arbitrary cells' do
-          omr.overlay :outline, [[1,2], [], [0,1,2,3,4], [3]]
-          omr.save "spec/out/outline/some-#{fn}"
-        end
-
-        it 'outlines and crosses marked cells' do
-          omr.overlay :outline, standard_mark_array(24)
           omr.overlay :check
-          omr.save "spec/out/outline/#{fn}"
+          omr.save "spec/out/JD-check-marked.jpeg"
         end
 
-        it 'highlights the barcode' do
-          omr.overlay :outline, :barcode
-          omr.save "spec/out/barcode/#{fn}"
+        it 'outlines marked cells' do
+          omr.overlay :outline
+          omr.save "spec/out/JD-outline-marked.jpeg"
+        end
+      end
+
+      context 'requesting invalid responses and choices' do
+        it 'raises an ArgumentError if the maximum number of responses is exceeded' do
+          one_too_many = [[0]] * 121
+          expect { omr.overlay(:check, one_too_many)}.to raise_error(ArgumentError)
         end
 
-        it 'refuses to outline an out-of-bounds cell', focus: true do
-          omr.overlay :outline, [[5]]
-          omr.save "spec/out/outline/invalid-cell-#{fn}"
+        it 'raises an ArgumentError if the maximum number of choices is exceeded' do
+          one_too_many = [[5]]
+          expect { omr.overlay(:check, one_too_many)}.to raise_error(ArgumentError)
         end
       end
     end
 
-    context 'systematic tests', exclude: true do
+    context 'systematic tests' do
       let(:bila)  { 'CCEBEBCEEACCDCABDBEBCADEADDCCCACCACDBBDAECDDABDEEBCEEDCBAAADEEEEDCADEABCBDECCCCDDDCABBECAADADBBEEABA'.split '' }
       let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
       let(:bila1) { SheetOMR.new 'spec/samples/syst/bila1.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
@@ -195,43 +192,44 @@ module Mork
       let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
 
       it 'checks bila' do
-        expect(bila0.mark_char_array.flatten).to eq(bila)
-        expect(bila1.mark_char_array.flatten).to eq(bila)
-        expect(bila2.mark_char_array.flatten).to eq(bila)
-        expect(bila3.mark_char_array.flatten).to eq(bila)
-        expect(bila4.mark_char_array.flatten).to eq(bila)
+        expect(bila0.marked_letters.flatten).to eq(bila)
+        expect(bila1.marked_letters.flatten).to eq(bila)
+        expect(bila2.marked_letters.flatten).to eq(bila)
+        expect(bila3.marked_letters.flatten).to eq(bila)
+        expect(bila4.marked_letters.flatten).to eq(bila)
       end
 
       it 'checks dald' do
-        expect(dald0.mark_char_array.flatten).to eq(dald)
-        expect(dald1.mark_char_array.flatten).to eq(dald)
-        expect(dald2.mark_char_array.flatten).to eq(dald)
-        expect(dald3.mark_char_array.flatten).to eq(dald)
-        expect(dald4.mark_char_array.flatten).to eq(dald)
+        expect(dald0.marked_letters.flatten).to eq(dald)
+        expect(dald1.marked_letters.flatten).to eq(dald)
+        expect(dald2.marked_letters.flatten).to eq(dald)
+        expect(dald3.marked_letters.flatten).to eq(dald)
+        expect(dald4.marked_letters.flatten).to eq(dald)
       end
 
       it 'checks cost' do
-        expect(cost0.mark_char_array.flatten).to eq(cost)
-        expect(cost1.mark_char_array.flatten).to eq(cost)
-        expect(cost2.mark_char_array.flatten).to eq(cost)
-        expect(cost3.mark_char_array.flatten).to eq(cost)
-        expect(cost4.mark_char_array.flatten).to eq(cost)
+        expect(cost0.marked_letters.flatten).to eq(cost)
+        expect(cost1.marked_letters.flatten).to eq(cost)
+        expect(cost2.marked_letters.flatten).to eq(cost)
+        expect(cost3.marked_letters.flatten).to eq(cost)
+      end
+
+      it 'fails to register cost4 because the BR corner is too far' do
+        expect(cost4.status).to eq({tl: :ok, tr: :ok, br: :edgy, bl: :ok})
       end
 
       it 'checks bone' do
-        expect(bone0.mark_char_array.flatten).to eq(bone)
-        expect(bone1.mark_char_array.flatten).to eq(bone)
-        expect(bone2.mark_char_array.flatten).to eq(bone)
+        expect(bone0.marked_letters.flatten).to eq(bone)
+        expect(bone1.marked_letters.flatten).to eq(bone)
+        expect(bone2.marked_letters.flatten).to eq(bone)
       end
 
       it 'checks barr' do
-        expect(barr0.mark_char_array.flatten).to eq(barr)
-        expect(barr1.mark_char_array.flatten).to eq(barr)
-        expect(barr2.mark_char_array.flatten).to eq(barr)
+        expect(barr0.marked_letters.flatten).to eq(barr)
+        expect(barr1.marked_letters.flatten).to eq(barr)
+        expect(barr2.marked_letters.flatten).to eq(barr)
       end
-
     end
-
     # context "multi-page pdf" do
     #   before(:all) do
     #     @mlist = MimageList.new('spec/samples/two_pages.pdf')
@@ -266,3 +264,14 @@ module Mork
   end
 end
 
+
+# it 'writes out markedness' do
+#   mf = File.open('spec/out/text/marked.txt', 'w')
+#   img.nitems.times do |q|
+#     x = 5.times.map do |c|
+#       omr.marked?(q,c) ? '1' : '0'
+#     end
+#     mf.puts x.join(' ')
+#   end
+#   mf.close
+# end

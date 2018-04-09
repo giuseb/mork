@@ -8,11 +8,12 @@ module Mork
 
     attr_reader :rm
     attr_reader :choxq # choices per question
+    attr_reader :status
 
     def initialize(path, grom)
       @mack  = Magicko.new path
+
       @grom  = grom.set_page_size @mack.width, @mack.height
-      # @choxq = [grom.max_choices_per_question] * grom.max_questions
       @choxq = [(0...@grom.max_choices_per_question).to_a] * grom.max_questions
       @rm    = {} # registration mark centers
       @valid = register
@@ -113,6 +114,12 @@ module Mork
     end
 
     def choice_cell_areas(cells)
+      if cells.length > @grom.max_questions
+        fail ArgumentError, 'Maximum number of responses exceeded'
+      end
+      if cells.any? { |q| q.any? { |c| c >= @grom.max_choices_per_question } }
+        fail ArgumentError, 'Maximum number of choices exceeded'
+      end
       itemator(cells) { |q,c| @grom.choice_cell_area q, c }.flatten
     end
 
@@ -160,6 +167,7 @@ module Mork
     def rm_centroid_on(corner)
       c = @grom.rm_crop_area(corner)
       p = @mack.rm_patch(c, @grom.rm_blur, @grom.rm_dilate)
+      # byebug
       n = NPatch.new(p, c.w, c.h)
       cx, cy, sd = n.centroid
       st = (cx < 2) or (cy < 2) or (cy > c.h-2) or (cx > c.w-2)
