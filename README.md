@@ -29,15 +29,13 @@ Mork is a low-level library, and very much work in progress. It is not, and will
 
 ## Getting started
 
-First, make sure that ImageMagick is installed in your system. Typing `convert in a terminal shell should print out a long help message. If instead you get a “command not found”-like error, you will need to install ImageMagick.
+First, make sure that ImageMagick is installed in your system. Typing `convert` in a terminal shell should print out a long help message. If instead you get a “command not found”-like error, you will need to install ImageMagick.
 
-In OS X, `brew` is an excellent package manager:
+In macOS, `brew` is an excellent package manager:
 
     brew install imagemagick
 
-In a Debian-based Linux distro (e.g., Ubuntu) you would do:
-
-    sudo apt-get install imagemagick
+Please visit [ImageMagick’s home page](http://www.imagemagick.org/script/index.php) for instructions on how to install the software on other platforms.
 
 To create a small ruby project that uses Mork, `cd` into a directory of choice, then execute the following shell commands:
 
@@ -215,7 +213,7 @@ layout = {
 
 sheet = SheetPDF.new content, layout
 s.save 'sheet.pdf'
-system 'open sheet.pdf' # this works in OSX
+system 'open sheet.pdf' # this works in macOS
 ```
 
 ## Analyzing response sheets with `SheetOMR`
@@ -279,7 +277,7 @@ It is also possible to show the scoring graphically by applying an overlay on to
 ```ruby
 s.overlay :check, :marked
 s.save 'marked_choices.jpg'
-system 'open marked_choices.jpg' # this works in OSX
+system 'open marked_choices.jpg' # this works in macOS
 ```
 
 More than one overlay can be applied on a sheet. For example, in addition to checking the marked choice cells, the expected choices can be outlined to show correct vs. wrong responses:
@@ -289,7 +287,7 @@ correct = [[3], [0], [2], [1], [2]] # and so on...
 s.overlay :outline, correct
 s.overlay :check, :marked
 s.save 'marked_choices_and_outlines.jpg'
-system 'open marked_choices_and_outlines.jpg' # this works in OSX
+system 'open marked_choices_and_outlines.jpg' # this works in macOS
 ```
 
 Scoring can only be performed if the sheet gets properly registered, which in turn depends on the quality of the scanned image.
@@ -312,7 +310,7 @@ end
 Experiment with the following layout settings to improve sheet registration:
 
 ```yaml
-reg_marks:         
+reg_marks:
   radius:    3 # a bigger registration mark can sometimes help
   crop:     20 # make sure the registration mark lies comfortably
                # inside the crop area
