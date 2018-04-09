@@ -21,7 +21,7 @@ module Mork
       when String
         @params.deeper_merge! symbolize YAML.load_file(options)
       else
-        raise ArgumentError, "Invalid parameter in the Grid constructor: #{options.class.inspect}"
+        fail ArgumentError, "Invalid parameter in the Grid constructor: #{options.class.inspect}"
       end
     end
 

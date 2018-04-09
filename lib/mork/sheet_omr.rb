@@ -81,7 +81,7 @@ module Mork
       @mim.set_ch case choices
                   when Integer; @mim.choxq[0...choices]
                   when Array; choices
-                  else raise ArgumentError, 'Invalid choice set'
+                  else fail ArgumentError, 'Invalid choice set'
                   end
       true
     end

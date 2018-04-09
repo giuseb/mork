@@ -82,7 +82,7 @@ module Mork
               when Array
                 choice_cell_areas where
               else
-                raise ArgumentError, 'Invalid overlay argument “where”'
+                fail ArgumentError, 'Invalid overlay argument “where”'
               end
       round = where != :barcode
       @mack.send what, areas, round

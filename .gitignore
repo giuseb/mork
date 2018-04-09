@@ -11,3 +11,4 @@ tmp/*
 .rspec
 .byebug_history
 doc
+spec/out
