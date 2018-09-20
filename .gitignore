@@ -12,3 +12,4 @@ tmp/*
 .byebug_history
 doc
 spec/out
+mork.sublime-workspace
