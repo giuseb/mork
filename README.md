@@ -216,6 +216,12 @@ s.save 'sheet.pdf'
 system 'open sheet.pdf' # this works in macOS
 ```
 
+In addition to `content` and `layout`, and optional boolean argument (`duplex`) instructs Mork to add a blank page after each response sheet, which allows to obtain individual response sheets when using double-sided printing:
+
+```ruby
+s = SheetPDF.new content, layout, true
+```
+
 ## Analyzing response sheets with `SheetOMR`
 
 ### Preparing a `SheetOMR` object

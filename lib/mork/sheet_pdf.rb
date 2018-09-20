@@ -7,7 +7,7 @@ module Mork
   # See the README file for usage
   class SheetPDF < Prawn::Document
     include Extensions
-    def initialize(content, layout=nil)
+    def initialize(content, layout=nil, duplex=false)
       @content =
         case content
         when Array; content
@@ -24,6 +24,7 @@ module Mork
         else raise ArgumentError, 'Invalid initialization parameter'
         end
       super my_page_params
+      @duplex = duplex
       process
     end
 
@@ -65,17 +66,20 @@ module Mork
         unless equal_choice_number?
           questions_and_choices ch_len[i]
         end
+        start_new_page if @duplex
       end
     end
 
     def make_repeaters
+      pages = @duplex ? :odd : :all
+
       if equal_choice_number?
-        repeat(:all) do
+        repeat(pages) do
           questions_and_choices ch_len.first
         end
       end
 
-      repeat(:all) do
+      repeat(pages) do
         calibration_cell_repeater
         registration_mark_repeater
       end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Mork
-  describe SheetPDF do
+  describe SheetPDF, focus: true do
     let(:content) {
       {
         barcode: 183251937962,
@@ -111,6 +111,13 @@ module Mork
         content.merge({ header: {title: "Test #{x+1}"}, barcode: x})
       end
       SheetPDF.new(c).save dest('p20')
+    end
+
+    it 'creates blank pages for duplex printing' do
+      c = 5.times.map do |x|
+        content.merge({ header: {title: "Test #{x+1}"}, barcode: x})
+      end
+      SheetPDF.new(c, nil, true).save dest('duplex5')
     end
 
     it 'creates a PDF with the maximum possible choice cells if none are specified' do
