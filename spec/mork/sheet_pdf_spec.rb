@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Mork
-  describe SheetPDF, focus: true do
+  describe SheetPDF do
     let(:content) {
       {
         barcode: 183251937962,

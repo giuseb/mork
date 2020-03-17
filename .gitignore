@@ -13,3 +13,4 @@ tmp/*
 doc
 spec/out
 mork.sublime-workspace
+.DS_store
