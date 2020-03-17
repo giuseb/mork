@@ -19,15 +19,15 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # dependencies:
-  s.add_dependency 'narray' #,      '~> 0.6'
-  s.add_dependency 'mini_magick' #, '~> 4.8'
-  s.add_dependency 'prawn' #,       '~> 2.2'
-  s.add_dependency 'deep_merge' #,  '~> 1.2'
-  s.add_development_dependency 'rake' #,          '~>0'
-  s.add_development_dependency 'rspec' #,         '~>0'
-  s.add_development_dependency 'guard' #,         '~>0'
-  s.add_development_dependency 'guard-rspec' #,   '~>0'
-  s.add_development_dependency 'guard-shell' #,   '~>0'
-  s.add_development_dependency 'awesome_print' #, '~>0'
-  s.add_development_dependency 'byebug' #,        '~>0'
+  s.add_dependency 'narray' ,      '~> 0.6'
+  s.add_dependency 'mini_magick' , '~> 4.10'
+  s.add_dependency 'prawn' ,       '~> 2.2'
+  s.add_dependency 'deep_merge' ,  '~> 1.2'
+  s.add_development_dependency 'rake' ,          '~>13.0'
+  s.add_development_dependency 'rspec' ,         '~>3.9'
+  s.add_development_dependency 'guard' ,         '~>2.16'
+  s.add_development_dependency 'guard-rspec' ,   '~>4.7'
+  s.add_development_dependency 'guard-shell' ,   '~>0.7'
+  s.add_development_dependency 'awesome_print' , '~>1.8'
+  s.add_development_dependency 'byebug' ,        '~>11.1'
 end
