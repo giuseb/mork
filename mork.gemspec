@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{Optical mark recognition of multiple-choice tests and surveys. Low-level ruby library to generate response sheets in PDF form and to automatically score manually filled-out forms.}
   s.required_ruby_version = '>= 2.4.0'
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^spec/}) }
   s.test_files    = `git ls-files -- {spec}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
