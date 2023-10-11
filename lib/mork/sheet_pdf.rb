@@ -13,7 +13,7 @@ module Mork
         when Array; content
         when Hash; [content]
         when String
-          fail Errno::ENOENT unless File.exists? content
+          fail Errno::ENOENT unless File.exist? content
           symbolize YAML.load_file(content)
         end
       @grip =

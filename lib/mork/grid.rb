@@ -10,7 +10,7 @@ module Mork
     # Calling Grid.new without arguments creates the default boilerplate Grid
     def initialize(options=nil)
       @params = default_grid
-      if File.exists?('layout.yml')
+      if File.exist?('layout.yml')
         @params.deeper_merge! symbolize YAML.load_file('layout.yml')
       end
       case options
