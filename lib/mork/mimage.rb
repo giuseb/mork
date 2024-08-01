@@ -51,12 +51,14 @@ module Mork
     end
 
     def marked
-      @marked_choices ||= begin
-        choice_mean_darkness.map do |cho|
-          [].tap do |choices|
-            cho.map.with_index do |drk, c|
-              choices << c if drk < choice_threshold
-            end
+      @marked_choices ||=
+        choice_mean_darkness
+          # We use the unmarked X cells to compute the reference darkness for each row
+          .zip(@grom.calibration_cell_areas.map { |c| reg_pixels.average c }.cycle)
+          .map do |cho, ref|
+        [].tap do |choices|
+          cho.map.with_index do |drk, c|
+            choices << c if drk < [ref * 0.95, choice_threshold].min
           end
         end
       end

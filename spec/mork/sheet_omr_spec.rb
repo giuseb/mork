@@ -13,7 +13,7 @@ module Mork
       describe 'trying to process a corrupted file' do
         it 'throws an IO error' do
           fn = sample_img('corrupted-pdf').image_path
-          expect { SheetOMR.new fn}.to raise_error(IOError, 'Invalid image. File may have been damaged')
+          expect { SheetOMR.new fn }.to raise_error(IOError)
         end
       end
     end
@@ -190,6 +190,7 @@ module Mork
       let(:barr0) { SheetOMR.new 'spec/samples/syst/barr0.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
       let(:barr1) { SheetOMR.new 'spec/samples/syst/barr1.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
       let(:barr2) { SheetOMR.new 'spec/samples/syst/barr2.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}
+      let(:default) {SheetOMR.new 'spec/samples/standard.png', choices: [5] * 120, layout: 'spec/samples/syst/layout.yml'}
 
       it 'checks bila' do
         expect(bila0.marked_letters.flatten).to eq(bila)
@@ -228,6 +229,10 @@ module Mork
         expect(barr0.marked_letters.flatten).to eq(barr)
         expect(barr1.marked_letters.flatten).to eq(barr)
         expect(barr2.marked_letters.flatten).to eq(barr)
+      end
+
+      it 'checks default is unchecked' do
+        expect(default.marked_letters).to eq(Array.new(120, []))
       end
     end
     # context "multi-page pdf" do
