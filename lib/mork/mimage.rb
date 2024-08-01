@@ -6,7 +6,7 @@ module Mork
   class Mimage
     include Extensions
 
-    attr_reader :rm
+    attr_reader :reg_marks
     attr_reader :choxq # choices per question
     attr_reader :status
 
@@ -15,7 +15,7 @@ module Mork
 
       @grom  = grom.set_page_size @mack.width, @mack.height
       @choxq = [(0...@grom.max_choices_per_question).to_a] * grom.max_questions
-      @rm    = {} # registration mark centers
+      @reg_marks    = {} # registration mark centers
       @valid = register
     end
 
@@ -24,15 +24,15 @@ module Mork
     end
 
     def low_contrast?
-      @rm.any? { |k,v| v < @grom.reg_min_contrast }
+      @reg_marks.any? { |k,v| v < @grom.reg_min_contrast }
     end
 
     def status
       {
-        tl: @rm[:tl][:status],
-        tr: @rm[:tr][:status],
-        br: @rm[:br][:status],
-        bl: @rm[:bl][:status]
+        tl: @reg_marks[:tl][:status],
+        tr: @reg_marks[:tr][:status],
+        br: @reg_marks[:br][:status],
+        bl: @reg_marks[:bl][:status]
       }
     end
 
@@ -42,6 +42,8 @@ module Mork
       @marked_choices = @choice_mean_darkness = nil
     end
 
+
+    # @return [Array<Array<Float>>]
     def choice_mean_darkness
       @choice_mean_darkness ||= begin
         itemator(@choxq) { |q,c| reg_pixels.average @grom.choice_cell_area(q, c) }
@@ -93,12 +95,12 @@ module Mork
     # if no file name is given, image is processed in-place;
     # if the 2nd arg is false, then stretching is not applied
     def save(fname=nil, reg=true)
-      pp = reg ? @rm : nil
+      pp = reg ? @reg_marks : nil
       @mack.save fname, pp
     end
 
     def save_registration(fname)
-      each_corner { |c| @mack.plus @rm[c][:x], @rm[c][:y], 30 }
+      each_corner { |c| @mack.plus @reg_marks[c][:x], @reg_marks[c][:y], 30 }
       each_corner { |c| @mack.outline [@grom.rm_crop_area(c)], false }
       @mack.save fname, nil
     end
@@ -152,14 +154,14 @@ module Mork
     end
 
     def reg_pixels
-      @reg_pixels ||= NPatch.new @mack.registered_bytes(@rm), @mack.width, @mack.height
+      @reg_pixels ||= NPatch.new @mack.registered_bytes(@reg_marks), @mack.width, @mack.height
     end
 
     # find the XY coordinates of the 4 registration marks,
     # plus the stdev of the search area as quality control
     def register
-      each_corner { |c| @rm[c] = rm_centroid_on c }
-      @rm.all? { |k,v| v[:status] == :ok }
+      each_corner { |c| @reg_marks[c] = rm_centroid_on c }
+      @reg_marks.all? { |k,v| v[:status] == :ok }
     end
 
     # returns the centroid of the dark region within the given area

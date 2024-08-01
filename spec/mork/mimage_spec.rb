@@ -27,7 +27,7 @@ module Mork
 
         it 'should return the correct regmark coordinates' do
           [:tl, :tr, :br, :bl].each do |corner|
-            crn = mim.rm[corner]
+            crn = mim.reg_marks[corner]
             expect(crn[:x]).to be_within(2).of(img.send(corner)[0])
             expect(crn[:x]).to be_within(2).of(img.send(corner)[0])
           end
