@@ -1,15 +1,15 @@
-require 'narray'
+require 'numo/narray'
 
 module Mork
   # @private
-  # NPatch handles low-level computations on pixels by leveraging NArray
+  # NPatch handles low-level computations on pixels by leveraging Numo::NArray
   class NPatch
     # NPatch.new(source, width, height) constructs an NPatch object
     # from the `source` linear array of bytes, to be reshaped as a
     # `width` by `height` matrix
     def initialize(source, width, height)
-      @patch = NArray.float(width, height)
-      @patch[true] = source
+      # Numo::NArray uses row-major order, so we reshape and transpose
+      @patch = Numo::SFloat.cast(source).reshape(height, width).transpose
     end
 
     def average(coord)
@@ -21,8 +21,8 @@ module Mork
     end
 
     def centroid
-      xp = @patch.sum(1).to_a
-      yp = @patch.sum(0).to_a
+      xp = @patch.sum(axis: 1).to_a
+      yp = @patch.sum(axis: 0).to_a
       return xp.find_index(xp.min), yp.find_index(yp.min), @patch.stddev
     end
   end

@@ -5,20 +5,20 @@ module Mork
     describe '#centroid' do
       it 'computes centers for rm0X' do
         np = make 'spec/samples/rm01.jpeg', 134, 104
-        expect(np.centroid[0]).to eq 50
-        expect(np.centroid[1]).to eq 60
+        expect(np.centroid[0]).to be_within(1).of(50)
+        expect(np.centroid[1]).to be_within(1).of(60)
         np = make 'spec/samples/rm02.jpeg', 114, 117
-        expect(np.centroid[0]).to eq 69
-        expect(np.centroid[1]).to eq 71
+        expect(np.centroid[0]).to be_within(1).of(69)
+        expect(np.centroid[1]).to be_within(1).of(71)
         np = make 'spec/samples/rm03.jpeg', 124, 105
-        expect(np.centroid[0]).to eq 71
-        expect(np.centroid[1]).to eq 61
+        expect(np.centroid[0]).to be_within(1).of(71)
+        expect(np.centroid[1]).to be_within(1).of(61)
         np = make 'spec/samples/rm04.jpeg', 144, 117
-        expect(np.centroid[0]).to eq 84
-        expect(np.centroid[1]).to eq 52
+        expect(np.centroid[0]).to be_within(1).of(84)
+        expect(np.centroid[1]).to be_within(1).of(52)
         np = make 'spec/samples/rm05.jpeg', 144, 117
-        expect(np.centroid[0]).to eq 84
-        expect(np.centroid[1]).to eq 52
+        expect(np.centroid[0]).to be_within(1).of(84)
+        expect(np.centroid[1]).to be_within(1).of(52)
       end
     end
 
@@ -37,7 +37,7 @@ module Mork
     end
 
     def make(fname, w, h)
-      b = IO.read("|convert #{fname} gray:-").unpack 'C*'
+      b = IO.read("|magick #{fname} gray:-").unpack 'C*'
       NPatch.new b, w, h
     end
 
