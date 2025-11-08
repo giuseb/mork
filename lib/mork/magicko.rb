@@ -145,7 +145,7 @@ module Mork
     # into an array of bytes
     def read_bytes(params=nil)
       d = @density ? "-density #{@density}" : nil
-      s = "|convert -depth 8 #{d} #{@path} #{params} gray:-"
+      s = "|magick -depth 8 #{d} #{@path} #{params} gray:-"
       IO.read(s).unpack 'C*'
     end
 

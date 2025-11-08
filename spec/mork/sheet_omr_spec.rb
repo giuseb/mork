@@ -13,7 +13,7 @@ module Mork
       describe 'trying to process a corrupted file' do
         it 'throws an IO error' do
           fn = sample_img('corrupted-pdf').image_path
-          expect { SheetOMR.new fn}.to raise_error(IOError, 'Invalid image. File may have been damaged')
+          expect { SheetOMR.new fn}.to raise_error(IOError, 'Unknown problem with image file')
         end
       end
     end
