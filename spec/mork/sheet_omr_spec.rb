@@ -163,6 +163,152 @@ module Mork
       end
     end
 
+    context 'using Cost3' do
+      let(:img) { sample_img 'cost3' }
+      let(:fn)  { File.basename(img.image_path) }
+      let(:omr) { SheetOMR.new img.image_path, layout: img.grid_path }
+
+      context 'object creation' do
+        describe '#new' do
+          it 'creates a SheetOMR object' do
+            expect(omr).to be_a SheetOMR
+          end
+
+          it 'registers the image correctly' do
+            expect(omr.valid?).to be_truthy
+          end
+        end
+      end
+      context 'querying and modifying the object' do
+        describe '#status' do
+          it 'returns the valid (:ok) registration status for each corner' do
+            expect(omr.status).to eq({ tl: :ok, tr: :ok, br: :ok, bl: :ok })
+          end
+        end
+
+        describe '#set_choices' do
+          it 'returns true if all goes well' do
+            expect(omr.set_choices([10])).to be_truthy
+          end
+
+          it 'raises an Argument error if the choices argument is invalid' do
+            expect { omr.set_choices('a string').to raise_error ArgumentError }
+          end
+        end
+      end
+
+      context 'analyzing the barcode' do
+        describe '#barcode' do
+          it 'returns the integer form of the barcode' do
+            expect(omr.barcode).to eq img.barcode_int
+          end
+        end
+
+        describe '#barcode_string' do
+          it 'returns the binary string version of the barcode' do
+            expect(omr.barcode_string).to eq img.barcode_str
+          end
+        end
+      end
+
+      context 'analyzing response cells' do
+        describe '#marked?' do
+          it 'returns true if the given cell was marked, false otherwise' do
+            expect(omr.marked?   0, 0).to be_truthy
+            expect(omr.marked?   0, 1).to be_falsy
+            expect(omr.marked?  99, 2).to be_truthy
+            expect(omr.marked?  99, 3).to be_falsy
+          end
+        end
+
+        describe '#marked_choices' do
+          it 'returns an array of marked choices as position indexes' do
+            omr.set_choices [5] * 100
+            expect(omr.marked_choices ).to eq [[0],[1],[1],[3],[3],[1],[0],[4],[0],[4],[1],[0],[0],[3],[4],[0],[0],[4],[2],[1],[2],[3],[1],[1],[3],[0],[1],[0],[1],[0],[3],[4],[4],[2],[2],[0],[2],[1],[2],[0],[4],[3],[3],[0],[4],[1],[4],[0],[1],[1],[2],[3],[0],[1],[4],[2],[0],[0],[2],[4],[4],[4],[1],[0],[3],[4],[2],[1],[1],[4],[0],[0],[3],[1],[1],[1],[4],[0],[1],[3],[0],[4],[1],[3],[4],[4],[0],[1],[1],[0],[1],[4],[1],[4],[3],[3],[0],[4],[4],[2]]
+          end
+
+          it 'returns marked choices only for existing choice cells' do
+            omr.set_choices [5, 4, 3, 2, 1]
+            expect(omr.marked_choices).to eq [[0], [1], [1], [], []]
+          end
+        end
+
+        describe '#marked_letters' do
+          it 'returns an array of characters for the marked choices' do
+            omr.set_choices [5] * 100
+            charr = img.mark_chars.split('').map { |c| [c] }
+            expect(omr.marked_letters).to eq charr
+          end
+        end
+      end
+
+      context 'creating overlays and saving resulting JPEGs' do
+        it 'highlights registration' do
+          omr.save_registration "spec/out/CG-registration.jpeg"
+        end
+
+        it 'highlights the barcode' do
+          omr.overlay :highlight, :barcode
+          omr.save "spec/out/CG-highlight-barcode.jpeg"
+        end
+
+        it 'highlights all requested choice cells' do
+          omr.set_choices [5] * 32
+          omr.overlay :highlight, :all
+          omr.save "spec/out/CG-highlight-all.jpeg"
+        end
+
+        it 'highlights all possible choice cells' do
+          omr.set_choices [5] * 30 # this will be ignored
+          omr.overlay :highlight, :max
+          omr.save "spec/out/CG-highlight-max.jpeg"
+        end
+
+        it 'highlights marked cells' do
+          omr.overlay :highlight, :marked
+          omr.save "spec/out/CG-highlight-marked.jpeg"
+        end
+
+        it 'highlights marked cells (as default overlay)' do
+          omr.overlay :highlight
+          omr.save "spec/out/CG-highlight-marked-def.jpeg"
+        end
+
+        it 'highlights arbitrary cells' do
+          omr.overlay :highlight, [[1,2], [], [0,1,2,3,4], [3]]
+          omr.save "spec/out/CG-highlight-some.jpeg"
+        end
+
+        it 'highlights and crosses marked cells' do
+          omr.overlay :highlight
+          omr.overlay :check
+          omr.save "spec/out/CG-highlight-and-cross.jpeg"
+        end
+
+        it 'checks marked cells' do
+          omr.overlay :check
+          omr.save "spec/out/CG-check-marked.jpeg"
+        end
+
+        it 'outlines marked cells' do
+          omr.overlay :outline
+          omr.save "spec/out/CG-outline-marked.jpeg"
+        end
+      end
+
+      context 'requesting invalid responses and choices' do
+        it 'raises an ArgumentError if the maximum number of responses is exceeded' do
+          one_too_many = [[0]] * 121
+          expect { omr.overlay(:check, one_too_many)}.to raise_error(ArgumentError)
+        end
+
+        it 'raises an ArgumentError if the maximum number of choices is exceeded' do
+          one_too_many = [[5]]
+          expect { omr.overlay(:check, one_too_many)}.to raise_error(ArgumentError)
+        end
+      end
+    end
+
     context 'systematic tests' do
       let(:bila)  { 'CCEBEBCEEACCDCABDBEBCADEADDCCCACCACDBBDAECDDABDEEBCEEDCBAAADEEEEDCADEABCBDECCCCDDDCABBECAADADBBEEABA'.split '' }
       let(:bila0) { SheetOMR.new 'spec/samples/syst/bila0.jpg', choices: [5]*100, layout: 'spec/samples/syst/layout.yml'}

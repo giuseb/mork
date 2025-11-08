@@ -1,0 +1,58 @@
+page_size:
+  width:   210
+  height:  297
+reg_marks:
+  margin:   10
+  radius:    3
+  crop:     20
+  offset:    3
+  blur:      2
+  dilate:    5
+header:
+  name:
+    top:     5
+    left:   15
+    width: 160
+    height:  7
+    size:   14
+  title:
+    top:    15
+    left:   15
+    width: 160
+    height: 12
+    size:   12
+  code:
+    top:    35
+    left:  130
+    width:  57
+    height: 10
+    size:   14
+    align: right
+  signature:
+    top:    30
+    left:   15
+    width: 120
+    height: 15
+    size:    7
+    box:  true
+items:
+  # threshold:     0.75
+  top:          55
+  left:         11
+  columns:       4
+  column_width: 44
+  rows:         30
+  x_spacing:     7
+  y_spacing:     7
+  cell_width:    6
+  cell_height:   5
+  max_cells:     5
+  font_size:     9
+  number_width:  8
+  number_margin: 2
+barcode:
+  bits:   40
+  left:   15
+  width:   3
+  height:  2.5
+  spacing: 4

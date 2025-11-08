@@ -14,6 +14,22 @@ jdoe1:
   br:          [1178, 1704]
   bl:          [55, 1702]
 
+cost3:
+  image_path:  spec/samples/cost/cost3.jpg
+  grid_path:   spec/samples/cost/layout.yml
+  nchoices:    5
+  nitems:      100
+  barcode_int: 11886
+  barcode_str: '00000000000000000000000010111001101110'
+  width:       1240
+  height:      1754
+  mark_array:  [[0],[1],[1],[3],[3],[1],[0],[4],[0],[4],[1],[0],[0],[3],[4],[0],[0],[4],[2],[1],[2],[3],[1],[1],[3],[0],[1],[0],[1],[0],[3],[4],[4],[2],[2],[0],[2],[1],[2],[0],[4],[3],[3],[0],[4],[1],[4],[0],[1],[1],[2],[3],[0],[1],[4],[2],[0],[0],[2],[4],[4],[4],[1],[0],[3],[4],[2],[1],[1],[4],[0],[0],[3],[1],[1],[1],[4],[0],[1],[3],[0],[4],[1],[3],[4],[4],[0],[1],[1],[0],[1],[4],[1],[4],[3],[3],[0],[4],[4],[2]]
+  mark_chars:  'ABBDDBAEAEBAADEAAECBCDBBDABABADEECCACBCAEDDAEBEABBCDABECAACEEEBADECBBEAADBBBEABDAEBDEEABBABEBEDDAEEC'
+  tl:          [63, 67]
+  tr:          [1182, 68]
+  br:          [1178, 1704]
+  bl:          [55, 1702]
+
 reg-mark:
   image_path: spec/samples/reg_mark.jpg
   centroid-x: 92

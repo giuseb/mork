@@ -145,8 +145,13 @@ module Mork
     # into an array of bytes
     def read_bytes(params=nil)
       d = @density ? "-density #{@density}" : nil
-      s = "|magick -depth 8 #{d} #{@path} #{params} gray:-"
-      IO.read(s).unpack 'C*'
+      cmd = "magick -depth 8 #{d} #{@path} #{params} gray:-"
+      stdout, stderr, status = Open3.capture3(cmd)
+      if status.success?
+        stdout.unpack('C*')
+      else
+        fail IOError, "ImageMagick command failed: #{stderr}"
+      end
     end
 
     # perspective points: brings the found registration area centers to the
