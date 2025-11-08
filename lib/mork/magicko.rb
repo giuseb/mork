@@ -126,7 +126,7 @@ module Mork
     end
 
     def save(fname, reg)
-      MiniMagick::Tool::Convert.new(whiny: false) do |img|
+      MiniMagick.convert do |img|
         img << '-density' << @density if @density
         img << @path
         img.distort(:perspective, pps(reg)) if reg

@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/giuseb/mork'
   s.summary     = %q{Optical mark recognition of multiple-choice tests and surveys}
   s.description = %q{Optical mark recognition of multiple-choice tests and surveys. Low-level ruby library to generate response sheets in PDF form and to automatically score manually filled-out forms.}
-  s.required_ruby_version = '>= 3.4.0'
+  s.required_ruby_version = '>= 3.3.0'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec}/*`.split("\n")
@@ -20,14 +20,14 @@ Gem::Specification.new do |s|
 
   # dependencies:
   s.add_dependency 'numo-narray' , '~> 0.9'
-  s.add_dependency 'mini_magick' , '~> 4.10'
-  s.add_dependency 'prawn' ,       '~> 2.2'
+  s.add_dependency 'mini_magick' , '~> 5.0'
+  s.add_dependency 'prawn' ,       '~> 2.5'
   s.add_dependency 'deep_merge' ,  '~> 1.2'
-  s.add_development_dependency 'rake' ,          '~>13.0'
-  s.add_development_dependency 'rspec' ,         '~>3.9'
-  s.add_development_dependency 'guard' ,         '~>2.16'
-  s.add_development_dependency 'guard-rspec' ,   '~>4.7'
-  s.add_development_dependency 'guard-shell' ,   '~>0.7'
-  s.add_development_dependency 'awesome_print' , '~>1.8'
-  s.add_development_dependency 'byebug' ,        '~>11.1'
+  s.add_development_dependency 'rake' ,          '~> 13.3'
+  s.add_development_dependency 'rspec' ,         '~> 3.13'
+  s.add_development_dependency 'guard' ,         '~> 2.19'
+  s.add_development_dependency 'guard-rspec' ,   '~> 4.7'
+  s.add_development_dependency 'guard-shell' ,   '~> 0.7'
+  s.add_development_dependency 'awesome_print' , '~> 1.9'
+  s.add_development_dependency 'byebug' ,        '~> 12.0'
 end
