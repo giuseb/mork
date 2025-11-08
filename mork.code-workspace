@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "mysqlOptions": {
+          "authProtocol": "default"
+        },
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 3306,
+        "driver": "MySQL",
+        "name": "HGuide",
+        "database": "hguide_development",
+        "username": "root",
+        "password": ""
+      }
+    ]
+  }
+}
