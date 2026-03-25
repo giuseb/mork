@@ -38,5 +38,17 @@ module Mork
         expect(ma.registered_bytes(pp).length).to eq sh.height*sh.width
       end
     end
+
+    describe 'overlay stroke width' do
+      it 'defaults to the legacy 3-pixel width' do
+        expect(ma.overlay_stroke_width).to eq 3
+      end
+
+      it 'uses the configured width for green outlines' do
+        ma.overlay_stroke_width = 6
+        ma.outline [co], false
+        expect(ma.instance_variable_get(:@cmd)).to include([:strokewidth, 6])
+      end
+    end
   end
 end

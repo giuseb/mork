@@ -5,6 +5,8 @@ require 'deep_merge/rails_compat'
 module Mork
   # @private
   class GridOMR < Grid
+    OVERLAY_STROKE_WIDTH_MM = 0.5
+
     def initialize(options=nil)
       super options
     end
@@ -13,6 +15,10 @@ module Mork
       @px = width.to_f
       @py = height.to_f
       self
+    end
+
+    def overlay_stroke_width_px
+      [(pixels_per_unit * OVERLAY_STROKE_WIDTH_MM).round, 1].max
     end
 
     def barcode_areas(bits)
@@ -61,6 +67,7 @@ module Mork
 
     def cx()    @px / reg_frame_width  end
     def cy()    @py / reg_frame_height end
+    def pixels_per_unit() (ppu_x + ppu_y) / 2.0 end
     def ppu_x() @px / page_width       end
     def ppu_y() @py / page_height      end
 

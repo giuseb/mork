@@ -163,6 +163,47 @@ module Mork
       @mim.overlay what, where
     end
 
+    # Applies correctness-aware overlays to the image using an answer key.
+    #
+    # Correct responses receive a green outline on the marked cell. Incorrect
+    # responses receive a red outline on the expected cell and a red cross on
+    # the given cell. Blank or invalid responses receive only the red outline
+    # on the expected cell.
+    #
+    # @param correct_choices [Array<Integer, Array<Integer>, nil>] one entry per
+    #   question. Each entry can be an integer choice index, a 1-element array
+    #   containing that index, or nil to skip that question.
+    # @param marked [Symbol] `:unique` treats multi-marked responses as invalid
+    #   and does not cross them out; `:all` crosses all marked cells for
+    #   incorrect responses.
+    def overlay_corrections(correct_choices, marked: :unique)
+      return if not_registered
+
+      expected = normalize_correct_choices(correct_choices)
+      actual = marked_responses(marked)
+
+      green_outlines = Array.new(expected.length) { [] }
+      red_outlines = Array.new(expected.length) { [] }
+      red_crosses = Array.new(expected.length) { [] }
+
+      expected.each_with_index do |choice, question|
+        next if choice.nil?
+
+        marked_cells = actual[question]
+        if marked_cells == [choice]
+          green_outlines[question] = [choice]
+          next
+        end
+
+        red_outlines[question] = [choice]
+        red_crosses[question] = marked_cells if marked_cells.any?
+      end
+
+      @mim.overlay :outline_green, green_outlines
+      @mim.overlay :outline_red, red_outlines
+      @mim.overlay :check_red, red_crosses
+    end
+
     # Saves a copy of the source image after registration;
     # the output image will also contain any previously applied overlays.
     #
@@ -186,6 +227,53 @@ module Mork
     # ============================================================#
     private                                                       #
     # ============================================================#
+
+    def normalize_correct_choices(correct_choices)
+      unless correct_choices.is_a?(Array)
+        fail ArgumentError, 'Correct choices must be an array'
+      end
+
+      if correct_choices.length != @mim.choxq.length
+        fail ArgumentError, 'Correct choices must match the configured number of questions'
+      end
+
+      correct_choices.map.with_index do |choice, question|
+        normalized =
+          case choice
+          when nil
+            nil
+          when Integer
+            choice
+          when Array
+            if choice.length > 1
+              fail ArgumentError, 'Each question supports a single correct choice'
+            end
+            choice.first
+          else
+            fail ArgumentError, 'Correct choices must contain integers, 1-element arrays, or nil'
+          end
+
+        next if normalized.nil?
+
+        max_choice = @mim.choxq[question].length
+        if normalized.negative? || normalized >= max_choice
+          fail ArgumentError, 'Correct choice exceeds the configured number of choices'
+        end
+
+        normalized
+      end
+    end
+
+    def marked_responses(mode)
+      case mode
+      when :unique
+        marked_choices.map { |choices| choices.length == 1 ? choices : [] }
+      when :all
+        marked_choices
+      else
+        fail ArgumentError, 'Invalid marked argument'
+      end
+    end
 
     def not_registered
       unless valid?

@@ -56,6 +56,20 @@ module Mork
       end
     end
 
+    describe '#overlay_stroke_width_px' do
+      it 'keeps the default visual width on the reference scan' do
+        grom = GridOMR.new 'spec/samples/jdoe/layout.yml'
+        grom.set_page_size 1240, 1754
+        expect(grom.overlay_stroke_width_px).to eq 3
+      end
+
+      it 'scales with scan resolution' do
+        grom = GridOMR.new 'spec/samples/jdoe/layout.yml'
+        grom.set_page_size 2480, 3508
+        expect(grom.overlay_stroke_width_px).to eq 6
+      end
+    end
+
     describe '#paper_white_area' do
       it 'returns the coordinates of the white area used for barcode calibration' do
         expect(@grom.paper_white_area).to have_coords(93, 2260, 25, 21)

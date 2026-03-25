@@ -8,10 +8,12 @@ module Mork
   class Magicko
     attr_reader :width
     attr_reader :height
+    attr_reader :overlay_stroke_width
 
     def initialize(path)
       @path = path
       @cmd = []
+      @overlay_stroke_width = 3
       # a density is required for processing PDF or other vector-based images;
       # a default of 150 dpi seems sensible. It should not affect bitmaps.
       density = 150
@@ -37,6 +39,10 @@ module Mork
           fail IOError, 'Unknown problem with image file'
         end
       end
+    end
+
+    def overlay_stroke_width=(width)
+      @overlay_stroke_width = [width.to_i, 1].max
     end
 
     def valid?
@@ -71,14 +77,36 @@ module Mork
     end
 
     def outline(coords, rounded)
-      @cmd << [:stroke, 'green']
-      @cmd << [:strokewidth, '3']
+      outline_with_color(coords, rounded, 'green')
+    end
+
+    def outline_green(coords, rounded)
+      outline_with_color(coords, rounded, 'green')
+    end
+
+    def outline_red(coords, rounded)
+      outline_with_color(coords, rounded, 'red')
+    end
+
+    def check(coords, rounded)
+      check_with_color(coords, 'red')
+    end
+
+    def check_red(coords, rounded)
+      check_with_color(coords, 'red')
+    end
+
+    def outline_with_color(coords, rounded, color)
+      return if coords.empty?
+      @cmd << [:stroke, color]
+      @cmd << [:strokewidth, overlay_stroke_width]
       @cmd << [:fill, 'none']
       coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
     end
 
-    def check(coords, rounded)
-      @cmd << [:stroke, 'red']
+    def check_with_color(coords, color)
+      return if coords.empty?
+      @cmd << [:stroke, color]
       @cmd << [:strokewidth, '3']
       coords.each do |c|
         @cmd << [:draw, "line #{c.cross1}"]
@@ -115,7 +143,7 @@ module Mork
     def join(p)
       @cmd << [:fill, 'none']
       @cmd << [:stroke, 'green']
-      @cmd << [:strokewidth, 3]
+      @cmd << [:strokewidth, overlay_stroke_width]
       pts = [
         p[0][:x], p[0][:y],
         p[1][:x], p[1][:y],

@@ -296,6 +296,29 @@ s.save 'marked_choices_and_outlines.jpg'
 system 'open marked_choices_and_outlines.jpg' # this works in macOS
 ```
 
+For single-answer tests, Mork also provides a higher-level method that compares the detected responses against an answer key and applies the overlays automatically:
+
+```ruby
+correct = [3, 0, 2, 1, 2] # one zero-based correct choice per question
+s.overlay_corrections correct
+s.save 'corrections.jpg'
+system 'open corrections.jpg' # this works in macOS
+```
+
+`overlay_corrections` applies:
+
+- a green outline on the marked cell when the response is correct
+- a red outline on the expected cell and a red cross on the marked cell when the response is incorrect
+- a red outline on the expected cell when the response is blank or invalid
+
+By default, `overlay_corrections` uses the unique marked response for each question, so if a responder marks more than one choice, the response is treated as invalid and no red cross is applied. To cross all marked cells for incorrect or multi-marked responses:
+
+```ruby
+s.overlay_corrections correct, marked: :all
+```
+
+The answer key must contain one entry per configured question, and each entry must be either a zero-based choice index, a one-element array containing that index, or `nil` to skip overlaying a question.
+
 Scoring can only be performed if the sheet gets properly registered, which in turn depends on the quality of the scanned image.
 
 ### Improving sheet registration and marking

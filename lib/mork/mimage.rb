@@ -14,6 +14,7 @@ module Mork
       @mack  = Magicko.new path
 
       @grom  = grom.set_page_size @mack.width, @mack.height
+      @mack.overlay_stroke_width = @grom.overlay_stroke_width_px
       @choxq = [(0...@grom.max_choices_per_question).to_a] * grom.max_questions
       @rm    = {} # registration mark centers
       @valid = register
@@ -86,7 +87,10 @@ module Mork
                 fail ArgumentError, 'Invalid overlay argument “where”'
               end
       round = where != :barcode
-      @mack.send what, areas, round
+      unless @mack.respond_to?(what)
+        fail ArgumentError, 'Invalid overlay argument “what”'
+      end
+      @mack.public_send what, areas, round
     end
 
     # write the underlying MiniMagick::Image to disk;

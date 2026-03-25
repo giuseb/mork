@@ -148,6 +148,58 @@ module Mork
           omr.overlay :outline
           omr.save "spec/out/JD-outline-marked.jpeg"
         end
+
+        it 'applies correctness-aware overlays and saves the result' do
+          omr.set_choices [5] * 5
+          omr.overlay_corrections [0, 0, 2, 3, 1]
+          omr.save "spec/out/JD-corrections.jpeg"
+        end
+      end
+
+      context 'applying correctness-aware overlays' do
+        let(:mim) { omr.instance_variable_get(:@mim) }
+
+        before do
+          omr.set_choices [5] * 4
+        end
+
+        it 'batches green outlines, red outlines, and red crosses by correctness' do
+          allow(omr).to receive(:marked_choices).and_return([[1], [2], [], [3, 4]])
+
+          expect(mim).to receive(:overlay).with(:outline_green, [[1], [], [], []]).ordered
+          expect(mim).to receive(:overlay).with(:outline_red, [[], [0], [2], [3]]).ordered
+          expect(mim).to receive(:overlay).with(:check_red, [[], [2], [], []]).ordered
+
+          omr.overlay_corrections [1, 0, 2, 3]
+        end
+
+        it 'can cross all marked cells for incorrect responses' do
+          allow(omr).to receive(:marked_choices).and_return([[1, 2], [0]])
+
+          omr.set_choices [5] * 2
+
+          expect(mim).to receive(:overlay).with(:outline_green, [[], []]).ordered
+          expect(mim).to receive(:overlay).with(:outline_red, [[3], [1]]).ordered
+          expect(mim).to receive(:overlay).with(:check_red, [[1, 2], [0]]).ordered
+
+          omr.overlay_corrections [3, 1], marked: :all
+        end
+
+        it 'raises an ArgumentError if the answer key length does not match the questions' do
+          expect { omr.overlay_corrections([0, 1, 2]) }.to raise_error(ArgumentError)
+        end
+
+        it 'raises an ArgumentError if a correct choice exceeds the configured choices' do
+          expect { omr.overlay_corrections([0, 1, 5, 2]) }.to raise_error(ArgumentError)
+        end
+
+        it 'raises an ArgumentError if a question has multiple correct choices' do
+          expect { omr.overlay_corrections([0, [1, 2], 2, 3]) }.to raise_error(ArgumentError)
+        end
+
+        it 'raises an ArgumentError if the marked mode is invalid' do
+          expect { omr.overlay_corrections([0, 1, 2, 3], marked: :invalid) }.to raise_error(ArgumentError)
+        end
       end
 
       context 'requesting invalid responses and choices' do
