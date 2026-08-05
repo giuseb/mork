@@ -68,6 +68,18 @@ module Mork
       expect(bytes).to include 'OpenSans-Regular'
     end
 
+    it 'raises item labels without changing their OMR coordinates' do
+      pdf = SheetPDF.new({})
+      grid = pdf.instance_variable_get('@grip')
+      cell_position = grid.item_xy(0)
+
+      text_position = pdf.send(:item_text_at, cell_position)
+
+      expect(text_position[0]).to eq cell_position[0]
+      expect(text_position[1] - cell_position[1]).to be_within(0.001).of(1.593)
+      expect(grid.item_xy(0)).to eq cell_position
+    end
+
     it 'creates a minimal PDF sheet' do
       s = SheetPDF.new({})
       s.save dest 'minimal'

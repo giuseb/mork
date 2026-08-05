@@ -8,7 +8,8 @@ module Mork
   class SheetPDF < Prawn::Document
     DEFAULT_FONT_FAMILY = 'Open Sans'
     DEFAULT_FONT_PATH = File.expand_path('fonts/OpenSans-Regular.ttf', __dir__)
-    private_constant :DEFAULT_FONT_FAMILY, :DEFAULT_FONT_PATH
+    ITEM_TEXT_RISE_EM = 0.177
+    private_constant :DEFAULT_FONT_FAMILY, :DEFAULT_FONT_PATH, :ITEM_TEXT_RISE_EM
 
     include Extensions
     def initialize(content, layout=nil, duplex=false)
@@ -142,7 +143,7 @@ module Mork
     def question_numbers
       ch_len.first.length.times do |i|
         text_box "#{i+1}",
-                 at: @grip.qnum_xy(i),
+                 at: item_text_at(@grip.qnum_xy(i)),
                  width: @grip.qnum_width,
                  height: @grip.height_of_cell,
                  align: :right,
@@ -176,7 +177,7 @@ module Mork
                                    @grip.width_of_uid,
                                    @grip.height_of_uid,
                                    @grip.uround
-          text_box i, at: [offx, 0],
+          text_box i, at: item_text_at([offx, 0]),
                       width: @grip.width_of_uid,
                       height: @grip.height_of_uid,
                       align: :center,
@@ -201,11 +202,18 @@ module Mork
                                @grip.height_of_cell,
                                @grip.cround
       text_box l,
-               at:     [x,0],
+               at:     item_text_at([x, 0]),
                width:  @grip.width_of_cell,
                height: @grip.height_of_cell,
                align:  :center,
                valign: :center
+    end
+
+    # Prawn vertically centers the font's full ascender box. Open Sans has a
+    # tall ascender relative to its visible capitals and digits, so raise only
+    # item text while leaving the OMR geometry unchanged.
+    def item_text_at(position)
+      [position[0], position[1] + @grip.item_font_size * ITEM_TEXT_RISE_EM]
     end
 
     def equal_choice_number?
