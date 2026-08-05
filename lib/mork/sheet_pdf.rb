@@ -6,6 +6,10 @@ module Mork
   # Generating response sheets as PDF files.
   # See the README file for usage
   class SheetPDF < Prawn::Document
+    DEFAULT_FONT_FAMILY = 'Open Sans'
+    DEFAULT_FONT_PATH = File.expand_path('fonts/OpenSans-Regular.ttf', __dir__)
+    private_constant :DEFAULT_FONT_FAMILY, :DEFAULT_FONT_PATH
+
     include Extensions
     def initialize(content, layout=nil, duplex=false)
       @content =
@@ -24,6 +28,7 @@ module Mork
         else raise ArgumentError, 'Invalid initialization parameter'
         end
       super my_page_params
+      use_default_font
       @duplex = duplex
       process
     end
@@ -43,6 +48,15 @@ module Mork
     ###########################################################################
     private
     ###########################################################################
+
+    def use_default_font
+      font_families.update(
+        DEFAULT_FONT_FAMILY => {
+          normal: { file: DEFAULT_FONT_PATH, subset: true }
+        }
+      )
+      font DEFAULT_FONT_FAMILY
+    end
 
     def my_page_params
       {

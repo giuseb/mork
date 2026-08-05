@@ -48,6 +48,26 @@ module Mork
       expect(sp.instance_variable_get('@content').first).to be_a Hash
     end
 
+    it 'uses the bundled Open Sans font with subsetting' do
+      pdf = SheetPDF.new({})
+
+      expect(pdf.font.family).to eq 'Open Sans'
+      expect(pdf.font.options[:subset]).to be true
+      expect(pdf.font.options[:file]).to end_with 'lib/mork/fonts/OpenSans-Regular.ttf'
+    end
+
+    it 'embeds Open Sans and renders supported Unicode across pages' do
+      content = [
+        { header: { title: 'Extended Latin: Ž; Greek: Ω' } },
+        { header: { title: 'Cyrillic: Ж; Hebrew: א' } }
+      ]
+
+      bytes = SheetPDF.new(content).to_pdf
+
+      expect(bytes).to include '/FontFile2'
+      expect(bytes).to include 'OpenSans-Regular'
+    end
+
     it 'creates a minimal PDF sheet' do
       s = SheetPDF.new({})
       s.save dest 'minimal'

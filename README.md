@@ -64,6 +64,14 @@ Response sheets are created through the `Mork::SheetPDF` class. Two pieces of in
 s = SheetPDF.new content, layout
 ```
 
+Mork uses its bundled Open Sans Regular font for all text in generated PDFs.
+Prawn embeds only the glyphs used by each document, so no font needs to be
+installed on the host that creates or prints the PDF. Open Sans covers extended
+Latin, Greek, Cyrillic, and Hebrew, but it does not cover every Unicode script;
+Arabic, Indic scripts, CJK, and emoji are not supported by Mork's default font.
+The bundled font is distributed under the SIL Open Font License in
+`lib/mork/fonts/OFL.txt`.
+
 Let’s look at each argument in turn.
 
 ### content
