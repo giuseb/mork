@@ -63,9 +63,7 @@ module Mork
         start_new_page if i>0
         barcode(content[:barcode] || 0)
         header(content[:header] || [])
-        unless equal_choice_number?
-          questions_and_choices ch_len[i]
-        end
+        choice_cells(ch_len[i]) unless equal_choice_number?
         start_new_page if @duplex
       end
     end
@@ -73,11 +71,9 @@ module Mork
     def make_repeaters
       pages = @duplex ? :odd : :all
 
-      if equal_choice_number?
-        repeat(pages) do
-          questions_and_choices ch_len.first
-        end
-      end
+      repeat(pages) { question_numbers }
+
+      repeat(pages) { choice_cells(ch_len.first) } if equal_choice_number?
 
       repeat(pages) do
         calibration_cell_repeater
@@ -129,14 +125,19 @@ module Mork
       end
     end
 
-    def questions_and_choices(n_ch)
-      n_ch.each_with_index do |n, i|
+    def question_numbers
+      ch_len.first.length.times do |i|
         text_box "#{i+1}",
                  at: @grip.qnum_xy(i),
                  width: @grip.qnum_width,
                  height: @grip.height_of_cell,
                  align: :right,
                  valign: :center
+      end
+    end
+
+    def choice_cells(n_ch)
+      n_ch.each_with_index do |n, i|
         stamp_at "s#{n}", @grip.item_xy(i)
       end
     end
@@ -194,11 +195,16 @@ module Mork
     end
 
     def equal_choice_number?
-      return false unless ch_len.all? { |c| c.length == ch_len[0].length }
-      ch_len[0].each_with_index do |c, i|
-        return false unless ch_len.all? { |x| c == x[i] }
+      return @equal_choice_number unless @equal_choice_number.nil?
+
+      first_choices = ch_len.first
+      return @equal_choice_number = false unless ch_len.all? { |c| c.length == first_choices.length }
+
+      first_choices.each_with_index do |c, i|
+        return @equal_choice_number = false unless ch_len.all? { |x| c == x[i] }
       end
-      true
+
+      @equal_choice_number = true
     end
 
     def ensure_presence_of_choices

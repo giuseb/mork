@@ -106,6 +106,23 @@ module Mork
       SheetPDF.new(c).save dest('uneq')
     end
 
+    it 'reuses question number repeaters for multi-page unequal batches' do
+      choices = Array.new(120) { |i| 1 + (i % 5) }
+      c = 3.times.map do |x|
+        {
+          barcode: x,
+          choices: choices.rotate(x),
+          header: { title: "Test #{x+1}" }
+        }
+      end
+
+      pdf = SheetPDF.new(c)
+
+      expect(pdf.page_count).to eq 3
+      expect(pdf.repeaters.length).to eq 2
+      expect { pdf.to_pdf }.not_to raise_error
+    end
+
     it 'creates 20 PDF sheets' do
       c = 20.times.map do |x|
         content.merge({ header: {title: "Test #{x+1}"}, barcode: x})
@@ -130,4 +147,3 @@ module Mork
     end
   end
 end
-
