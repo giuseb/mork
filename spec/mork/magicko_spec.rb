@@ -39,6 +39,30 @@ module Mork
       end
     end
 
+    describe 'ImageMagick command selection' do
+      let(:status) { instance_double(Process::Status, success?: true) }
+
+      it 'uses ImageMagick 6 convert through MiniMagick and preserves raw bytes' do
+        magicko = ma
+        allow(MiniMagick).to receive(:imagemagick7?).and_return(false)
+        expect(Open3).to receive(:capture3).with(
+          'convert', '-depth', '8', sh.image_path, '-crop', co.cropper, 'gray:-'
+        ).and_return(["\x00\x0a\xff".b, '', status])
+
+        expect(magicko.rm_patch(co)).to eq [0, 10, 255]
+      end
+
+      it 'uses ImageMagick 7 magick through MiniMagick' do
+        magicko = ma
+        allow(MiniMagick).to receive(:imagemagick7?).and_return(true)
+        expect(Open3).to receive(:capture3).with(
+          'magick', '-depth', '8', sh.image_path, '-crop', co.cropper, 'gray:-'
+        ).and_return(["\x00".b, '', status])
+
+        expect(magicko.rm_patch(co)).to eq [0]
+      end
+    end
+
     describe 'overlay stroke width' do
       it 'defaults to the legacy 3-pixel width' do
         expect(ma.overlay_stroke_width).to eq 3

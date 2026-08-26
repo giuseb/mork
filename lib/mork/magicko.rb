@@ -18,7 +18,11 @@ module Mork
       # a default of 150 dpi seems sensible. It should not affect bitmaps.
       density = 150
       # inspect the source file
-      s1, s2, s3 = Open3.capture3 "identify -density #{density} -format '%w %h %m' #{path}"
+      identify = MiniMagick.identify
+      identify.density density
+      identify.format '%w %h %m'
+      identify << path
+      s1, s2, s3 = Open3.capture3(*identify.command)
       if s3.success?
         # parse the identify command output
         w, h, @type = s1.split(' ')
@@ -54,16 +58,17 @@ module Mork
     # (i.e. the centers of the four registration marks)
     # pp: a hash in the form of pp[:tl][:x], pp[:tl][:y], etc.
     def registered_bytes(pp)
-      read_bytes "-distort Perspective '#{pps pp}'"
+      read_bytes '-distort', 'Perspective', pps(pp)
     end
 
     # Reading from the image file the bytes from one of the four corner
     # squares encompassing each registration mark; the blur and dilation
     # manipulations may prevent registration misalignments due to stray dark pixels
     def rm_patch(c, blr=0, dlt=0)
-      b = blr==0 ? '' : " -blur #{blr*3}x#{blr}"
-      d = dlt==0 ? '' : " -morphology Dilate Octagon:#{dlt}"
-      read_bytes "-crop #{c.cropper}#{b}#{d}"
+      params = ['-crop', c.cropper]
+      params.concat ['-blur', "#{blr*3}x#{blr}"] unless blr == 0
+      params.concat ['-morphology', 'Dilate', "Octagon:#{dlt}"] unless dlt == 0
+      read_bytes(*params)
     end
 
     ##################################
@@ -171,10 +176,18 @@ module Mork
 
     # calling imagemagick and capturing the converted image
     # into an array of bytes
-    def read_bytes(params=nil)
-      d = @density ? "-density #{@density}" : nil
-      cmd = "magick -depth 8 #{d} #{@path} #{params} gray:-"
-      stdout, stderr, status = Open3.capture3(cmd)
+    def read_bytes(*params)
+      # MiniMagick selects `convert` on ImageMagick 6 and `magick` on
+      # ImageMagick 7. Execute its argv directly to preserve binary stdout
+      # (MiniMagick::Tool#call strips a trailing newline) and avoid a shell.
+      command = MiniMagick.convert
+      command.depth 8
+      command.density @density if @density
+      command << @path
+      command.merge!(params)
+      command << 'gray:-'
+
+      stdout, stderr, status = Open3.capture3(*command.command)
       if status.success?
         stdout.unpack('C*')
       else
