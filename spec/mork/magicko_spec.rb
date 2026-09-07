@@ -73,6 +73,14 @@ module Mork
         ma.outline [co], false
         expect(ma.instance_variable_get(:@cmd)).to include([:strokewidth, 6])
       end
+
+      it 'draws a semitransparent green fill over the cell' do
+        ma.highlight_green [co], false
+        commands = ma.instance_variable_get(:@cmd)
+        expect(commands).to include([:stroke, 'none'])
+        expect(commands).to include([:fill, 'rgba(0, 255, 0, 0.3)'])
+        expect(commands).to include([:draw, 'rectangle 0 0 50 50'])
+      end
     end
   end
 end

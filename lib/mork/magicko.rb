@@ -81,6 +81,13 @@ module Mork
       coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
     end
 
+    def highlight_green(coords, rounded)
+      return if coords.empty?
+      @cmd << [:stroke, 'none']
+      @cmd << [:fill, 'rgba(0, 255, 0, 0.3)']
+      coords.each { |c| @cmd << [:draw, shape(c, rounded)] }
+    end
+
     def outline(coords, rounded)
       outline_with_color(coords, rounded, 'green')
     end

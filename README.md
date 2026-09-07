@@ -315,7 +315,7 @@ system 'open corrections.jpg' # this works in macOS
 
 `overlay_corrections` applies:
 
-- a green outline on the marked cell when the response is correct
+- a green outline and semitransparent green fill on the marked cell when the response is correct
 - a red outline on the expected cell and a red cross on the marked cell when the response is incorrect
 - a red outline on the expected cell when the response is blank or invalid
 

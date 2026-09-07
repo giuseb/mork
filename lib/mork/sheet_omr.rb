@@ -165,10 +165,10 @@ module Mork
 
     # Applies correctness-aware overlays to the image using an answer key.
     #
-    # Correct responses receive a green outline on the marked cell. Incorrect
-    # responses receive a red outline on the expected cell and a red cross on
-    # the given cell. Blank or invalid responses receive only the red outline
-    # on the expected cell.
+    # Correct responses receive a green outline and semitransparent green fill
+    # on the marked cell. Incorrect responses receive a red outline on the
+    # expected cell and a red cross on the given cell. Blank or invalid
+    # responses receive only the red outline on the expected cell.
     #
     # @param correct_choices [Array<Integer, Array<Integer>, nil>] one entry per
     #   question. Each entry can be an integer choice index, a 1-element array
@@ -183,6 +183,7 @@ module Mork
       actual = marked_responses(marked)
 
       green_outlines = Array.new(expected.length) { [] }
+      green_highlights = Array.new(expected.length) { [] }
       red_outlines = Array.new(expected.length) { [] }
       red_crosses = Array.new(expected.length) { [] }
 
@@ -192,6 +193,7 @@ module Mork
         marked_cells = actual[question]
         if marked_cells == [choice]
           green_outlines[question] = [choice]
+          green_highlights[question] = [choice]
           next
         end
 
@@ -200,6 +202,7 @@ module Mork
       end
 
       @mim.overlay :outline_green, green_outlines
+      @mim.overlay :highlight_green, green_highlights
       @mim.overlay :outline_red, red_outlines
       @mim.overlay :check_red, red_crosses
     end

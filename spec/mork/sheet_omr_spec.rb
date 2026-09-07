@@ -167,6 +167,7 @@ module Mork
           allow(omr).to receive(:marked_choices).and_return([[1], [2], [], [3, 4]])
 
           expect(mim).to receive(:overlay).with(:outline_green, [[1], [], [], []]).ordered
+          expect(mim).to receive(:overlay).with(:highlight_green, [[1], [], [], []]).ordered
           expect(mim).to receive(:overlay).with(:outline_red, [[], [0], [2], [3]]).ordered
           expect(mim).to receive(:overlay).with(:check_red, [[], [2], [], []]).ordered
 
@@ -179,6 +180,7 @@ module Mork
           omr.set_choices [5] * 2
 
           expect(mim).to receive(:overlay).with(:outline_green, [[], []]).ordered
+          expect(mim).to receive(:overlay).with(:highlight_green, [[], []]).ordered
           expect(mim).to receive(:overlay).with(:outline_red, [[3], [1]]).ordered
           expect(mim).to receive(:overlay).with(:check_red, [[1, 2], [0]]).ordered
 
